@@ -1,6 +1,6 @@
 
 
-public class Test {
+public class FlightMap {
 	
 	public static void main(String[] args) {
 		System.out.println("Hello World");
