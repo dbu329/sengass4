@@ -4,3 +4,4 @@ out/
 .idea
 .classpath
 *.iml
+.settings/
