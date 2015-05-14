@@ -3,5 +3,4 @@ out/
 *.class
 *.jar
 .idea
-.classpath
 *.iml
