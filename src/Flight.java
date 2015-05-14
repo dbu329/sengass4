@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 public class Flight {
-	private int id;
+
 	private Calendar date;
 	private String origin;
 	private String destination;
@@ -23,9 +23,8 @@ public class Flight {
 	}
 	
 	public void setTime(int hour, int minute) {
-		date.set(Calendar.HOUR, hour);
+		date.set(Calendar.HOUR_OF_DAY, hour);
 		date.set(Calendar.MINUTE, minute);
-		
 	}
 	
 	public void setOrigin(String loc) {
@@ -46,5 +45,45 @@ public class Flight {
 	
 	public void setCost(int c) {
 		cost = c;
+	}
+	
+	public int getDay() {
+		return date.get(Calendar.DATE);
+	}
+	
+	public int getMonth() {
+		return date.get(Calendar.MONTH);
+	}
+	
+	public int getYear() {
+		return date.get(Calendar.YEAR);
+	}
+	
+	public int getHour() {
+		return date.get(Calendar.HOUR_OF_DAY);
+	}
+	
+	public int getMinute() {
+		return date.get(Calendar.MINUTE);
+	}
+	
+	public String getOrigin() {
+		return origin;
+	}
+	
+	public String getDestination() {
+		return destination;
+	}
+	
+	public int getTravelTime() {
+		return travelTime;
+	}
+	
+	public String getAirline() {
+		return airline;
+	}
+	
+	public int getCost() {
+		return cost;
 	}
 }

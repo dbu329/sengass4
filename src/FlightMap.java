@@ -10,17 +10,33 @@ public class FlightMap {
 	HashSet<Flight> edges = new HashSet<Flight>();
 	
 	public static void main(String[] args) {
-		System.out.println("Seng Asscheduler:");
-		FlightMap newMap = new FlightMap(args);
+		if (args.length != 2) {
+			System.out.println("Usage: FlightMap flightsFile queryFile");
+		} else {
+			System.out.println("Seng Asscheduler:");
+			FlightMap newMap = new FlightMap(args);
+		}
 	}
 	
 	public FlightMap(String[] args) {
 		readFlightData(args[0]);
-//		readQueryData(args[1]);
+		readQueryData(args[1]);
 	}
 	
-	private void readQueryData(String string) {
-		
+	private void readQueryData(String file) {
+		Scanner sc = null;
+		try
+		{
+		    sc = new Scanner(new FileReader(file)); 
+     	    while (sc.hasNextLine()) {
+     	    	
+     	    }
+		}
+		catch (FileNotFoundException e) {System.out.println("File not Found");}
+		finally
+		{
+		    if (sc != null) sc.close();
+		}  
 	}
 
 	private void readFlightData(String file) {
@@ -29,38 +45,42 @@ public class FlightMap {
 		{
 		    sc = new Scanner(new FileReader(file)); 
      	    while (sc.hasNextLine()) {
-     	    	Flight myFlight = new Flight();
      	    	String line = sc.nextLine();
      	    	line = line.replaceAll("\\s", "");
-
-//     	    	for (int i = 0; i < tokens.length; i++)
-//     	    		System.out.print("("+tokens[i]+")");
-     	    	System.out.println();
-     	    	//if the values are not in multiples of seven, must be missing something.
+     	    	//check that the data in String line is valid
      	    	if (!verifyFlightData(line)) {
      	    		System.out.println("incorrectly formatted flight data");
      	    		break;
      	    	}
-     	    	
+     	    	//prepare line for insertion into warzone
      	    	line = line.replaceAll("\\[", "");
      	    	line = line.replaceAll("\\]", ",");
      	    	String delims = "[,]+";
-     	    	String tokens[] = line.split(delims);
-	    		for (int i = 0; i < tokens.length; i += 7) {
+     	    	String lineTokens[] = line.split(delims);
+	    		for (int i = 0; i < lineTokens.length; i += 7) {
+	    			Flight myFlight = new Flight();
 	    			//first set date
-//	    			String[] dateTokens = tokens[i].split("/");
-	    			
-//	    			myFlight.setDate(day, month, year);
-	    			
+	    			String[] tmpTokens = lineTokens[i].split("/");
+	    			myFlight.setDate(Integer.parseInt(tmpTokens[0]), 
+	    							 Integer.parseInt(tmpTokens[1]), 
+	    							 Integer.parseInt(tmpTokens[2]));
 	    			//then set time
+	    			tmpTokens = lineTokens[i+1].split("[:]");
+	    			myFlight.setTime(Integer.parseInt(tmpTokens[0]), 
+	    				           	 Integer.parseInt(tmpTokens[1]));
 	    			//then set origin and dest
+	    			myFlight.setOrigin(lineTokens[i+2]);
+	    			myFlight.setDestination(lineTokens[i+3]);
 	    			//then setflight time
+	    			myFlight.setTravelTime(Integer.parseInt(lineTokens[i+4]));
 	    			//set airline
+	    			myFlight.setAirline(lineTokens[i+5]);
 	    			//set ff points
+	    			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
+	    			edges.add(myFlight);
 	    		}
-     	    	
      	    }
-		
+     	    printEdges();
 		}
 		catch (FileNotFoundException e) {System.out.println("File not Found");}
 		finally
@@ -69,48 +89,6 @@ public class FlightMap {
 		}  
 	}
 	
-//	private boolean addFlight(String[] values) {
-//		
-//	}
-	
-		
-//	public static void main(String[] args) {
-//		
-//		File flightsFile = new File(args[0]); //flight data file
-//		File queriesFile = new File(args[1]); //query file
-//		Scanner parser = null;
-//		
-//		//process flight data file section
-//		try
-//		{
-//			//Assuming we're not meant to go line by line 
-//			//and we're meant to comb the file
-//			//by regexing for flights
-//			
-//			parser = new Scanner(flightsFile);
-//			Pattern flightContainer = Pattern.compile("\\s*\\[.*?\\]\\s*");
-//			
-//			while(parser.hasNext(flightContainer)){
-//				String flightString = parser.next(flightContainer);
-//				flightString.replaceAll("[\\s\\[\\]]", "");
-//				
-//				String[] flightData = flightString.split(",");
-//                for (String s : flightData) {
-//                    System.out.print("("+s+")");
-//                }
-//				
-//				if(!flightVerified(flightData)){
-//					System.out.println("incorrectly formatted flight data");
-//				}else{
-//					//next phase: adding all the info to the FlightMap
-//				}
-//			}
-//		}
-//		catch(FileNotFoundException e){
-//			System.out.println("Flight data file not found.");
-//		}
-//	}
-//	
 	//Keep in mind the order of information in our Flight
 	//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
 	private boolean verifyFlightData(String data){
@@ -210,4 +188,17 @@ public class FlightMap {
 		}
 	}
 	
+	// test function
+	private void printEdges() {
+		int i = 1;
+		for (Flight f:edges) {
+			System.out.println("Flight #"+i + " " + f.getAirline());
+			System.out.println("\tCost: $"+f.getCost());
+			System.out.println("\t Departing:"+f.getOrigin());
+    		System.out.println("\tDate:"+f.getDay()+"/"+f.getMonth()+"/"+f.getYear()+" at "
+    				+ f.getHour() + ":" + f.getMinute());
+    		System.out.println("\tArriving:"+f.getDestination() +" in "+f.getTravelTime()+" minutes");
+			i++;
+    	}
+	}
 }
