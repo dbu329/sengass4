@@ -1,7 +1,6 @@
-bin/
-out/
-.project
+###java ###
+*.class
+*.jar
 .idea
-.classpath
 *.iml
 .settings/
