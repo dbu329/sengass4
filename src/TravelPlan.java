@@ -97,8 +97,7 @@ public class TravelPlan {
 	    			myFlightMap.addFlight(myFlight);
 	    		}
      	    }
-     	    if (correctFormat)
-     	    myFlightMap.printEdges();
+     	    if (correctFormat) myFlightMap.printEdges();
 		}
 		catch (FileNotFoundException e) {System.out.println("File not Found");}
 		finally
@@ -110,8 +109,9 @@ public class TravelPlan {
 	//Keep in mind the order of information in our Flight
 	//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
 	private boolean verifyFlightData(String data){
+		String original = data;
 		boolean valid = true;
-		
+		boolean validDateTime = true;
 		//First Make Sure all the Required Brackets Are there
 		if (!isValidBrackets(data))
 			valid = false;
@@ -137,18 +137,41 @@ public class TravelPlan {
 							valid = false;
 						}
 					}
+					
+					if(valid){
+						//Now check validity of each integer
+						
+						int day = Integer.parseInt(tmpTokens[0]);
+						int month = Integer.parseInt(tmpTokens[1]);
+						int year = Integer.parseInt(tmpTokens[2]);
+						//According to spec, only need to consider 1/1/2000-31/12/2500
+						if(year < 2000 || year > 2500){
+							valid = false;
+							validDateTime = false;
+						}else{
+							validDateTime = validDayMonth(day, month, year);
+						}
+					}
+					
 				}
 				
 				//2. check Time is valid
 				tmpTokens = dataArray[i+1].split("[:]");
 				if (tmpTokens.length != 2) {
-					valid = false;
+					validDateTime = false;
 				} else {
 					for (String s:tmpTokens) {
-						if (!isValidNumber(s))
-							valid = false;
+						if (!isValidNumber(s)) validDateTime = false;
 					}
+					
+					
 				}
+				
+				if(!validDateTime){
+					valid = false;
+					System.out.println("Invalid date/time in entry: " + original);
+				}
+				
 				//3. check origin and destination is valid?
 				if (!isValidName(dataArray[i+2]))
 						valid = false;
@@ -206,5 +229,31 @@ public class TravelPlan {
 		}
 	}
 	
+	private boolean validDayMonth(int d, int m, int y){
+		boolean validDate = true;
+		
+		if(m < 1 || m > 12 || d < 1 || d > 31){
+			validDate = false;
+		}else{
+			if(m == 2){
+				if(d > 28){
+					if(d == 29 && !isLeapYear(y)) validDate = false;
+				}
+			}
+		}
+		
+		return validDate;
+	}
 	
+	private boolean isLeapYear(int y){
+		if(y % 4 != 0){
+			return false;
+		}else if(y % 100 != 0){
+			return true;
+		}else if(y % 400 != 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
