@@ -86,4 +86,11 @@ public class Flight {
 	public int getCost() {
 		return cost;
 	}
+	
+	public void print() {
+		System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
+		System.out.print(getHour() + ":" + getMinute() + ",");
+		System.out.print(getOrigin() + "," + getDestination());
+		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
+	}
 }

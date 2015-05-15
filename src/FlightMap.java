@@ -16,7 +16,7 @@ public class FlightMap {
 			System.out.println("Flight #"+i + " " + f.getAirline());
 			System.out.println("\tCost: $"+f.getCost());
 			System.out.println("\t Departing:"+f.getOrigin());
-    		System.out.println("\tDate:"+f.getDay()+"/"+f.getMonth()+"/"+f.getYear()+" at "
+    		System.out.println("\tDate:"+f.getDay()+"/"+(f.getMonth()+1)+"/"+f.getYear()+" at "
     				+ f.getHour() + ":" + f.getMinute());
     		System.out.println("\tArriving:"+f.getDestination() +" in "+f.getTravelTime()+" minutes");
 			i++;
