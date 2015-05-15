@@ -55,49 +55,51 @@ public class TravelPlan {
      	    while (sc.hasNextLine()) {
      	    	String line = sc.nextLine();
      	    	line = line.replaceAll("\\s", "");
+     	    	correctFormat = true;
      	    	//check that the data in String line is valid
      	    	if (!verifyFlightData(line)) {
      	    		System.out.println("incorrectly formatted flight data");
      	    		correctFormat = false;
-     	    		break;
+     	    		//break;
+     	    	}else{
+	     	    	//prepare line for insertion into warzone
+	     	    	line = line.replaceAll("\\[", "");
+	     	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
+	     	    	String delims = "[,]+";             //split string line, by comma
+	     	    	String lineTokens[] = line.split(delims);
+		    		for (int i = 0; i < lineTokens.length; i += 7) {
+		    			Flight myFlight = new Flight();
+		    			//first set date
+		    			String[] tmpTokens = lineTokens[i].split("/");
+		    			// problem: have to print out the flight details of the flight
+		    			// with invalid date and/or time. However can't test for this at the end
+		    			// because setting Calendar day to, say, 56, will give 26 and it automatically
+		    			// increments the month. Decision: don't use Calendar (probs not), or store variables
+		    			// aside before sending them into the setDate functions.
+		    			// like this: int day = Integer.parseInt(tmpTokens[0]); test for invalid, thenpass in
+		    			myFlight.setDate(Integer.parseInt(tmpTokens[0]), 
+		    							 Integer.parseInt(tmpTokens[1])-1, //month is minus one cos Calendar.
+		    							 Integer.parseInt(tmpTokens[2]));
+	
+		    			//then set time
+		    			tmpTokens = lineTokens[i+1].split("[:]");
+		    			myFlight.setTime(Integer.parseInt(tmpTokens[0]), 
+		    				           	 Integer.parseInt(tmpTokens[1]));
+		    			//then set origin and dest
+		    			myFlight.setOrigin(lineTokens[i+2]);
+		    			myFlight.setDestination(lineTokens[i+3]);
+		    			//then setflight time
+		    			myFlight.setTravelTime(Integer.parseInt(lineTokens[i+4]));
+		    			//set airline
+		    			myFlight.setAirline(lineTokens[i+5]);
+		    			//set cost
+		    			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
+		    			
+		    			myFlightMap.addFlight(myFlight);
+		    		}
      	    	}
-     	    	//prepare line for insertion into warzone
-     	    	line = line.replaceAll("\\[", "");
-     	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
-     	    	String delims = "[,]+";             //split string line, by comma
-     	    	String lineTokens[] = line.split(delims);
-	    		for (int i = 0; i < lineTokens.length; i += 7) {
-	    			Flight myFlight = new Flight();
-	    			//first set date
-	    			String[] tmpTokens = lineTokens[i].split("/");
-	    			// problem: have to print out the flight details of the flight
-	    			// with invalid date and/or time. However can't test for this at the end
-	    			// because setting Calendar day to, say, 56, will give 26 and it automatically
-	    			// increments the month. Decision: don't use Calendar (probs not), or store variables
-	    			// aside before sending them into the setDate functions.
-	    			// like this: int day = Integer.parseInt(tmpTokens[0]); test for invalid, thenpass in
-	    			myFlight.setDate(Integer.parseInt(tmpTokens[0]), 
-	    							 Integer.parseInt(tmpTokens[1])-1, //month is minus one cos Calendar.
-	    							 Integer.parseInt(tmpTokens[2]));
-
-	    			//then set time
-	    			tmpTokens = lineTokens[i+1].split("[:]");
-	    			myFlight.setTime(Integer.parseInt(tmpTokens[0]), 
-	    				           	 Integer.parseInt(tmpTokens[1]));
-	    			//then set origin and dest
-	    			myFlight.setOrigin(lineTokens[i+2]);
-	    			myFlight.setDestination(lineTokens[i+3]);
-	    			//then setflight time
-	    			myFlight.setTravelTime(Integer.parseInt(lineTokens[i+4]));
-	    			//set airline
-	    			myFlight.setAirline(lineTokens[i+5]);
-	    			//set cost
-	    			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
-	    			
-	    			myFlightMap.addFlight(myFlight);
-	    		}
      	    }
-     	    if (correctFormat) myFlightMap.printEdges();
+     	    myFlightMap.printEdges();
 		}
 		catch (FileNotFoundException e) {System.out.println("File not Found");}
 		finally
@@ -113,8 +115,7 @@ public class TravelPlan {
 		boolean valid = true;
 		boolean validDateTime = true;
 		//First Make Sure all the Required Brackets Are there
-		if (!isValidBrackets(data))
-			valid = false;
+		if (!isValidBrackets(data))	valid = false;
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
@@ -131,14 +132,17 @@ public class TravelPlan {
 				if (tmpTokens.length != 3) {
 					valid = false;
 				} else {
+					//This can be replaced with the NumberFormatException
+					/*
 					//if has 3 tokens, then check if they are all integers
 					for (String s:tmpTokens) {
 						if (!isValidNumber(s)) {
 							valid = false;
 						}
-					}
+					}*/
 					
-					if(valid){
+					try
+					{
 						//Now check validity of each integer
 						
 						int day = Integer.parseInt(tmpTokens[0]);
@@ -152,6 +156,10 @@ public class TravelPlan {
 							validDateTime = validDayMonth(day, month, year);
 						}
 					}
+					catch(NumberFormatException e)
+					{
+						validDateTime = false;
+					}
 					
 				}
 				
@@ -160,11 +168,25 @@ public class TravelPlan {
 				if (tmpTokens.length != 2) {
 					validDateTime = false;
 				} else {
-					for (String s:tmpTokens) {
+					//This can be replaced with the NumberFormatException
+					/*for (String s:tmpTokens) {
 						if (!isValidNumber(s)) validDateTime = false;
+					}*/
+					
+					try
+					{
+						int hour = Integer.parseInt(tmpTokens[0]);
+						int min = Integer.parseInt(tmpTokens[1]);
+						
+						//Follows 24hr time where midnight is the 0th hour
+						if(min < 0 || hour < 0 || min > 59 || hour > 23){
+							validDateTime = false;
+						}
 					}
-					
-					
+					catch(NumberFormatException e)
+					{
+						validDateTime = false;
+					}
 				}
 				
 				if(!validDateTime){
@@ -198,6 +220,7 @@ public class TravelPlan {
 		}
 		return true;
 	}
+	
 	
 	private boolean isValidNumber(String str) {
 		if (!str.matches("\\d+")) {
@@ -238,6 +261,11 @@ public class TravelPlan {
 			if(m == 2){
 				if(d > 28){
 					if(d == 29 && !isLeapYear(y)) validDate = false;
+				}
+			}else{
+				//April, June, September November only have 30 days
+				if(d == 31 && (m == 4 || m == 6 || m == 9 || m == 11)){
+					validDate = false;
 				}
 			}
 		}
