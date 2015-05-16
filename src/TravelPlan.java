@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 
 public class TravelPlan {
+	//Error codes for flight verification
+	private static final int CORRECT = 0;
+	private static final int INCORRECT_FORMAT = 1;
+	private static final int INCORRECT_DATE_TIME = 2;
+	
 	FlightMap myFlightMap;
 	//Query myQueryList;
 	
@@ -51,16 +56,15 @@ public class TravelPlan {
 		try
 		{
 		    sc = new Scanner(new FileReader(file)); 
-		    boolean correctFormat = true;
      	    while (sc.hasNextLine()) {
      	    	String line = sc.nextLine();
      	    	line = line.replaceAll("\\s", "");
-     	    	correctFormat = true;
+     	    	
      	    	//check that the data in String line is valid
-     	    	if (!verifyFlightData(line)) {
+     	    	if (verifyFlightData(line) == INCORRECT_FORMAT) {
      	    		System.out.println("incorrectly formatted flight data");
-     	    		correctFormat = false;
-     	    		//break;
+     	    	}else if(verifyFlightData(line) == INCORRECT_DATE_TIME){
+     	    		System.out.println("Invalid date/time in entry: " + line);
      	    	}else{
 	     	    	//prepare line for insertion into warzone
 	     	    	line = line.replaceAll("\\[", "");
@@ -110,12 +114,10 @@ public class TravelPlan {
 	
 	//Keep in mind the order of information in our Flight
 	//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
-	private boolean verifyFlightData(String data){
-		String original = data;
-		boolean valid = true;
-		boolean validDateTime = true;
+	private int verifyFlightData(String data){
+		int errorCode = CORRECT;
 		//First Make Sure all the Required Brackets Are there
-		if (!isValidBrackets(data))	valid = false;
+		if (!isValidBrackets(data))	errorCode = INCORRECT_FORMAT;
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
@@ -123,24 +125,16 @@ public class TravelPlan {
 		String[] dataArray = data.split("[,]"); // split data by commaa (,)
 	
 		if (dataArray.length % 7 != 0) {
-			valid = false;
+			errorCode = INCORRECT_FORMAT;
 		} else {
 			for (int i = 0; i < dataArray.length-1;i+=7) {
 				//1. check Date is valid
 				String[] tmpTokens = dataArray[i].split("/");
-					//if date doesn't contain 3 tokens then definitely not in layout of DD/MM/YYYY
+				
+				//if date doesn't contain 3 tokens then definitely not in layout of DD/MM/YYYY
 				if (tmpTokens.length != 3) {
-					valid = false;
+					errorCode = INCORRECT_FORMAT;
 				} else {
-					//This can be replaced with the NumberFormatException
-					/*
-					//if has 3 tokens, then check if they are all integers
-					for (String s:tmpTokens) {
-						if (!isValidNumber(s)) {
-							valid = false;
-						}
-					}*/
-					
 					try
 					{
 						//Now check validity of each integer
@@ -150,15 +144,14 @@ public class TravelPlan {
 						int year = Integer.parseInt(tmpTokens[2]);
 						//According to spec, only need to consider 1/1/2000-31/12/2500
 						if(year < 2000 || year > 2500){
-							valid = false;
-							validDateTime = false;
+							errorCode = INCORRECT_DATE_TIME;
 						}else{
-							validDateTime = validDayMonth(day, month, year);
+							if(!validDayMonth(day, month, year)) errorCode = INCORRECT_DATE_TIME;
 						}
 					}
 					catch(NumberFormatException e)
 					{
-						validDateTime = false;
+						errorCode = INCORRECT_FORMAT;
 					}
 					
 				}
@@ -166,13 +159,8 @@ public class TravelPlan {
 				//2. check Time is valid
 				tmpTokens = dataArray[i+1].split("[:]");
 				if (tmpTokens.length != 2) {
-					validDateTime = false;
+					errorCode = INCORRECT_FORMAT;
 				} else {
-					//This can be replaced with the NumberFormatException
-					/*for (String s:tmpTokens) {
-						if (!isValidNumber(s)) validDateTime = false;
-					}*/
-					
 					try
 					{
 						int hour = Integer.parseInt(tmpTokens[0]);
@@ -180,37 +168,32 @@ public class TravelPlan {
 						
 						//Follows 24hr time where midnight is the 0th hour
 						if(min < 0 || hour < 0 || min > 59 || hour > 23){
-							validDateTime = false;
+							errorCode = INCORRECT_DATE_TIME;
 						}
 					}
 					catch(NumberFormatException e)
 					{
-						validDateTime = false;
+						errorCode = INCORRECT_FORMAT;
 					}
-				}
-				
-				if(!validDateTime){
-					valid = false;
-					System.out.println("Invalid date/time in entry: " + original);
 				}
 				
 				//3. check origin and destination is valid?
 				if (!isValidName(dataArray[i+2]))
-						valid = false;
+					errorCode = INCORRECT_FORMAT;
 				if (!isValidName(dataArray[i+3]))
-					valid = false;
+					errorCode = INCORRECT_FORMAT;
 				//4.check duration is valid?
 				if (!isValidNumber(dataArray[i+4])) 
-					valid = false;
+					errorCode = INCORRECT_FORMAT;
 				//5. check Airline is valid
 				if (!isValidName(dataArray[i+5]))
-					valid = false;
-				//6. check ff points is valid
+					errorCode = INCORRECT_FORMAT;
+				//6. check cost is valid
 				if (!isValidNumber(dataArray[i+6])) 
-					valid = false;
+					errorCode = INCORRECT_FORMAT;
 			}
 		}
-		return valid;
+		return errorCode;
 	}
 	
 	//currently a name with a space in it is VALID
