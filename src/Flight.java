@@ -27,7 +27,7 @@ public class Flight {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setTimeZone(date.getTimeZone());
-		System.out.println("setting time: " + sdf.format(date.getTime()));
+//		System.out.println("setting time: " + sdf.format(date.getTime()));
 	}
 	
 	public void setOrigin(String loc) {
@@ -96,7 +96,6 @@ public class Flight {
 	
 	public void print() {
 		System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
-
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setTimeZone(date.getTimeZone());
 		System.out.print(sdf.format(date.getTime()));
@@ -104,4 +103,6 @@ public class Flight {
 		System.out.print(getOrigin() + "," + getDestination());
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
 	}
+	
+
 }
