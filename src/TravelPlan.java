@@ -56,6 +56,7 @@ public class TravelPlan {
 		try
 		{
 		    sc = new Scanner(new FileReader(file)); 
+		    boolean correctFormat = true;
      	    while (sc.hasNextLine()) {
      	    	String line = sc.nextLine();
      	    	line = line.replaceAll("\\s", "");
@@ -63,6 +64,8 @@ public class TravelPlan {
      	    	//check that the data in String line is valid
      	    	if (verifyFlightData(line) == INCORRECT_FORMAT) {
      	    		System.out.println("incorrectly formatted flight data");
+     	    		correctFormat = false;
+     	    		break;
      	    	}else if(verifyFlightData(line) == INCORRECT_DATE_TIME){
      	    		System.out.println("Invalid date/time in entry: " + line);
      	    	}else{
@@ -103,7 +106,8 @@ public class TravelPlan {
 		    		}
      	    	}
      	    }
-     	    myFlightMap.printEdges();
+     	    if (correctFormat)
+     	    	myFlightMap.printEdges();
 		}
 		catch (FileNotFoundException e) {System.out.println("File not Found");}
 		finally
