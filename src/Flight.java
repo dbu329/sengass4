@@ -1,6 +1,5 @@
-import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class Flight {
@@ -25,6 +24,10 @@ public class Flight {
 	public void setTime(int hour, int minute) {
 		date.set(Calendar.HOUR_OF_DAY, hour);
 		date.set(Calendar.MINUTE, minute);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		sdf.setTimeZone(date.getTimeZone());
+		System.out.println("setting time: " + sdf.format(date.getTime()));
 	}
 	
 	public void setOrigin(String loc) {
@@ -87,9 +90,17 @@ public class Flight {
 		return cost;
 	}
 	
+	public Calendar getTime () {
+		return date;
+	}
+	
 	public void print() {
 		System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
-		System.out.print(getHour() + ":" + getMinute() + ",");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		sdf.setTimeZone(date.getTimeZone());
+		System.out.print(sdf.format(date.getTime()));
+		//System.out.print(getHour() + ":" + getMinute() + ",");
 		System.out.print(getOrigin() + "," + getDestination());
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
 	}

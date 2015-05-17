@@ -1,5 +1,9 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -19,7 +23,13 @@ public class TravelPlan {
 			System.out.println("Seng Asscheduler:");
 			TravelPlan newPlan = new TravelPlan(args);
 		}
+		
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		String str = sdf.format(d);
+		System.out.println(str);
 	}
+
 	
 	public TravelPlan(String[] args) {
 		myFlightMap = new FlightMap();
@@ -78,12 +88,6 @@ public class TravelPlan {
 		    			Flight myFlight = new Flight();
 		    			//first set date
 		    			String[] tmpTokens = lineTokens[i].split("/");
-		    			// problem: have to print out the flight details of the flight
-		    			// with invalid date and/or time. However can't test for this at the end
-		    			// because setting Calendar day to, say, 56, will give 26 and it automatically
-		    			// increments the month. Decision: don't use Calendar (probs not), or store variables
-		    			// aside before sending them into the setDate functions.
-		    			// like this: int day = Integer.parseInt(tmpTokens[0]); test for invalid, thenpass in
 		    			myFlight.setDate(Integer.parseInt(tmpTokens[0]), 
 		    							 Integer.parseInt(tmpTokens[1])-1, //month is minus one cos Calendar.
 		    							 Integer.parseInt(tmpTokens[2]));

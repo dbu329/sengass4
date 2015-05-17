@@ -1,4 +1,5 @@
 
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 
 public class FlightMap {
@@ -16,8 +17,13 @@ public class FlightMap {
 			System.out.println("Flight #"+i + " " + f.getAirline());
 			System.out.println("\tCost: $"+f.getCost());
 			System.out.println("\t Departing:"+f.getOrigin());
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			sdf.setTimeZone(f.getTime().getTimeZone());
+			//System.out.print(sdf.format(f.getTime().getTime()));
+			
     		System.out.println("\tDate:"+f.getDay()+"/"+(f.getMonth()+1)+"/"+f.getYear()+" at "
-    				+ f.getHour() + ":" + f.getMinute());
+    				+ sdf.format(f.getTime().getTime()));
     		System.out.println("\tArriving:"+f.getDestination() +" in "+f.getTravelTime()+" minutes");
 			i++;
     	}
