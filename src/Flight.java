@@ -95,11 +95,16 @@ public class Flight {
 	}
 	
 	public void print() {
-		System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		sdf.setTimeZone(date.getTimeZone());
-		System.out.print(sdf.format(date.getTime()));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+		dateFormat.setTimeZone(date.getTimeZone());
+		System.out.print(dateFormat.format(date.getTime()));
+		//System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
+		
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		timeFormat.setTimeZone(date.getTimeZone());
+		System.out.print(timeFormat.format(date.getTime()));
 		//System.out.print(getHour() + ":" + getMinute() + ",");
+		
 		System.out.print(getOrigin() + "," + getDestination());
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
 	}
