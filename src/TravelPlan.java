@@ -317,7 +317,7 @@ public class TravelPlan {
 		// String data is the current line from the file
 		boolean isValid = true;
 		//First Make Sure all the Required Brackets Are there
-		if (!isValidBrackets(data))	isValid = false;
+		if (!isValidBracketsFlights(data))	isValid = false;
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
