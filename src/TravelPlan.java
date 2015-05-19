@@ -70,15 +70,77 @@ public class TravelPlan {
 		}
 	}
 
-	private boolean verifyQueryFormat(String line) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean verifyQueryFormat(String data) {
+		// String data is the current line from the file
+		boolean isValid = true;
+		//First Make Sure all the Required Brackets Are there
+		if (!isValidBracketsQuery(data)) isValid = false;
+		//prepare data, then split data into tokens
+		data = data.replaceAll("\\s", ""); // get rid of spaces
+		data = data.replaceAll("\\[", ""); // get rid of [ 
+		data = data.replaceAll("\\]", ",");// replace ] with ,
+    	data = data.replaceAll("\\(", ""); // get rid of (
+    	data = data.replaceAll("\\)", ""); // get rid of )
+		String[] dataArray = data.split("[,]"); // split data by commaa (,)
+	
+		if (dataArray.length % 8 != 0) {
+			isValid = false;
+		} else {
+			for (int i = 0; i < dataArray.length-1;i+=8) {
+				//1. check Date is valid
+				String[] tmpTokens = dataArray[i].split("/");
+				//if date doesn't contain 3 tokens then definitely not in layout of DD/MM/YYYY
+				if (tmpTokens.length != 3) {
+					isValid = false;
+				} else {
+					try {
+						Integer.parseInt(tmpTokens[0]);
+						Integer.parseInt(tmpTokens[1]);
+						Integer.parseInt(tmpTokens[2]);
+					} catch(NumberFormatException e) {
+						isValid = false;
+					}
+				}
+				//2. check Time is valid
+				tmpTokens = dataArray[i+1].split("[:]");
+				if (tmpTokens.length != 2) {
+					isValid = false;
+				} else {
+					try {
+						Integer.parseInt(tmpTokens[0]);
+						Integer.parseInt(tmpTokens[1]);
+					} catch(NumberFormatException e) {
+						isValid = false;
+					}
+				}
+				//3. check origin and destination is valid?
+				if (!isValidName(dataArray[i+2])) 
+					isValid = false;
+				if (!isValidName(dataArray[i+3]))
+					isValid = false;
+				//4.check PreferenceType is valid? from i+4 to i+6
+				// daf is dis? No mention of error messages in the spec
+				// Do we actually assume that Query passed in is correct then? 
+				// If we DO do a error message for Query, are we meant to make sure
+				// that the preferenceTypes contain one of each from 
+				// (Cost, Time and "airline"?)
+				// 	Furthermore would that be an incorrect format error? or incorrect
+				//  preference error or something?
+				//TODO TODO TODO TODO TODO TODO
+				//TODO TODO TODO TODO TODO TODO TODO
+				//TODO TODO TODO TODO TODO TODO TODO TODO
+				//TODO TODO TODO TODO TODO TODO TODO TODO TODO
+				//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+				//5. check number of plans to return is valid
+				if (!isValidNumber(dataArray[i+7])) 
+					isValid = false;
+			}
+		}
+		return isValid;
 	}
 
 	private boolean isValidBracketsQuery(String data) {
-		//makes sure that the brackets are there and inbetween each open and
-		//close bracket, there will be 6 commas to divide it all
-		//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
+		//Query [Date, Time, Name, Name, (PreferenceType,PreferenceType,PreferenceType), Number]
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		int startCount = 0, commaCount = 0, endCount = 0;
 		int roundStart = 0, roundEnd = 0;
@@ -86,19 +148,19 @@ public class TravelPlan {
 			if (data.charAt(i) == '[') {
 				startCount++;
 			} else if (data.charAt(i) == '(') {
+				if (commaCount != 4 || startCount != roundStart-1) {
+					return false;
+				}
 				roundStart++;
-				if (commaCount != 4) {
-					return false;
-				}
 			} else if (data.charAt(i) == ')') {
-				roundEnd++;
-				if (roundStart -1 != roundEnd || commaCount != 7) {
+				if (roundStart -1 != roundEnd || commaCount != 6) {
 					return false;
 				}
+				roundEnd++;
 			} else if (data.charAt(i) == ',') {
 				commaCount++;
 			} else if (data.charAt(i) == ']') {
-				if (commaCount == 8 && startCount-1 == endCount && roundStart-1 == commaCount) {
+				if (commaCount == 7 && startCount-1 == endCount && roundStart-1 == commaCount) {
 					endCount++;
 					commaCount = 0;
 				} else {
