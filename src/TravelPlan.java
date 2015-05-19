@@ -40,6 +40,7 @@ public class TravelPlan {
 	 * @param file query input file
 	 */
 	private void readQueryData(String file) {
+		System.out.println("Scan");
 		Scanner sc = null;
 		try	{
 			sc = new Scanner(new FileReader(file)); 
@@ -73,11 +74,50 @@ public class TravelPlan {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	private boolean isValidBracketsQuery(String data) {
+		//makes sure that the brackets are there and inbetween each open and
+		//close bracket, there will be 6 commas to divide it all
+		//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
+		data = data.replaceAll("\\s", ""); // get rid of spaces
+		int startCount = 0, commaCount = 0, endCount = 0;
+		int roundStart = 0, roundEnd = 0;
+		for (int i = 0; i < data.length(); i++) {
+			if (data.charAt(i) == '[') {
+				startCount++;
+			} else if (data.charAt(i) == '(') {
+				roundStart++;
+				if (commaCount != 4) {
+					return false;
+				}
+			} else if (data.charAt(i) == ')') {
+				roundEnd++;
+				if (roundStart -1 != roundEnd || commaCount != 7) {
+					return false;
+				}
+			} else if (data.charAt(i) == ',') {
+				commaCount++;
+			} else if (data.charAt(i) == ']') {
+				if (commaCount == 8 && startCount-1 == endCount && roundStart-1 == commaCount) {
+					endCount++;
+					commaCount = 0;
+				} else {
+					return false;
+				}
+			}
+		}
+		if (startCount != endCount || commaCount != 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	
 	private void parseValidQuery(String[] lineTokens) {
 		// TODO Auto-generated method stub	
 	}
-
+	
 	/**
 	 * Contains two checks. First uses the function verifyFlightFormat, this is to check formatting in
 	 * general. Fail the program and returns "incorrectly formatted flight data". However, in the case
@@ -168,7 +208,7 @@ public class TravelPlan {
 		// String data is the current line from the file
 		boolean isValid = true;
 		//First Make Sure all the Required Brackets Are there
-		if (!isValidBrackets(data))	isValid = false;
+		if (!isValidBracketsFlights(data))	isValid = false;
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
@@ -240,7 +280,7 @@ public class TravelPlan {
 		return true;
 	}
 	
-	private boolean isValidBrackets(String data) {
+	private boolean isValidBracketsFlights(String data) {
 		//makes sure that the brackets are there and inbetween each open and
 		//close bracket, there will be 6 commas to divide it all
 		//Flight -> [ Date, Time, Name, Name, Duration, Name, Number ]
