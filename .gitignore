@@ -1,6 +1,5 @@
-###java ###
 *.class
-*.jar
 .idea
 *.iml
 .settings/
+/bin/
