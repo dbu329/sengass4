@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sengass4" default="compile" basedir=".">
+	
+	<path id="project-classpath">
+		<fileset dir="WebContent/WEB-INF/lib" includes="*.jar" />
+	</path>
+	
+	<target name="clean">
+		<delete dir="WebContent/WEB-INF/classes"/>
+	</target>
+	<target name="compile" depends="clean">
+		<mkdir dir="WebContent/WEB-INF/classes"/>
+		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" classpathref="project-classpath"/>
+	</target>
+</project>
