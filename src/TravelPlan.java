@@ -31,20 +31,51 @@ public class TravelPlan {
 		readQueryData(args[1]);
 	}
 	
+	
+	// not tested
+	/**
+	 * Reads the query input, checking whether it is of valid format. If the format is valid but
+	 * the values are not valid, then that query will be skipped. If the format is invalid then
+	 * "incorrectly formatted query data" will be printed and program will exit. (?)
+	 * @param file query input file
+	 */
 	private void readQueryData(String file) {
 		Scanner sc = null;
-		try
-		{
-		    sc = new Scanner(new FileReader(file)); 
+		try	{
+			sc = new Scanner(new FileReader(file)); 
      	    while (sc.hasNextLine()) {
-     	    	
+     	    	String line = sc.nextLine();
+     	    	line = line.replaceAll("\\s", "");
+     	    	// check queries have valid format
+     	    	if (!verifyQueryFormat(line)) {
+     	    		System.out.println("incorrectly formatted query data");
+     	    		System.exit(0);
+     	    	}
+     	    	// edit line to split string into tokens
+     	    	line = line.replaceAll("\\[", "");
+     	    	line = line.replaceAll("\\]", "");
+     	    	line = line.replaceAll("\\(", "");
+     	    	line = line.replaceAll("\\)", "");
+     	    	// can probably do this next line instead, but untested
+//     	    	line = line.replaceAll("[\\[\\]\\(\\)]", "");
+     	    	String delims = "[,]+";
+     	    	String lineTokens[] = line.split(delims);
+     	    	parseValidQuery(lineTokens);
      	    }
-		}
-		catch (FileNotFoundException e) {System.out.println("File not Found");}
-		finally
-		{
+		} catch (FileNotFoundException e) {
+			System.out.println("File not Found");
+		} finally {
 		    if (sc != null) sc.close();
-		}  
+		}
+	}
+
+	private boolean verifyQueryFormat(String line) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	private void parseValidQuery(String[] lineTokens) {
+		// TODO Auto-generated method stub	
 	}
 
 	/**
