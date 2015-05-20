@@ -74,6 +74,7 @@ public class TravelPlan {
 		boolean isValid = true;
 		//First Make Sure all the Required Brackets Are there
 		if (!isValidBracketsQuery(data)) isValid = false;
+		System.out.println(isValid);
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
@@ -147,7 +148,7 @@ public class TravelPlan {
 			if (data.charAt(i) == '[') {
 				startCount++;
 			} else if (data.charAt(i) == '(') {
-				if (commaCount != 4 || startCount != roundStart-1) {
+				if (commaCount != 4 || startCount-1 != roundStart) {
 					return false;
 				}
 				roundStart++;
@@ -159,10 +160,12 @@ public class TravelPlan {
 			} else if (data.charAt(i) == ',') {
 				commaCount++;
 			} else if (data.charAt(i) == ']') {
-				if (commaCount == 7 && startCount-1 == endCount && roundStart-1 == commaCount) {
+				if (commaCount == 7 && startCount-1 == endCount && roundStart == roundEnd) {
 					endCount++;
 					commaCount = 0;
 				} else {
+					System.out.println("fucked up commcount:"+commaCount+"startCount" + startCount + "endCount:"+endCount);
+					System.out.println("roundStart"+roundStart+"roundEnd"+roundEnd);
 					return false;
 				}
 			}
@@ -188,6 +191,7 @@ public class TravelPlan {
 			//get the date, splitting first token with delimiter '/'
 			String[] tmpTokens = lineTokens[i].split("/");
 			int day = Integer.parseInt(tmpTokens[0]);
+			System.out.println(tmpTokens.length);
 			int month = Integer.parseInt(tmpTokens[1])-1; //months from 0 to 11
 			int year = Integer.parseInt(tmpTokens[2]);
 			// then gets the hour and minutes

@@ -1,2 +1,2 @@
-[11/02/2015, 15:04, Sydney, Melbourne, (Cost,Time,None ), 5)]
-[11/02/2100, 15:04, Sydney, Brisbane, (Cost,Time,None ), 5)] [03/02/2200, 15:04, Auckland, Wellington, (Time,Cost ,None ), 5)]
+[11/02/2015, 15:04, Sydney, Melbourne, (Cost,Time,None ), 5]
+[11/02/2100, 15:04, Sydney, Brisbane, (Cost,Time,None ), 5] [03/02/2200, 15:04, Auckland, Wellington, (Time,Cost ,None ), 5]
