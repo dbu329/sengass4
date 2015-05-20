@@ -1,7 +1,9 @@
 body {
 	font-family: Arial;
 	text-align: center;
-	background-color: #CCE;
+	background-image: url("../img/sky.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 h1 {
 	text-align: center;
