@@ -105,7 +105,7 @@ public class Flight {
 		System.out.print(timeFormat.format(date.getTime()));
 		//System.out.print(getHour() + ":" + getMinute() + ",");
 		
-		System.out.print(getOrigin() + "," + getDestination());
+		System.out.print(getOrigin() + "," + getDestination()+",");
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
 	}
 	

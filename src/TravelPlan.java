@@ -9,10 +9,6 @@ import java.util.Scanner;
 
 
 public class TravelPlan {
-	//Error codes for flight verification
-//	private static final int CORRECT = 0;
-//	private static final int false = 1;
-//	private static final int INCORRECT_DATE_TIME = 2;
 	
 	FlightMap myFlightMap;
 	ArrayList<Query> queryList;
@@ -32,9 +28,7 @@ public class TravelPlan {
 		readFlightData(args[0]);
 		readQueryData(args[1]);
 	}
-	
-	
-	// not tested
+
 	/**
 	 * Reads the query input, checking whether it is of valid format. If the format is valid but
 	 * the values are not valid, then that query will be skipped. If the format is invalid then
@@ -62,6 +56,10 @@ public class TravelPlan {
      	    	String lineTokens[] = line.split(delims);
      	    	parseValidQuery(lineTokens);
      	    }
+     	    
+//     	    for (Query q : queryList) {
+//     	    	q.print();
+//     	    }
 		} catch (FileNotFoundException e) {
 			System.out.println("File not Found");
 		} finally {
@@ -74,7 +72,6 @@ public class TravelPlan {
 		boolean isValid = true;
 		//First Make Sure all the Required Brackets Are there
 		if (!isValidBracketsQuery(data)) isValid = false;
-		System.out.println(isValid);
 		//prepare data, then split data into tokens
 		data = data.replaceAll("\\s", ""); // get rid of spaces
 		data = data.replaceAll("\\[", ""); // get rid of [ 
@@ -187,24 +184,22 @@ public class TravelPlan {
 	 * @param lineTokens array of tokens from the input queries
 	 */
 	private void parseValidQuery(String[] lineTokens) {
-		for (int i = 0; i < lineTokens.length; i += 7) {
+		for (int i = 0; i < lineTokens.length; i += 8) {
 			//get the date, splitting first token with delimiter '/'
 			String[] tmpTokens = lineTokens[i].split("/");
 			int day = Integer.parseInt(tmpTokens[0]);
-			System.out.println(tmpTokens.length);
 			int month = Integer.parseInt(tmpTokens[1])-1; //months from 0 to 11
 			int year = Integer.parseInt(tmpTokens[2]);
 			// then gets the hour and minutes
 			tmpTokens = lineTokens[i+1].split("[:]");
 			int hour = Integer.parseInt(tmpTokens[0]);
 			int min = Integer.parseInt(tmpTokens[1]);
-			
 			//check validity of date and time values
 			if (!validDateTime(day, month ,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
 				// re-generate the input line
 				System.out.println("[" + day + "/"+ month + "/" + year + ", " + 
-								   min + ":" + hour + ", " + lineTokens[i+2] + 
+								   hour + ":" + min + ", " + lineTokens[i+2] + 
 								   ", " + lineTokens[i+3] + ", (" + lineTokens[i+4] +
 								   ", " + lineTokens[i+5] + ", " + lineTokens[i+6] + 
 								   "), " + lineTokens[i+7] + "]");
@@ -269,7 +264,7 @@ public class TravelPlan {
      	    if (!correctFormat) {
      	    	System.exit(0);
      	    }
-     	    myFlightMap.printEdges();
+//     	    myFlightMap.printEdges();
 		}
 		catch (FileNotFoundException e) {System.out.println("File not Found");}
 		finally
