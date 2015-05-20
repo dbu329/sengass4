@@ -1,5 +1,2 @@
-*.class
-.idea
-*.iml
-.settings/
+**/*.class
 /bin/
