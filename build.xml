@@ -10,6 +10,8 @@
 	</target>
 	<target name="compile" depends="clean">
 		<mkdir dir="WebContent/WEB-INF/classes"/>
-		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" classpathref="project-classpath"/>
+		<javac srcdir="src" includes="*.java" destdir="WebContent/WEB-INF/classes" classpathref="project-classpath"/>
+		<copy file="flightData.txt" tofile="WebContent/WEB-INF/flightData.txt"/>
+		<copy file="queryData.txt" tofile="WebContent/WEB-INF/queryData.txt"/>
 	</target>
 </project>
