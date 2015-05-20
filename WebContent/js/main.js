@@ -1,10 +1,10 @@
 $(document).ready(function () {
-	$('#queryBtn').click(function () {
+	$('#queryBtn').click(function (event) {
+		event.preventDefault();
 		$.post('query', {
 			query: $('#query').val()
 		}, function (results) {
-			console.log('query done');
 			console.log(results);
-		}, 'text');
+		}, 'json');
 	});
 });
