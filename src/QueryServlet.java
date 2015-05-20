@@ -19,6 +19,8 @@ public class QueryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String[] data = {"../flightData.txt", "../queryData.txt"};
+		TravelPlan tp = new TravelPlan(data);
 		response.getWriter().write("Here are the results");
 	}
 

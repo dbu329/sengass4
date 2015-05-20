@@ -1,5 +1,5 @@
 body {
-	font-family: Arial;
+	font-family: Verdana, Arial;
 	text-align: center;
 	background-image: url("../img/sky.jpg");
 	background-repeat: no-repeat;
@@ -7,4 +7,18 @@ body {
 }
 h1 {
 	text-align: center;
+	color: #555;
+}
+input[type="text"] {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 0.4em 0.25em;
+}
+input[type="submit"] {
+	background-color: rgba(100, 255, 100, 0.8);
+	border: 1px solid rgba(50, 100, 50, 0.5);
+	border-radius: 4px;
+	padding: 0.4em 0.8em;
+	color: #333;
 }
