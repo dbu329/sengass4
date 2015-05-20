@@ -235,42 +235,33 @@ public class TravelPlan {
 	 * @param file
 	 */
 	private void readFlightData(String file) {
-		Scanner sc = null;
-		try
-		{
-		    sc = new Scanner(new FileReader(file)); 
+ 
+			String line = fileToString(file);
 		    boolean correctFormat = true;
-     	    while (sc.hasNextLine()) {
-     	    	String line = sc.nextLine();
-     	    	line = line.replaceAll("\\s", "");
-     	    	
-     	    	//check that the all flights(one or more) in the current line has
-     	    	// valid format. If format is not valid, quit program
-     	    	if (verifyFlightFormat(line) == false) {
-     	    		System.out.println("incorrectly formatted flight data");
-     	    		correctFormat = false;
-     	    		break;
-     	    	}else{
-	     	    	//Edit line, in order to be able to split into string tokens.
-	     	    	line = line.replaceAll("\\[", "");
-	     	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
-	     	    	String delims = "[,]+";             //split string line, by comma
-	     	    	String lineTokens[] = line.split(delims);
-	     	    	//move through one OR more flights in the current line, and add
-	     	    	//them flights. Already proved above the format was correct.
-	     	    	parseValidFlights(lineTokens);
-     	    	}
-     	    }
+
+ 	    	line = line.replaceAll("\\s", "");
+ 	    	
+ 	    	//check that the all flights(one or more) in the current line has
+ 	    	// valid format. If format is not valid, quit program
+ 	    	if (verifyFlightFormat(line) == false) {
+ 	    		System.out.println("incorrectly formatted flight data");
+ 	    		correctFormat = false;
+ 	    		//break;
+ 	    	}else{
+     	    	//Edit line, in order to be able to split into string tokens.
+     	    	line = line.replaceAll("\\[", "");
+     	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
+     	    	String delims = "[,]+";             //split string line, by comma
+     	    	String lineTokens[] = line.split(delims);
+     	    	//move through one OR more flights in the current line, and add
+     	    	//them flights. Already proved above the format was correct.
+     	    	parseValidFlights(lineTokens);
+ 	    	}
+     	    
      	    if (!correctFormat) {
      	    	System.exit(0);
      	    }
 //     	    myFlightMap.printEdges();
-		}
-		catch (FileNotFoundException e) {System.out.println("File not Found");}
-		finally
-		{
-		    if (sc != null) sc.close();
-		}  
 	}
 	
 	/**
@@ -459,5 +450,21 @@ public class TravelPlan {
 			System.out.print(myFlight.getAirline()+",");
 			System.out.println(myFlight.getCost()+"]");
 		
+	}
+	
+	private String fileToString(String filePath){
+		
+		String text = "";
+		try
+		{
+			Scanner sc = new Scanner(new FileReader(filePath));
+			while(sc.hasNextLine()){
+				text = text + sc.nextLine();
+			}
+		}catch(FileNotFoundException e) {
+			System.out.println("File not Found");
+		}
+			
+		return text;
 	}
 }
