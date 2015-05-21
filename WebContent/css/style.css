@@ -63,10 +63,11 @@ div.results {
 }
 div.result {
 	padding: 1em;
-	background-color: rgba(200, 200, 200, 0.2); 
-	border: 1px solid #333;
-	border-radius: 3px;
-	margin: 1px;
+	background-color: rgba(200, 200, 200, 0.1); 
+	//border: 1px solid #333;
+	//border-radius: 3px;
+	//margin: 1px;
+	border-bottom: 1px solid #555;
 	color: #111;
 }
 div.result:hover {
@@ -74,7 +75,19 @@ div.result:hover {
 }
 span.arrow {
 	float: right;
-	font-size: 16pt;
-	margin-top: -3px;
+	font-size: 11pt;
 	color: #333;
+	-ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg);
+    
+	-moz-transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+span.arrow.down {
+	-ms-transform: rotate(0deg); /* IE 9 */
+    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+    transform: rotate(0deg);
 }

@@ -20,6 +20,8 @@ $(document).ready(function () {
 					$('.details', result).animate({
 						height: height == 100 ? 0 : 100
 					}, 200);
+					console.log($('span.arrow .details', result));
+					$('span.arrow', result).toggleClass('down');
 				});
 				$('.results').append(result);
 			});
