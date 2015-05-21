@@ -61,3 +61,20 @@ div.results {
 	margin: 0 auto;
 	margin-top: 1em;
 }
+div.result {
+	padding: 1em;
+	background-color: rgba(200, 200, 200, 0.2); 
+	border: 1px solid #333;
+	border-radius: 3px;
+	margin: 1px;
+	color: #111;
+}
+div.result:hover {
+	cursor: pointer;
+}
+span.arrow {
+	float: right;
+	font-size: 16pt;
+	margin-top: -3px;
+	color: #333;
+}

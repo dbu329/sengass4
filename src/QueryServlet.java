@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,12 +28,23 @@ public class QueryServlet extends HttpServlet {
 		response.addHeader("Content-type", "application/json");
 		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData.txt"),
 						 getServletContext().getRealPath("/WEB-INF/queryData.txt")};
-		//TravelPlan tp = new TravelPlan(data);
+		TravelPlan tp = new TravelPlan(data);
 		JSONArray results = new JSONArray();
-		JSONObject obj = new JSONObject();
-		obj.put("city", "Melbourne");
-		obj.put("price", 230);
-		results.add(obj);
+		for (Flight flight : tp.myFlightMap.edges) {
+			JSONObject obj = new JSONObject();
+			obj.put("airline", flight.getAirline());
+			obj.put("price", flight.getCost());
+			obj.put("origin", flight.getOrigin());
+			obj.put("destination", flight.getDestination());
+			SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+			time.setTimeZone(flight.getTime().getTimeZone());
+			SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+			date.setTimeZone(flight.getTime().getTimeZone());
+			obj.put("date", date.format(flight.getTime().getTime()));
+			obj.put("time", time.format(flight.getTime().getTime()));
+			obj.put("duration", flight.getTravelTime());
+			results.add(obj);
+		}
 		response.getWriter().write(results.toJSONString());
 	}
 
