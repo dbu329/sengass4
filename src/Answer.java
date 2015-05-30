@@ -15,10 +15,11 @@ public class Answer {
 	int travelTime;
 	int totalFreqFlierPoints;
 	
-	Answer(int totalCost, int travelTime, int totalFreqFlierPoints) {
-		this.totalCost = totalCost;
-		this.travelTime = travelTime;
-		this.totalFreqFlierPoints = totalFreqFlierPoints;
+	Answer(FlightPlan flightPlan, int totalCost, int travelTime, int totalFreqFlierPoints) {
+		this.flightPlan = flightPlan;
+		this.totalCost = flightPlan.getTotalCost();
+		this.travelTime = flightPlan.getTravelTime();
+		this.totalFreqFlierPoints = flightPlan.getTotalFreqFlierPoints();
 	}
 	
 	public String toString() {
