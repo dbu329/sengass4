@@ -27,8 +27,9 @@ public class TravelPlan {
 		queryList = new ArrayList<Query>();
 		readFlightData(args[0]);
 		readQueryData(args[1]);
-		
+		findAnswers(queryList);
 	}
+
 
 	/**
 	 * Reads the query input, checking whether it is of valid format. If the format is valid but
@@ -462,10 +463,19 @@ public class TravelPlan {
 			while(sc.hasNextLine()){
 				text = text + sc.nextLine();
 			}
-		}catch(FileNotFoundException e) {
+		} catch(FileNotFoundException e) {
 			System.out.println("File not Found");
 		}
 			
 		return text;
 	}
+	
+	// for every query, return a query answer list, which contains the query and the answer
+	private ArrayList<QueryAnswerPair> findAnswers(ArrayList<Query> queryList) {
+		return null;
+		// TODO
+		
+	}
+
+	
 }
