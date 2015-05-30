@@ -7,17 +7,16 @@ public class Query {
 	private Calendar departureTime; // date as well, might need to change
 	private String origin;
 	private String destination;
-	private String[] preferences;
+	private Preferences preferences;
 	private int numToDisplay;
 	private ArrayList<State> finalStates;
 	
 	public Query(Calendar time, String start, String end,
-				 String[] order, int amount) {
+				 ArrayList<String> order, int amount) {
 		departureTime = time; // might have to change to clone
 		origin = start;
 		destination = end;
-		preferences = new String[3];
-		preferences = order; // again might have to clone
+		preferences = new Preferences(order);
 		numToDisplay = amount;
 	}
 	
@@ -54,7 +53,7 @@ public class Query {
 		return destination;
 	}
 	
-	public String[] getPreferences() {
+	public Preferences getPreferences() {
 		return preferences;
 	}
 	
@@ -82,10 +81,10 @@ public class Query {
 		
 		System.out.print(getOrigin() + "," + getDestination()+",("	);
 		
-		for (int i = 0; i < this.getPreferences().length; i++) {
-			String s = preferences[i];
+		for (int i = 0; i < this.getPreferences().length(); i++) {
+			String s = preferences.get(i);
 			System.out.print(s);
-			if (i != preferences.length-1) {
+			if (i != preferences.length()-1) {
 				System.out.print(",");
 			}
 		}

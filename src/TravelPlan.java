@@ -212,12 +212,15 @@ public class TravelPlan {
 			dateTime.set(Calendar.HOUR_OF_DAY, hour);
 			dateTime.set(Calendar.MINUTE, min);
 			
-			String[] prefOrder = new String[3];
-			prefOrder[0] = lineTokens[i+4];
-			prefOrder[1] = lineTokens[i+5];
-			prefOrder[2] = lineTokens[i+6];
+			ArrayList<String> prefOrder = new ArrayList<String>();
+			
+			prefOrder.add(lineTokens[i+4]);
+			prefOrder.add(lineTokens[i+5]);
+			prefOrder.add(lineTokens[i+6]);
 
 			int numToDisplay = Integer.parseInt(lineTokens[i+7]);
+
+			System.out.println(prefOrder);
 			
 			Query newQuery = new Query(dateTime, lineTokens[i+2], lineTokens[i+3],
 									   prefOrder, numToDisplay);
@@ -471,8 +474,13 @@ public class TravelPlan {
 	private ArrayList<QueryAnswerPair> findAnswers(ArrayList<Query> queryList) {
 		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
 		
+		KBestFirstSearch kbfs = new KBestFirstSearch();
 		
+		for (Query q : queryList) {
+			queryAnswerList.add(kbfs.search(q));
+		}
 		
+
 		return queryAnswerList;
 	}
 
