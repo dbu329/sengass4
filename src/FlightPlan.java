@@ -14,13 +14,19 @@ public class FlightPlan {
 	}
 
 	public int getTotalCost() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cost = 0;
+		for(Flight f : flightPlan){
+			cost += f.getCost();
+		}
+		return cost;
 	}
 
 	public int getTravelTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		int time = 0;
+		for(Flight f : flightPlan){
+			time += f.getTravelTime();
+		}
+		return time;
 	}
 
 	public int getTotalFreqFlierPoints() {
