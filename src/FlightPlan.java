@@ -29,9 +29,10 @@ public class FlightPlan {
 		return time;
 	}
 
+	//TODO: Is there allowed to be DIFFERENT flight carriers in a single flightplan?
 	public int getTotalFreqFlierPoints() {
 		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 	
 }

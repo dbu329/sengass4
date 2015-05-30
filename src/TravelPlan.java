@@ -469,9 +469,11 @@ public class TravelPlan {
 	
 	// for every query, return a query answer list, which contains the query and the answer
 	private ArrayList<QueryAnswerPair> findAnswers(ArrayList<Query> queryList) {
-		return null;
-		// TODO
+		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
 		
+		
+		
+		return queryAnswerList;
 	}
 
 	
