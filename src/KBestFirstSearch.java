@@ -1,9 +1,10 @@
+import java.util.PriorityQueue;
+
 public class KBestFirstSearch {
 	
 	public KBestFirstSearch() {
 		
 	}
-
 	
 /*
 method search(from:Vertex, to:Vertex, g:Graph, k: int) returns (P: set<set<Edge>>) 
@@ -48,8 +49,12 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		// originating city.
 		
+		q.getPreferences().getFirstPref();
+		
+		PriorityQueue queue  = new PriorityQueue();
 		
 		int count = 0;
+		
 
 		while (count < q.getNumToDisplay()) {
 			count++;
@@ -59,4 +64,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		return queryAnswerPair;
 	}
+	
+	
+	
 }

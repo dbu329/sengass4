@@ -451,7 +451,6 @@ public class TravelPlan {
 			System.out.print(myFlight.getTravelTime() + ",");
 			System.out.print(myFlight.getAirline()+",");
 			System.out.println(myFlight.getCost()+"]");
-		
 	}
 	
 	private String fileToString(String filePath){

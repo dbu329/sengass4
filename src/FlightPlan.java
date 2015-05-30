@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+// WHAT YOU WANT TO RETURN TO THE CUSTOMER
 
 public class FlightPlan {
 	

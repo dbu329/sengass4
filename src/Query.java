@@ -9,7 +9,6 @@ public class Query {
 	private String destination;
 	private Preferences preferences;
 	private int numToDisplay;
-	private ArrayList<State> finalStates;
 	
 	public Query(Calendar time, String start, String end,
 				 ArrayList<String> order, int amount) {
@@ -61,13 +60,6 @@ public class Query {
 		return numToDisplay;
 	}
 	
-	public ArrayList<State> getFinalStates() {
-		return finalStates;
-	}
-	
-	public void addFinalState(State state) {
-		finalStates.add(state);
-	}
 	
 	public void print() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

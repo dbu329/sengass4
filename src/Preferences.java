@@ -8,11 +8,8 @@ public class Preferences {
 	private ArrayList<String> prefList;
 	
 	public Preferences(ArrayList<String> pList) {
-		System.out.println("0");
 		prefList = new ArrayList<String>();
-		System.out.println("1");
 		prefList.addAll(pList);
-		System.out.println("2");
 	}
 	
 	public String get(int i) {
