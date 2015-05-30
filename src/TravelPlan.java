@@ -27,6 +27,7 @@ public class TravelPlan {
 		queryList = new ArrayList<Query>();
 		readFlightData(args[0]);
 		readQueryData(args[1]);
+		
 	}
 
 	/**
