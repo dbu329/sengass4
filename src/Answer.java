@@ -15,8 +15,7 @@ public class Answer {
 	int travelTime;
 	int totalFreqFlierPoints;
 	
-	Answer(FlightPlan flightPlan, int totalCost, int travelTime, int totalFreqFlierPoints) {
-		this.flightPlan = flightPlan;
+	Answer(int totalCost, int travelTime, int totalFreqFlierPoints) {
 		this.totalCost = totalCost;
 		this.travelTime = travelTime;
 		this.totalFreqFlierPoints = totalFreqFlierPoints;
