@@ -68,7 +68,15 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
 		PriorityQueue<FlightPlan> b = new PriorityQueue<FlightPlan>(10,myComparator);
-		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
+		
+		Flight fake = new Flight();
+		fake.setDate(q.getDay(), q.getMonth(), q.getYear());
+		fake.setDestination(start);
+		fake.setOrigin(null);
+		fake.setTime(q.getHour(), q.getMinute());
+		fake.setAirline("None");
+		fake.setCost(0);
+		fake.setTravelTime(0);
 
 		//Stores the count of shortest paths to EACH city.
 		// Then set the count for all of these cities to ZERO
@@ -84,21 +92,25 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
 		// HashSet<FlightPlan> P = new HashSet<FlightPlan>();
 		FlightPlan u = new FlightPlan();
+		u.addFlight(fake);
+		System.out.println("dummy flight plan" + u);
+		b.offer(u);
 		
 		// Need a set/list of the paths that we found from start to finish
 		// big 'P' in Wikipedia
 		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
 		
 		System.out.println("Number of paths to find: " + q.getNumToDisplay());
-		
-		System.out.println("numShortestPaths.get(finish) = " + numShortestPaths.get(finish));
+		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
 		
 		while (b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
-			System.out.println("entered once");
+			System.out.println("entered");
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			u = b.poll();
+			
 			System.out.println("just popped off: " + u);
+			
 			b.remove(u);
 			
 			// the shortest path from src -> 'u' increasesby one
