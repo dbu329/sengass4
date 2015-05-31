@@ -1,7 +1,9 @@
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class FlightMap {
 	
@@ -58,5 +60,16 @@ public class FlightMap {
 		}
 		
 		return toReturn;
+	}
+	
+	public Set<String> getAllLocations() {
+		Set<String> list = new HashSet<String>();
+		for (Flight f: edges) {
+//			if (!list.contains(f.getOrigin()))
+				list.add(f.getOrigin());
+//			if (!list.contains(f.getDestination()))
+				list.add(f.getDestination());
+		}
+		return list;
 	}
 }

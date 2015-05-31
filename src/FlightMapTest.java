@@ -1,5 +1,8 @@
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 
 
@@ -43,6 +46,12 @@ public class FlightMapTest {
 		System.out.println("edges = " + fp);
 		
 		System.out.println("neighbours of " + "Sydney : " + fp.getNeighbours("Sydney"));
+		System.out.println("Testing All Neighbours:");
+		Set<String> list = fp.getAllLocations();
+		for (String s : list) {
+			System.out.print(s + " ");
+		}
+		System.out.println();
 	}
 
 }
