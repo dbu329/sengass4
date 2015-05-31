@@ -190,10 +190,10 @@ public class TravelPlan {
 			int hour = Integer.parseInt(tmpTokens[0]);
 			int min = Integer.parseInt(tmpTokens[1]);
 			//check validity of date and time values
-			if (!validDateTime(day, month ,year, hour, min)){
+			if (!validDateTime(day, month+1 ,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
 				// re-generate the input line
-				System.out.println("[" + day + "/"+ month + "/" + year + ", " + 
+				System.out.println("[" + day + "/"+ month+1 + "/" + year + ", " + 
 								   hour + ":" + min + ", " + lineTokens[i+2] + 
 								   ", " + lineTokens[i+3] + ", (" + lineTokens[i+4] +
 								   ", " + lineTokens[i+5] + ", " + lineTokens[i+6] + 
@@ -290,9 +290,9 @@ public class TravelPlan {
 			myFlight.setAirline(lineTokens[i+5]);
 			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
 			//check validity of date and time values
-			if (!validDateTime(day,month,year, hour, min)){
+			if (!validDateTime(day,month+1,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
-				printInvalidDateTime(myFlight,day, month, year, hour, min);
+				printInvalidDateTime(myFlight,day, month+1, year, hour, min);
 				continue;
 			} 
 			myFlightMap.addFlight(myFlight);
