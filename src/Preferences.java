@@ -12,7 +12,7 @@ public class Preferences {
 		prefList.addAll(pList);
 	}
 	
-	public String get(int i) {
+	public String get(int i) { 
 		return prefList.get(i);
 	}
 	
