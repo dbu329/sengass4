@@ -35,8 +35,9 @@ public class Preferences {
 	// order of preference is NOT known.
 	// this function gets the 'airline'...whereever it might be.
 	public String airLinePreference() {
-		
-		return "null";
+		prefList.remove("Cost");
+		prefList.remove("Time");
+		return prefList.get(0);
 	}
 
 }

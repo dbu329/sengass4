@@ -53,10 +53,12 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		q.getPreferences().getFirstPref();
 		
-		PriorityQueue<Flight> b  = new PriorityQueue();
+		//PriorityQueue<Flight> b  = new PriorityQueue();
 		HashSet<FlightPlan> p = new HashSet<FlightPlan>();
 		
-		HashMap<Flight, Integer> countU = new HashMap<Flight, Integer>();
+		HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
+		
+		HashMap<Flight, Integer> numShortestPaths = new HashMap<Flight, Integer>();
 		
 		
 		// nodes we're searching through = 'flight'
@@ -67,7 +69,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		System.out.println(q.getNumToDisplay());
 		
-		while (count < q.getNumToDisplay()) {
+		while (b.isEmpty() &&  count < q.getNumToDisplay()) {
 			count++;
 		}
 		
