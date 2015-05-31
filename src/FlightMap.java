@@ -1,5 +1,7 @@
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,15 +37,24 @@ public class FlightMap {
     	}
 	}
 	
-	public ArrayList<Flight> getNeighbours(String fStr) {
+	/**
+	 * Passed in a flight. Finds the neighbours of the destination of the flight. Convenient as
+	 * it also contains all the necessary date values, and is ready to be used with the function
+	 * getLayoverTime(Flight a, Flight b)
+	 * @param lastFlight
+	 * @return
+	 */
+	public ArrayList<Flight> getNeighbours(Flight myFlight) {
 		ArrayList<Flight> toReturn = new ArrayList<Flight>();
-		
+		String fStr = myFlight.getDestination();
 		for (Flight f : edges) {
 			if (f.getOrigin().equals(fStr)) {
-				toReturn.add(f);
+				// if the layover time is larger than 60 minutes, then add the flight
+				// as a neighbouring flight of fStr. Check out getLayOverTime.
+				if (getLayoverTime(myFlight, f) >= 60)
+					toReturn.add(f);
 			}
 		}
-		
 		return toReturn;
 	}
 	
@@ -72,4 +83,29 @@ public class FlightMap {
 		}
 		return list;
 	}
+	
+	/**
+	 * Gets the layover time between two flights. Returns exact minutes.
+	 * It is possible to be a negative number. Can use this to our advantage, as long as
+	 * returned minutes is >= 60, then the two flights are connected.
+	 * @param a
+	 * @param b
+	 * @return an integer representing the layover time in minutes
+	 */
+	private int getLayoverTime(Flight a, Flight b) {
+		if (a == null || b == null)
+			return 0;
+		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
+		
+		Date dateA = arriveDateA.getTime();
+		Date dateB = b.getTime().getTime();
+		
+		//get the difference between the end of flight a, and the start of flight b
+		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
+		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
+		long diffMinutes = diff/ (60*1000); 
+//		System.out.println("difference in minutes:"+diffMinutes);
+		return (int) diffMinutes;
+	}
+
 }

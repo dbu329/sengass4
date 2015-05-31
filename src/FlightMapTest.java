@@ -20,9 +20,19 @@ public class FlightMapTest {
 		
 		f1.setOrigin("Sydney");
 		f1.setDestination("Melbourne");
+//		f1.setCost(20);
+//		f1.setTime(2, 0);
+//		f1.setAirline("AirSeng");
+//		f1.setDate(10, 6, 2015);
+//		f1.setTravelTime(120);
 		
 		f2.setOrigin("Melbourne");
 		f2.setDestination("Perth");
+//		f2.setCost(35);
+//		f2.setTime(5, 30);
+//		f2.setAirline("AirSeng");
+//		f2.setDate(10, 6, 2015);
+//		f2.setTravelTime(120);
 		
 		f3.setOrigin("Sydney");
 		f3.setDestination("Adelaide");
@@ -45,8 +55,9 @@ public class FlightMapTest {
 		
 		System.out.println("edges = " + fp);
 		
-		System.out.println("neighbours of " + "Sydney : " + fp.getNeighbours("Sydney"));
-		System.out.println("Testing All Neighbours:");
+		// So now, to call getNeighbours, we pass in a Flight.
+		//System.out.println("neighbours of " + "Sydney : " + fp.getNeighbours());
+		System.out.println("Testing getting ALL cities:");
 		Set<String> list = fp.getAllLocations();
 		for (String s : list) {
 			System.out.print(s + " ");

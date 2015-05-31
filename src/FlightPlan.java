@@ -125,7 +125,7 @@ public class FlightPlan {
 	}
 	
 	//Gets the LAST flight in the list of flights taken by this flightPlan.
-	private Flight getLastFlight() {
+	public Flight getLastFlight() {
 		int last = listOfFlights.size() - 1;
 		if (listOfFlights.size() > 0) {
 			return listOfFlights.get(last);

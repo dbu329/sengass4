@@ -108,9 +108,17 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			//NOW, if the count(pathsCountToCurrent) of shortest cost to currentLocation is 
 			//still lower or equal to the number of shortest paths to find, we go through neighbours
 			if (pathsCountToCurrent <= q.getNumToDisplay()) {
+				//First get the list of neighbours from the current Location
+				//This is assuming that the list of NeighBour flights is all VALID
+				Flight lastFlight = p.getLastFlight();
+				ArrayList<Flight> neighbourFlights = myMap.getNeighbours(lastFlight);
 				
+				//now for each Flight in neighbourFlights, we make a new FlightPlan, concatenate 
+				// the new Flight to FlightPlan p, remember to update totalAirline flight time value
+				// if we have flown on the preferred airline (in variable 'airlineToUse')
+				//then insert the new FlightPlan into the priorityqueue b. where it will sort itself
 				
-				
+				//for loop
 				
 				
 			}
