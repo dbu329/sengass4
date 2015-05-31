@@ -33,11 +33,13 @@ public class FlightMap {
     	}
 	}
 	
-	public ArrayList<Flight> getneighbourFlights(String fStr) {
+	public ArrayList<Flight> getNeighbours(String fStr) {
 		ArrayList<Flight> toReturn = new ArrayList<Flight>();
 		
 		for (Flight f : edges) {
-			
+			if (f.getOrigin().equals(fStr)) {
+				toReturn.add(f);
+			}
 		}
 		
 		return toReturn;
@@ -49,7 +51,7 @@ public class FlightMap {
 		while (fItr.hasNext()) {
 			Flight f = fItr.next();
 			if (fItr.hasNext()) {
-				toReturn +=  f.toString() + ",";
+				toReturn +=  f.toString() + ", ";
 			} else {
 				toReturn += f.toString() ;
 			}
