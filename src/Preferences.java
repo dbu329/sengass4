@@ -2,9 +2,6 @@ import java.util.ArrayList;
 
 public class Preferences {
 	
-	//private static final String COST = "Cost";
-	//private static final String TIME = "Time";
-	
 	private ArrayList<String> prefList;
 	
 	public Preferences(ArrayList<String> pList) {
@@ -35,9 +32,19 @@ public class Preferences {
 	// order of preference is NOT known.
 	// this function gets the 'airline'...whereever it might be.
 	public String airLinePreference() {
-		prefList.remove("Cost");
-		prefList.remove("Time");
-		return prefList.get(0);
+		// adding suppressed warnings to local variables is
+		// allowed as we are not interfering with at the 'global' scale.
+		// http://stackoverflow.com/questions/509076/how-do-i-address-unchecked-cast-warnings
+		// http://docs.oracle.com/javase/7/docs/api/java/lang/SuppressWarnings.html
+		@SuppressWarnings("unchecked")
+		ArrayList<String> prefListCopy = (ArrayList<String>) this.prefList.clone();
+		
+		// since it's an array list, gets rid of the objects "Cost" and "Time" in the copied arraylist
+		prefListCopy.remove("Cost");
+		prefListCopy.remove("Time");
+		
+		// returns the remaining preferences. aka the 'airline' that the user has requested.
+		return prefListCopy.get(0);
 	}
 
 }
