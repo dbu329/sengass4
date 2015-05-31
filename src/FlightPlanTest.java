@@ -10,6 +10,7 @@ public class FlightPlanTest {
 		Flight f1 = new Flight();
 		Flight f2 = new Flight();
 		
+		//F1 valid Flight,
 		f1.setOrigin("Sydney");
 		f1.setDestination("Melboure");
 		f1.setCost(20);
@@ -21,7 +22,7 @@ public class FlightPlanTest {
 		f2.setOrigin("Melbourne");
 		f2.setDestination("Perth");
 		f2.setCost(35);
-		f2.setTime(5, 0);
+		f2.setTime(5, 30);
 		f2.setAirline("AirSeng");
 		f2.setDate(10, 6, 2015);
 		f2.setTravelTime(120);
@@ -37,8 +38,10 @@ public class FlightPlanTest {
 		assertTrue(p.getAirlineTime() == 25);
 		assertTrue(p.getTotalTime() == 120);
 		p.addFlight(f2);
+		//assertTrue(p.getTotalCost() == 55);
+		assertTrue(p.getAirlineTime() == 25);
+		System.out.println("\n"+p.getTotalTime());
 		
-	
 	}
 
 }

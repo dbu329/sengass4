@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class FlightPlan {
 	
-	private ArrayList<Flight> listOfFlights;
+	private ArrayList<Flight> listOfFlights; 
 	
 	private int totalCost;	//total price of the flightplan
 	private int totalTime;	//total minutes spent on this flight plan overall. 
@@ -32,10 +32,13 @@ public class FlightPlan {
 	}
 	
 	/**
-	 * Adds a new flight to the FlightPlan path
-	 * @param f
+	 * Adds a new flight to the FlightPlan path.
+	 * @param f 
 	 */
 	public void addFlight(Flight f) {
+//		if (getLastFlight() != null && getLayoverTime(getLastFlight(), f) < 60) {
+//			return;
+//		}
 		this.listOfFlights.add(f);
 	}
 	
@@ -68,6 +71,7 @@ public class FlightPlan {
 		for(Flight f : listOfFlights){
 			time += f.getTravelTime();
 			time += getLayoverTime(prevFlight, f); //get layover time deals with null first time
+			prevFlight = f;
 		}
 		return time;
 	}
@@ -97,8 +101,16 @@ public class FlightPlan {
 		return this.listOfFlights.toString();
 	}
 	
-	//TODO gets the layover time between end of A, and start of B
+	/**
+	 * Gets the layover time between two flights. Returns exact minutes.
+	 *  Can be under 60 minutes.
+	 * @param a
+	 * @param b
+	 * @return an integer representing the layover time in minutes
+	 */
 	private int getLayoverTime(Flight a, Flight b) {
+		if (a == null || b == null)
+			return 0;
 		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
 		
 		Date dateA = arriveDateA.getTime();
@@ -106,12 +118,19 @@ public class FlightPlan {
 		
 		//get the difference between the end of flight a, and the start of flight b
 		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
-		// difference in minutes.don't ask me how i got this
-		long diffMinutes = diff/ (60*1000) % 60; 
-		
-		System.out.println("difference in minutes:"+diffMinutes);
-		
+		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
+		long diffMinutes = diff/ (60*1000); 
+//		System.out.println("difference in minutes:"+diffMinutes);
 		return (int) diffMinutes;
+	}
+	
+	//Gets the LAST flight in the list of flights taken by this flightPlan.
+	private Flight getLastFlight() {
+		int last = listOfFlights.size() - 1;
+		if (listOfFlights.size() > 0) {
+			return listOfFlights.get(last);
+		}
+		return null;
 	}
 
 }
