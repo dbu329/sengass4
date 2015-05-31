@@ -60,14 +60,14 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// originating city.
 		String start = q.getOrigin();
 		String finish = q.getDestination();
+		System.out.println("want to find an flight path for: " + start + "-->" + finish);
 		String airlineToUse = queryPreferences.airLinePreference();
+		
 		//creates a valid comparator given the preferences of the current Query q
-		
 		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
-		
-		//Creates a new Priority Queue using the new comparator created above
+		// Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
-		PriorityQueue<FlightPlan> b  = new PriorityQueue<FlightPlan>(10,myComparator);
+		PriorityQueue<FlightPlan> b = new PriorityQueue<FlightPlan>(10,myComparator);
 		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
 
 		//Stores the count of shortest paths to EACH city.
@@ -77,58 +77,43 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			numShortestPaths.put(s, 0);
 		}
 		
+		System.out.println("numShortestPaths (HashMap) : " + numShortestPaths);
+		
+		System.out.println();
+		
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
-		//HashSet<FlightPlan> P = new HashSet<FlightPlan>();
-		FlightPlan p = new FlightPlan();
+		// HashSet<FlightPlan> P = new HashSet<FlightPlan>();
+		FlightPlan u = new FlightPlan();
 		
-		//Need a set/list of the paths that we found from start to finish
+		// Need a set/list of the paths that we found from start to finish
+		// big 'P' in Wikipedia
 		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
-			
-		//TODO setup the first flight to add to flightPlan. Which should be a bogus flight
-		//  	based on the query. (its costs are all zero and shit, origin = null
-		//		destination = start (the variable defined above)
 		
-		System.out.println("Number of paths to find" + q.getNumToDisplay());
+		System.out.println("Number of paths to find: " + q.getNumToDisplay());
+		
+		System.out.println("numShortestPaths.get(finish) = " + numShortestPaths.get(finish));
+		
 		while (b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
+			System.out.println("entered once");
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
-			p = b.poll();
-			// Then increment the count of 'shortest cost' path to the current city
-			String currentLocation = p.getCurrentCity();
-			int pathsCountToCurrent = numShortestPaths.get(currentLocation);
-			pathsCountToCurrent += 1;
-			// And update it on the main HashMap holding all these counts
-			numShortestPaths.put(currentLocation, pathsCountToCurrent);
+			u = b.poll();
+			System.out.println("just popped off: " + u);
+			b.remove(u);
 			
-			//if we found our destination, then add it to the list called pathsToFinish
-			if (currentLocation.equals(finish)) {
-				pathsToFinish.add(p);
+			// the shortest path from src -> 'u' increasesby one
+			System.out.println("current city = " + u);
+			numShortestPaths.put(u.getCurrentCity(), numShortestPaths.get(u)+1);
+			
+			// if the city of the current city == finish city, 
+			if (u.getCurrentCity().equals(finish)) {
+				pathsToFinish.add(u);
 			}
 			
-			//NOW, if the count(pathsCountToCurrent) of shortest cost to currentLocation is 
-			//still lower or equal to the number of shortest paths to find, we go through neighbours
-			if (pathsCountToCurrent <= q.getNumToDisplay()) {
-				//First get the list of neighbours from the current Location
-				//This is assuming that the list of NeighBour flights is all VALID
-				Flight lastFlight = p.getLastFlight();
-				ArrayList<Flight> neighbourFlights = myMap.getNeighbours(lastFlight);
-				
-				//now for each Flight in neighbourFlights, we make a new FlightPlan, concatenate 
-				// the new Flight to FlightPlan p, remember to update totalAirline flight time value
-				// if we have flown on the preferred airline (in variable 'airlineToUse')
-				//then insert the new FlightPlan into the priorityqueue b. where it will sort itself
-				
-				//for loop
-				
-				
+			// if the QUOTA hasn't been fulfilled...
+			if (numShortestPaths.get(start) <= q.getNumToDisplay()) {
+				// for every neighbour of 'u', get the neighbours of the current city...
 			}
-			
-			//String currCity = p.getCurrentCity()
-			//List<Flight> = myMap.getAdjacent(currCity);
-			// if the current flightplan's 
-			
-				//	if (flighttoneighbour.getAirline = airlineTOUse)
-				//	a.incTotalFreq(a);
 			
 			
 		}
