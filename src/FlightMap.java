@@ -1,7 +1,6 @@
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class FlightMap {
@@ -33,5 +32,29 @@ public class FlightMap {
 			i++;
     	}
 	}
-
+	
+	public ArrayList<Flight> getneighbourFlights(String fStr) {
+		ArrayList<Flight> toReturn = new ArrayList<Flight>();
+		
+		for (Flight f : edges) {
+			
+		}
+		
+		return toReturn;
+	}
+	
+	public String toString() {
+		String toReturn = "";
+		Iterator<Flight> fItr = edges.iterator();
+		while (fItr.hasNext()) {
+			Flight f = fItr.next();
+			if (fItr.hasNext()) {
+				toReturn +=  f.toString() + ",";
+			} else {
+				toReturn += f.toString() ;
+			}
+		}
+		
+		return toReturn;
+	}
 }

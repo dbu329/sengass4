@@ -113,5 +113,9 @@ public class Flight {
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
 	}
 	
+	public String toString() {
+		return this.origin + "->" + this.destination;
+	}
+	
 
 }
