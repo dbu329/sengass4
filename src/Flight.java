@@ -99,14 +99,14 @@ public class Flight {
 	}
 	
 	public void print() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 		dateFormat.setTimeZone(date.getTimeZone());
-		System.out.print(dateFormat.format(date.getTime()));
+		System.out.print("[" + dateFormat.format(date.getTime()) + ",");
 		//System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
 		
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		timeFormat.setTimeZone(date.getTimeZone());
-		System.out.print(timeFormat.format(date.getTime()));
+		System.out.print(timeFormat.format(date.getTime()) + ",");
 		//System.out.print(getHour() + ":" + getMinute() + ",");
 		
 		System.out.print(getOrigin() + "," + getDestination()+",");
