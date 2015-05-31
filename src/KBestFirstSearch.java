@@ -113,6 +113,9 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			// if the QUOTA hasn't been fulfilled...
 			if (numShortestPaths.get(start) <= q.getNumToDisplay()) {
 				// for every neighbour of 'u', get the neighbours of the current city...
+				for (Flight f : this.myMap.getNeighbours(u.getLastFlight())) {
+					u.addFlight(f);
+				}
 			}
 			
 			

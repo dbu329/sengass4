@@ -94,6 +94,7 @@ public class FlightPlan {
 		return listOfFlights.get(last).getDestination();
 	}
 	
+	
 	/**
 	 * Puts this FlightPlan to a String
 	 */
