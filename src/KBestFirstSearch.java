@@ -50,13 +50,16 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	public QueryAnswerPair search(Query q) {
 		
 		// originating city.
+		//creates a valid comparator given the preferences of the current Query q
+		Preferences queryPreferences = q.getPreferences();
+		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
+		//Creates a new Priority Queue using the new comparator created above
+		// Essentially the 'toVisit' list
+		PriorityQueue<Flight> b  = new PriorityQueue(10, myComparator);
 		
-		q.getPreferences().getFirstPref();
-		
-		//PriorityQueue<Flight> b  = new PriorityQueue();
 		HashSet<FlightPlan> p = new HashSet<FlightPlan>();
 		
-		HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
+		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
 		
 		HashMap<Flight, Integer> numShortestPaths = new HashMap<Flight, Integer>();
 		

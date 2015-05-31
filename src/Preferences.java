@@ -46,5 +46,13 @@ public class Preferences {
 		// returns the remaining preferences. aka the 'airline' that the user has requested.
 		return prefListCopy.get(0);
 	}
+	
+	/**
+	 * Returns the preferences of the list
+	 * @return
+	 */
+	public ArrayList<String> getPrefList() {
+		return prefList;
+	}
 
 }

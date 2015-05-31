@@ -25,7 +25,6 @@ public class QueueComparator implements Comparator<Flight> {
 	@Override
 	public int compare(Flight o1, Flight o2) {
 		int comparatorAnswer = 0; 
-
 		for (Comparator<Flight> c:myComparators) {
 			comparatorAnswer = c.compare(o1, o2);
 			if (comparatorAnswer != 0) {
