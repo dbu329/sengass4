@@ -83,19 +83,41 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		//Need a set/list of the paths that we found from start to finish
 		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
+			
+		//TODO setup the first flight to add to flightPlan. Which should be a bogus flight
+		//  	based on the query. (its costs are all zero and shit, origin = null
+		//		destination = start (the variable defined above)
 		
-		int count = 0;	
 		System.out.println("Number of paths to find" + q.getNumToDisplay());
-		
-		while (b.isEmpty() &&  count < q.getNumToDisplay()) {
+		while (b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			p = b.poll();
+			// Then increment the count of 'shortest cost' path to the current city
+			String currentLocation = p.getCurrentCity();
+			int pathsCountToCurrent = numShortestPaths.get(currentLocation);
+			pathsCountToCurrent += 1;
+			// And update it on the main HashMap holding all these counts
+			numShortestPaths.put(currentLocation, pathsCountToCurrent);
+			
+			//if we found our destination, then add it to the list called pathsToFinish
+			if (currentLocation.equals(finish)) {
+				pathsToFinish.add(p);
+			}
+			
+			//NOW, if the count(pathsCountToCurrent) of shortest cost to currentLocation is 
+			//still lower or equal to the number of shortest paths to find, we go through neighbours
+			if (pathsCountToCurrent <= q.getNumToDisplay()) {
+				
+				
+				
+				
+				
+			}
 			
 			//String currCity = p.getCurrentCity()
 			//List<Flight> = myMap.getAdjacent(currCity);
 			// if the current flightplan's 
-			count++;
 			
 				//	if (flighttoneighbour.getAirline = airlineTOUse)
 				//	a.incTotalFreq(a);
