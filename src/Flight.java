@@ -7,7 +7,7 @@ public class Flight {
 	private Calendar date;
 	private String origin;
 	private String destination;
-	private int travelTime;
+	private int travelTime; // minutes
 	private String airline;
 	private int cost;
 	
@@ -90,6 +90,10 @@ public class Flight {
 		return cost;
 	}
 	
+	/**
+	 * Returns the whole date as Calendar.
+	 * @return
+	 */
 	public Calendar getTime () {
 		return date;
 	}

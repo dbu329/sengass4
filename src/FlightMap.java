@@ -1,10 +1,12 @@
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class FlightMap {
 	
-	HashSet<Flight> edges = new HashSet<Flight>();
+	List<Flight> edges = new ArrayList<Flight>();
 	
 	public void addFlight(Flight myFlight) {
 		edges.add(myFlight);
@@ -32,5 +34,4 @@ public class FlightMap {
     	}
 	}
 
-	
 }

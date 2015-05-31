@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 // WHAT YOU WANT TO RETURN TO THE CUSTOMER
 
@@ -11,23 +13,44 @@ public class FlightPlan {
 	                         // Assuming that it includes the 1 hour layovers
 	private int totalAirline; // aka total minutes spent on airline of preference
 	
+	/**
+	 * Constructs a new FlightPlan. The list of flights is empty
+	 */
 	public FlightPlan() {
-		totalCost = 0;
-		totalTime = 0;
-		totalAirline = 0;
+		listOfFlights = new ArrayList<Flight>();
 	}
 	
+	/**
+	 * Constructs a new FlightPlan. The listOfFlights is given a copy
+	 * of the arrayList 'flights' being passed in.
+	 * @param flights
+	 */
 	public FlightPlan(ArrayList<Flight> flights) {
-		totalCost = 0;
-		totalTime = 0;
-		totalAirline = 0;
-		this.listOfFlights = flights;
+
+		listOfFlights = new ArrayList<Flight>(flights); //this passes flights by value, not by reference
 	}
 	
-	public String toString() {
-		return this.listOfFlights.toString();
+	/**
+	 * Adds a new flight to the FlightPlan path
+	 * @param f
+	 */
+	public void addFlight(Flight f) {
+		this.listOfFlights.add(f);
 	}
-
+	
+	/**
+	 * Increments the total time spent on an Airline by minutes 'm' KBestFirstSearch.java
+	 * knows what is the preferred Airline
+	 * @param m
+	 */
+	public void incrementAirlineTime(int m) {
+		totalAirline += m;
+	}
+	
+	/**
+	 * Calculates and returns the totalCost of this FlightPlan
+	 * @return
+	 */
 	public int getTotalCost() {
 		int cost = 0;
 		for(Flight f : listOfFlights){
@@ -36,26 +59,58 @@ public class FlightPlan {
 		return cost;
 	}
 	
+	//TODO we need to figure out a way to get Travel Time which includes delay times
+	// 		which is not necessarily an hour, could be more.
 	public int getTravelTime() {
 		int time = 0;
+		Flight prevFlight = null;
 		for(Flight f : listOfFlights){
 			time += f.getTravelTime();
+			time += getLayoverTime(prevFlight, f); //get layover time deals with null first time
 		}
 		return time;
 	}
 	
-	public void inctotalAirline(int a) {
-		totalAirline += a;
+	// Is there allowed to be DIFFERENT flight carriers in a single flightplan? Yes
+	/**
+	 * Gets the total minutes spent on the Airline.
+	 * @return
+	 */
+	public int getAirlineTime() {
+		return totalAirline;
 	}
 
-	//TODO: Is there allowed to be DIFFERENT flight carriers in a single flightplan?
-	public int getAirlineTime() {
-		return -1;
+	/**
+	 * Gets the Current City the FlightPlan is at
+	 * @return
+	 */
+	public String getCurrentCity() {
+		int last = listOfFlights.size() - 1;
+		return listOfFlights.get(last).getDestination();
 	}
 	
-	// adds a flight.
-	public void addFlight(Flight f) {
-		this.listOfFlights.add(f);
+	/**
+	 * Puts this FlightPlan to a String
+	 */
+	public String toString() {
+		return this.listOfFlights.toString();
 	}
 	
+	//TODO gets the layover time between end of A, and start of B
+	private int getLayoverTime(Flight a, Flight b) {
+		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
+		
+		Date dateA = arriveDateA.getTime();
+		Date dateB = b.getTime().getTime();
+		
+		//get the difference between the end of flight a, and the start of flight b
+		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
+		// difference in minutes.don't ask me how i got this
+		long diffMinutes = diff/ (60*1000) % 60; 
+		
+		System.out.println("difference in minutes:"+diffMinutes);
+		
+		return 0;
+	}
+
 }

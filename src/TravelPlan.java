@@ -122,11 +122,7 @@ public class TravelPlan {
 				// (Cost, Time and "airline"?)
 				// 	Furthermore would that be an incorrect format error? or incorrect
 				//  preference error or something?
-				//TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+				//TODO Do we need to check that preference type is valid?
 				//5. check number of plans to return is valid
 				if (!isValidNumber(dataArray[i+7])) 
 					isValid = false;

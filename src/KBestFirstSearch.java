@@ -81,9 +81,10 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			p = b.poll();
+			//String currCity = p.getCurrentCity()
+			//List<Flight> = myMap.getAdjacent(currCity);
 			// if the current flightplan's 
 			count++;
-			
 			
 				//	if (flighttoneighbour.getAirline = airlineTOUse)
 				//	a.incTotalFreq(a);
