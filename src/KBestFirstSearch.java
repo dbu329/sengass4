@@ -51,6 +51,9 @@ decreases * ; // This is needed here to allow decreases * on the loop
 }
 */
 	
+	//TODO: A prelimiary check to determine whether a query's start and finish is in the
+	// list of all possible locations. if not, return EMPTY STRING.
+	
 	public QueryAnswerPair search(Query q) {
 		Preferences queryPreferences = q.getPreferences();
 		
@@ -103,19 +106,21 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		System.out.println("Number of paths to find: " + q.getNumToDisplay());
 		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
 		
-		while (b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
+		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
 			System.out.println("entered");
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			u = b.poll();
+			
 			
 			System.out.println("just popped off: " + u);
 			
 			b.remove(u);
 			
 			// the shortest path from src -> 'u' increasesby one
-			System.out.println("current city = " + u);
-			numShortestPaths.put(u.getCurrentCity(), numShortestPaths.get(u)+1);
+			System.out.println("current city = " + u.getCurrentCity());
+			System.out.println("num shortest paths to 'u' = " + numShortestPaths.get(u.getCurrentCity()));
+			numShortestPaths.put(u.getCurrentCity(), numShortestPaths.get(u.getCurrentCity())+1);
 			
 			// if the city of the current city == finish city, 
 			if (u.getCurrentCity().equals(finish)) {
@@ -123,9 +128,9 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			}
 			
 			// if the QUOTA hasn't been fulfilled...
-			if (numShortestPaths.get(start) <= q.getNumToDisplay()) {
+			if (numShortestPaths.get(u.getCurrentCity()) <= q.getNumToDisplay()) {
 				// for every neighbour of 'u', get the neighbours of the current city...
-				for (Flight f : this.myMap.getNeighbours(u.getLastFlight())) {
+				for (Flight f : myMap.getNeighbours(u.getLastFlight())) {
 					u.addFlight(f);
 				}
 			}
@@ -134,10 +139,10 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		}
 		
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, null);
-		
+		System.out.println("#######################################");
 		return queryAnswerPair;
 	}
 	
-	
+
 	
 }
