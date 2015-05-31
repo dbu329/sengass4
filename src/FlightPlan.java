@@ -5,9 +5,10 @@ import java.util.ArrayList;
 public class FlightPlan {
 	
 	private ArrayList<Flight> listOfFlights;
+	
 	private int totalCost;
 	private int totalTime;
-	private int totalFreq;
+	private int totalFreq; // aka total minutes spent on airline of preference
 	
 	
 	public FlightPlan(ArrayList<Flight> flights) {
@@ -36,6 +37,7 @@ public class FlightPlan {
 
 	//TODO: Is there allowed to be DIFFERENT flight carriers in a single flightplan?
 	public int getTotalFreqFlierPoints() {
+		
 		return -1;
 	}
 	

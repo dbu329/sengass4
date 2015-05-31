@@ -49,27 +49,31 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	
 	public QueryAnswerPair search(Query q) {
 		
+		// nodes (we're searching through) = 'flight'
+		// path (is a list of flights) aka = 'flightplan'
+		
 		// originating city.
 		String start = q.getOrigin();
 		String dest = q.getDestination();
 		
 		//creates a valid comparator given the preferences of the current Query q
 		Preferences queryPreferences = q.getPreferences();
+		
 		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
 		
 		//Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
-		PriorityQueue<Flight> b  = new PriorityQueue(10, myComparator);
+		PriorityQueue<FlightPlan> b  = new PriorityQueue<FlightPlan>(myComparator);
 		
-		HashSet<FlightPlan> p = new HashSet<FlightPlan>();
+		// 
+		HashSet<FlightPlan> P = new HashSet<FlightPlan>();
 		
 		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
 		
 		HashMap<Flight, Integer> numShortestPaths = new HashMap<Flight, Integer>();
 		
 		
-		// nodes we're searching through = 'flight'
-		// a path is a list of flights. aka: a 'flightplan'
+
 		
 		int count = 0;
 		
