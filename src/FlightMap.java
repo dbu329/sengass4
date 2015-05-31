@@ -110,7 +110,7 @@ public class FlightMap {
 		//get the difference between the end of flight a, and the start of flight b
 		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
 		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
-		long diffMinutes = diff/ (60*1000); 
+		long diffMinutes = (diff + (60*1000) - 1)/ (60*1000);
 		System.out.println("difference in minutes:"+diffMinutes);
 		return (int) diffMinutes;
 	}
