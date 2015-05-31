@@ -139,7 +139,10 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			
 			
 		}
-
+		System.out.println("Paths Found:");
+		for (FlightPlan pl: pathsToFinish) {
+			System.out.println(pl+" Cost:"+pl.getTotalCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Hours Used" + pl.getAirlineTime() );
+		}
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, null);
 		System.out.println("#######################################");
 		return queryAnswerPair;

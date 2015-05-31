@@ -101,9 +101,12 @@ public class FlightMap {
 		if (a == null || b == null)
 			return 0;
 		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
+		Calendar arriveDateB = b.getTime();
 		System.out.print("A:");a.print();
 		System.out.print("B:");b.print();
 		System.out.println();
+		arriveDateA.set(Calendar.MILLISECOND, 0);
+		arriveDateB.set(Calendar.MILLISECOND, 0);
 		Date dateA = arriveDateA.getTime();
 		Date dateB = b.getTime().getTime();
 		
