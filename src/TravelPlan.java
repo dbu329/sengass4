@@ -475,7 +475,8 @@ public class TravelPlan {
 			queryAnswerList.add(kbfs.search(q));
 		}
 		
-
+		System.out.println("FINAL ANSWER:" + queryAnswerList);
+		
 		return queryAnswerList;
 	}
 
