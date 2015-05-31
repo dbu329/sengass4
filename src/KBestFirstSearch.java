@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class KBestFirstSearch {
@@ -51,11 +53,20 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		q.getPreferences().getFirstPref();
 		
-		PriorityQueue<Flight> queue  = new PriorityQueue();
+		PriorityQueue<Flight> b  = new PriorityQueue();
+		HashSet<FlightPlan> p = new HashSet<FlightPlan>();
+		
+		HashMap<Flight, Integer> countU = new HashMap<Flight, Integer>();
+		
+		
+		// nodes we're searching through = 'flight'
+		// a path is a list of flights. aka: a 'flightplan'
 		
 		int count = 0;
 		
-
+		
+		System.out.println(q.getNumToDisplay());
+		
 		while (count < q.getNumToDisplay()) {
 			count++;
 		}
