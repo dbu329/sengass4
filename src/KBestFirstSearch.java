@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class KBestFirstSearch {
@@ -57,7 +59,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		// originating city.
 		String start = q.getOrigin();
-		String dest = q.getDestination();
+		String finish = q.getDestination();
 		String airlineToUse = queryPreferences.airLinePreference();
 		//creates a valid comparator given the preferences of the current Query q
 		
@@ -67,20 +69,29 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// Essentially the 'toVisit' list
 		PriorityQueue<FlightPlan> b  = new PriorityQueue<FlightPlan>(10,myComparator);
 		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
+
+		//Stores the count of shortest paths to EACH city.
+		// Then set the count for all of these cities to ZERO
+		HashMap<String, Integer> numShortestPaths = new HashMap<String, Integer>();
+		for (String s : myMap.getAllLocations()) {
+			numShortestPaths.put(s, 0);
+		}
 		
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
 		//HashSet<FlightPlan> P = new HashSet<FlightPlan>();
 		FlightPlan p = new FlightPlan();
 		
-		HashMap<Flight, Integer> numShortestPaths = new HashMap<Flight, Integer>();
+		//Need a set/list of the paths that we found from start to finish
+		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
 		
 		int count = 0;	
-		System.out.println(q.getNumToDisplay());
+		System.out.println("Number of paths to find" + q.getNumToDisplay());
 		
 		while (b.isEmpty() &&  count < q.getNumToDisplay()) {
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			p = b.poll();
+			
 			//String currCity = p.getCurrentCity()
 			//List<Flight> = myMap.getAdjacent(currCity);
 			// if the current flightplan's 
