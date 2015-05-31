@@ -51,7 +51,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		q.getPreferences().getFirstPref();
 		
-		PriorityQueue queue  = new PriorityQueue();
+		PriorityQueue<Flight> queue  = new PriorityQueue();
 		
 		int count = 0;
 		

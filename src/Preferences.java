@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Preferences {
 	
-	private static final String COST = "Cost";
-	private static final String TIME = "Time";
+	//private static final String COST = "Cost";
+	//private static final String TIME = "Time";
 	
 	private ArrayList<String> prefList;
 	
