@@ -17,6 +17,7 @@ public class FlightPlan {
 	 * Constructs a new FlightPlan. The list of flights is empty
 	 */
 	public FlightPlan() {
+		totalAirline = 0;
 		listOfFlights = new ArrayList<Flight>();
 	}
 	
@@ -26,7 +27,7 @@ public class FlightPlan {
 	 * @param flights
 	 */
 	public FlightPlan(ArrayList<Flight> flights) {
-
+		totalAirline = 0;
 		listOfFlights = new ArrayList<Flight>(flights); //this passes flights by value, not by reference
 	}
 	
@@ -61,7 +62,7 @@ public class FlightPlan {
 	
 	//TODO we need to figure out a way to get Travel Time which includes delay times
 	// 		which is not necessarily an hour, could be more.
-	public int getTravelTime() {
+	public int getTotalTime() {
 		int time = 0;
 		Flight prevFlight = null;
 		for(Flight f : listOfFlights){
@@ -110,7 +111,7 @@ public class FlightPlan {
 		
 		System.out.println("difference in minutes:"+diffMinutes);
 		
-		return 0;
+		return (int) diffMinutes;
 	}
 
 }
