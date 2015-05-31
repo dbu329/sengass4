@@ -7,7 +7,7 @@ public class KBestFirstSearch {
 	public KBestFirstSearch() {
 		
 	}
-	
+
 /*
 method search(from:Vertex, to:Vertex, g:Graph, k: int) returns (P: set<set<Edge>>) 
 requires from in g && to in g && closed(g); 
@@ -50,9 +50,13 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	public QueryAnswerPair search(Query q) {
 		
 		// originating city.
+		String start = q.getOrigin();
+		String dest = q.getDestination();
+		
 		//creates a valid comparator given the preferences of the current Query q
 		Preferences queryPreferences = q.getPreferences();
 		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
+		
 		//Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
 		PriorityQueue<Flight> b  = new PriorityQueue(10, myComparator);
