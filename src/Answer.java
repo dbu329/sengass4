@@ -19,7 +19,7 @@ public class Answer {
 		this.flightPlan = flightPlan;
 		this.totalCost = flightPlan.getTotalCost();
 		this.travelTime = flightPlan.getTravelTime();
-		this.totalFreqFlierPoints = flightPlan.getTotalFreqFlierPoints();
+		this.totalFreqFlierPoints = flightPlan.getAirlineTime();
 	}
 	
 	public String toString() {

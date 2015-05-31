@@ -4,8 +4,10 @@ import java.util.PriorityQueue;
 
 public class KBestFirstSearch {
 	
-	public KBestFirstSearch() {
-		
+	private FlightMap myMap;
+	
+	public KBestFirstSearch(FlightMap fm) {
+		myMap = fm;
 	}
 
 /*
@@ -48,6 +50,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 */
 	
 	public QueryAnswerPair search(Query q) {
+		Preferences queryPreferences = q.getPreferences();
 		
 		// nodes (we're searching through) = 'flight'
 		// path (is a list of flights) aka = 'flightplan'
@@ -55,33 +58,37 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// originating city.
 		String start = q.getOrigin();
 		String dest = q.getDestination();
-		
+		String airlineToUse = queryPreferences.airLinePreference();
 		//creates a valid comparator given the preferences of the current Query q
-		Preferences queryPreferences = q.getPreferences();
 		
 		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
 		
 		//Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
-		PriorityQueue<FlightPlan> b  = new PriorityQueue<FlightPlan>(myComparator);
-		
-		// 
-		HashSet<FlightPlan> P = new HashSet<FlightPlan>();
-		
+		PriorityQueue<FlightPlan> b  = new PriorityQueue<FlightPlan>(10,myComparator);
 		//HashMap<FlightPlan, Integer> b = new HashMap<FlightPlan, Integer>();
+		
+		// P is not just a flight plan, pretty much the 'curr' in our other searches
+		//HashSet<FlightPlan> P = new HashSet<FlightPlan>();
+		FlightPlan p = new FlightPlan();
 		
 		HashMap<Flight, Integer> numShortestPaths = new HashMap<Flight, Integer>();
 		
-		
-
-		
-		int count = 0;
-		
-		
+		int count = 0;	
 		System.out.println(q.getNumToDisplay());
 		
 		while (b.isEmpty() &&  count < q.getNumToDisplay()) {
+			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
+			// also removes itself from the top of the priority queue
+			p = b.poll();
+			// if the current flightplan's 
 			count++;
+			
+			
+				//	if (flighttoneighbour.getAirline = airlineTOUse)
+				//	a.incTotalFreq(a);
+			
+			
 		}
 		
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, null);

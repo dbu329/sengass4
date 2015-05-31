@@ -473,7 +473,7 @@ public class TravelPlan {
 	private ArrayList<QueryAnswerPair> findAnswers(ArrayList<Query> queryList) {
 		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
 		
-		KBestFirstSearch kbfs = new KBestFirstSearch();
+		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
 		
 		for (Query q : queryList) {
 			queryAnswerList.add(kbfs.search(q));
