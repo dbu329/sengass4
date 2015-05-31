@@ -134,4 +134,7 @@ public class FlightPlan {
 		return null;
 	}
 
+	public ArrayList<Flight> getListOfFlights() {
+		return listOfFlights;
+	}
 }

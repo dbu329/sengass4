@@ -48,11 +48,16 @@ public class FlightMap {
 		ArrayList<Flight> toReturn = new ArrayList<Flight>();
 		String fStr = myFlight.getDestination();
 		for (Flight f : edges) {
+			
 			if (f.getOrigin().equals(fStr)) {
+				System.out.println("looking at "+f +"dest:"+fStr + "origin:"+myFlight.getOrigin());
+//				System.out.println("\t the layover time of this flight is:"+getLayoverTime(myFlight, f));
 				// if the layover time is larger than 60 minutes, then add the flight
 				// as a neighbouring flight of fStr. Check out getLayOverTime.
-				if (getLayoverTime(myFlight, f) >= 60)
+				if (myFlight.getOrigin() == null || getLayoverTime(myFlight, f) >= 60) {
+//					System.out.println("add");
 					toReturn.add(f);
+				}
 			}
 		}
 		return toReturn;
@@ -96,7 +101,9 @@ public class FlightMap {
 		if (a == null || b == null)
 			return 0;
 		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
-		
+		System.out.print("A:");a.print();
+		System.out.print("B:");b.print();
+		System.out.println();
 		Date dateA = arriveDateA.getTime();
 		Date dateB = b.getTime().getTime();
 		
@@ -104,7 +111,7 @@ public class FlightMap {
 		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
 		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
 		long diffMinutes = diff/ (60*1000); 
-//		System.out.println("difference in minutes:"+diffMinutes);
+		System.out.println("difference in minutes:"+diffMinutes);
 		return (int) diffMinutes;
 	}
 

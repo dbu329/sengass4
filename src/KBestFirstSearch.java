@@ -107,16 +107,11 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
 		
 		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
-			System.out.println("entered");
+			System.out.println("-----New Loop: B Contains:"+b);
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			u = b.poll();
-			
-			
 			System.out.println("just popped off: " + u);
-			
-			b.remove(u);
-			
 			// the shortest path from src -> 'u' increasesby one
 			System.out.println("current city = " + u.getCurrentCity());
 			System.out.println("num shortest paths to 'u' = " + numShortestPaths.get(u.getCurrentCity()));
@@ -130,14 +125,21 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			// if the QUOTA hasn't been fulfilled...
 			if (numShortestPaths.get(u.getCurrentCity()) <= q.getNumToDisplay()) {
 				// for every neighbour of 'u', get the neighbours of the current city...
+//				System.out.println(myMap.getNeighbours(u.getLastFlight()).size());
 				for (Flight f : myMap.getNeighbours(u.getLastFlight())) {
-					u.addFlight(f);
+//					System.out.println("adding neighbour");
+					FlightPlan newPlan = new FlightPlan(u.getListOfFlights());
+					newPlan.addFlight(f);
+					if (airlineToUse.equals(f.getAirline())) {
+						newPlan.incrementAirlineTime(f.getTravelTime());
+					}
+					b.offer(newPlan);
 				}
 			}
 			
 			
 		}
-		
+
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, null);
 		System.out.println("#######################################");
 		return queryAnswerPair;
