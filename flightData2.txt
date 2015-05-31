@@ -5,3 +5,4 @@
 [01/01/2011, 22:00, Melbourne, Brisbane, 80, Tiger, 120]
 [02/01/2011, 00:30, Canberra, Brisbane, 150, Qantas, 180]
 [01/01/2011, 23:00, Canberra, Brisbane, 140, Jetstar, 120]
+[02/01/2011, 00:30, Canberra, Brisbane, 150, Qantas, 100]

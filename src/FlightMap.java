@@ -102,9 +102,9 @@ public class FlightMap {
 			return 0;
 		Calendar arriveDateA = a.getTime(); // date arriving at destination in A
 		Calendar arriveDateB = b.getTime();
-		System.out.print("A:");a.print();
-		System.out.print("B:");b.print();
-		System.out.println();
+//		System.out.print("A:");a.print();
+//		System.out.print("B:");b.print();
+//		System.out.println();
 		arriveDateA.set(Calendar.MILLISECOND, 0);
 		arriveDateB.set(Calendar.MILLISECOND, 0);
 		Date dateA = arriveDateA.getTime();
@@ -114,7 +114,7 @@ public class FlightMap {
 		long diff = dateB.getTime() - (dateA.getTime() + a.getTravelTime()*60*1000);
 		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
 		long diffMinutes = (diff + (60*1000) - 1)/ (60*1000);
-		System.out.println("difference in minutes:"+diffMinutes);
+//		System.out.println("difference in minutes:"+diffMinutes);
 		return (int) diffMinutes;
 	}
 

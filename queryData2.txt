@@ -1,1 +1,1 @@
-[01/01/2011, 17:00, Sydney, Brisbane, (Qantas, Cost, Time), 3]
+[01/01/2011, 17:00, Sydney, Brisbane, (Cost, Time, Qantas), 6]
