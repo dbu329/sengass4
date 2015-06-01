@@ -24,7 +24,7 @@ public class TravelPlan {
 		queryList = new ArrayList<Query>();
 		readFlightData(args[0]);
 		readQueryData(args[1]);
-		//findAnswers(queryList);
+		doAnswers(queryList);
 	}
 
 
@@ -478,6 +478,13 @@ public class TravelPlan {
 		System.out.println("FINAL ANSWER:" + queryAnswerList);
 		
 		return queryAnswerList;
+	}
+	
+	// wrapper function for 'doAnswers' set to public visibility.
+	public ArrayList<QueryAnswerPair> getResults () {
+		ArrayList<QueryAnswerPair> results = doAnswers(this.queryList);
+		System.out.println("RETURNING RESULTS...");
+		return results;
 	}
 
 	

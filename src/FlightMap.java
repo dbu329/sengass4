@@ -50,7 +50,7 @@ public class FlightMap {
 		for (Flight f : edges) {
 			
 			if (f.getOrigin().equals(fStr)) {
-				System.out.println("looking at "+f +"dest:"+fStr + "origin:"+myFlight.getOrigin());
+//				System.out.println("looking at "+f +"dest:"+fStr + "origin:"+myFlight.getOrigin());
 //				System.out.println("\t the layover time of this flight is:"+getLayoverTime(myFlight, f));
 				// if the layover time is larger than 60 minutes, then add the flight
 				// as a neighbouring flight of fStr. Check out getLayOverTime.

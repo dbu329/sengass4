@@ -88,35 +88,35 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			numShortestPaths.put(s, 0);
 		}
 		
-		System.out.println("numShortestPaths (HashMap) : " + numShortestPaths);
+//		System.out.println("numShortestPaths (HashMap) : " + numShortestPaths);
 		
-		System.out.println();
+//		System.out.println();
 		
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
 		// HashSet<FlightPlan> P = new HashSet<FlightPlan>();
 		FlightPlan u = new FlightPlan();
 		u.addFlight(fake);
-		System.out.println("dummy flight plan" + u);
+//		System.out.println("dummy flight plan" + u);
 		b.offer(u);
 		
 		// Need a set/list of the paths that we found from start to finish
 		// big 'P' in Wikipedia
 		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
 		
-		System.out.println("Number of paths to find: " + q.getNumToDisplay());
-		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
+//		System.out.println("Number of paths to find: " + q.getNumToDisplay());
+//		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
 		
 		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
-			System.out.print("\n-----New Loop: B Contains:\n");
+//			System.out.print("\n-----New Loop: B Contains:\n");
 			for (FlightPlan fp:b) {
-				System.out.println("\t"+fp + " Cost="+fp.getTotalCost()+ " Time="+fp.getTotalTime() + "airline" + fp.getAirlineTime());
+//				System.out.println("\t"+fp + " Cost="+fp.getTotalCost()+ " Time="+fp.getTotalTime() + "airline" + fp.getAirlineTime());
 			}
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			u = b.poll();
-			System.out.println("just popped off: " + u);
+//			System.out.println("just popped off: " + u);
 			// the shortest path from src -> 'u' increasesby one
-			System.out.println("current city = " + u.getCurrentCity());
+//			System.out.println("current city = " + u.getCurrentCity());
 //			System.out.println("num shortest paths to 'u' = " + numShortestPaths.get(u.getCurrentCity()));
 			numShortestPaths.put(u.getCurrentCity(), numShortestPaths.get(u.getCurrentCity())+1);
 			
@@ -157,7 +157,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, answerList);
 		
-		System.out.println("#######################################");
+//		System.out.println("#######################################");
 		return queryAnswerPair;
 	}
 	
