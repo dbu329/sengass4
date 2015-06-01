@@ -30,6 +30,7 @@ input {
 	font-family: inherit;
 	font-size: 12pt;
 }
+
 input[type="text"] {
 	background-color: rgba(255, 255, 255, 0.5);
 	border: 1px solid rgba(0, 0, 0, 0.5);
@@ -38,20 +39,51 @@ input[type="text"] {
 	margin-right: 0.25em;
 	width: 20em;
 }
+
 input[type="text"]:focus {
 	border: 1px solid rgb(50, 50, 255);
 }
+
+select {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 0.5em 0.4em;
+	margin-right: 0.25em;
+	width: 20em;
+}
+
+input[type="number"] {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 0.5em 0.4em;
+	margin-right: 0.25em;
+	width: 2em;
+}
+
+input[type="date"] {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 0.5em 0.4em;
+	margin-right: 0.25em;
+}
+
 input[type="submit"] {
 	background-color: rgba(100, 220, 100, 0.8);
 	border: 1px solid rgba(50, 100, 50, 0.5);
 	border-radius: 4px;
 	padding: 0.5em 0.8em;
+	width: 45em;
 	color: #FFF;
 }
+
 input[type="submit"]:hover {
 	cursor: pointer;
 	background-color: rgba(80, 200, 80, 0.8);
 }
+
 div.results {
 	display: block;
 	width: 70%;
@@ -61,6 +93,7 @@ div.results {
 	margin: 0 auto;
 	margin-top: 1em;
 }
+
 div.result {
 	padding: 1em;
 	background-color: rgba(200, 200, 200, 0.1); 
@@ -70,9 +103,11 @@ div.result {
 	border-bottom: 1px solid #555;
 	color: #111;
 }
+
 div.result:hover {
 	cursor: pointer;
 }
+
 span.arrow {
 	float: right;
 	font-size: 11pt;

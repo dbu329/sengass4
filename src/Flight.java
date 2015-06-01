@@ -7,7 +7,7 @@ public class Flight {
 	private Calendar date;
 	private String origin;
 	private String destination;
-	private int travelTime;
+	private int travelTime; // minutes
 	private String airline;
 	private int cost;
 	
@@ -90,23 +90,31 @@ public class Flight {
 		return cost;
 	}
 	
+	/**
+	 * Returns the whole date as Calendar.
+	 * @return
+	 */
 	public Calendar getTime () {
 		return date;
 	}
 	
 	public void print() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 		dateFormat.setTimeZone(date.getTimeZone());
-		System.out.print(dateFormat.format(date.getTime()));
+		System.out.print("[" + dateFormat.format(date.getTime()) + ",");
 		//System.out.print("["+getDay() + "/" + getMonth() + "/" + getYear() + ",");
 		
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		timeFormat.setTimeZone(date.getTimeZone());
-		System.out.print(timeFormat.format(date.getTime()));
+		System.out.print(timeFormat.format(date.getTime()) + ",");
 		//System.out.print(getHour() + ":" + getMinute() + ",");
 		
 		System.out.print(getOrigin() + "," + getDestination()+",");
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
+	}
+	
+	public String toString() {
+		return this.origin + "->" + this.destination;
 	}
 	
 

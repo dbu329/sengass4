@@ -1,0 +1,3 @@
+[ 29/02/2000, 8:30,Adelaide, Frankfurt, (Time, Cost, None), 4]
+[29/2/2000, 08:40, Adelaide, Singapore, (Qantas, Cost, Time), 1]
+[ 29/2/2000, 10:00,Sydney, Frankfurt, (Jal,  Time, Cost), 2]

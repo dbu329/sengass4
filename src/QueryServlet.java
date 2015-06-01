@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,10 +27,24 @@ public class QueryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Content-type", "application/json");
-		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData.txt"),
-						 getServletContext().getRealPath("/WEB-INF/queryData.txt")};
+		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData3.txt"),
+						 getServletContext().getRealPath("/WEB-INF/queryData3.txt")};
+		
+		// interaction with backend.
+		// we create a TravelPlan object.
 		TravelPlan tp = new TravelPlan(data);
-		JSONArray results = new JSONArray();
+
+		ArrayList<QueryAnswerPair> solutions = new ArrayList<QueryAnswerPair>();
+		// the creation of 'tp' above loads all the queries etc into the object
+		// so, calling the method below is VALID.
+		solutions = tp.getResults();
+		
+		JSONArray jsonResults = new JSONArray();
+		for (QueryAnswerPair qap : solutions) {
+			JSONObject obj0 = new JSONObject();
+		}
+		
+		
 		for (Flight flight : tp.myFlightMap.edges) {
 			JSONObject obj = new JSONObject();
 			obj.put("airline", flight.getAirline());
@@ -43,9 +58,9 @@ public class QueryServlet extends HttpServlet {
 			obj.put("date", date.format(flight.getTime().getTime()));
 			obj.put("time", time.format(flight.getTime().getTime()));
 			obj.put("duration", flight.getTravelTime());
-			results.add(obj);
+			jsonResults.add(obj);
 		}
-		response.getWriter().write(results.toJSONString());
+		response.getWriter().write(jsonResults.toJSONString());
 	}
 
 }

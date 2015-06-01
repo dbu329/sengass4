@@ -1,0 +1,8 @@
+[01/01/2011, 17:00, Sydney, Melbourne, 45, Qantas, 80]
+[01/01/2011, 19:00, Melbourne, Adelaide, 80, Tiger, 120]
+[01/01/2011, 20:00, Melbourne, Adelaide, 70, Qantas, 160]
+[01/01/2011, 22:45, Adelaide, Canberra, 45, Qantas, 80]
+[01/01/2011, 22:00, Melbourne, Brisbane, 80, Tiger, 120]
+[02/01/2011, 00:30, Canberra, Brisbane, 150, Qantas, 180]
+[01/01/2011, 23:00, Canberra, Brisbane, 140, Jetstar, 120]
+[02/01/2011, 00:30, Canberra, Brisbane, 150, Qantas, 100]

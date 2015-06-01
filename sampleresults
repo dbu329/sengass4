@@ -1,0 +1,27 @@
+( [ 29/02/2000, 8:30, Adelaide, Frankfurt, (Time, Cost, Jal), 4] 
+, [ (( [ 29/2/2000, 9:00, Adelaide, Sydney, 110, Qantas, 200 ]
+       [ 29/2/2000, 11:00, Sydney, Singapore, 481, Singaporeairlines, 1500 ]
+       [ 29/2/2000, 22:00, Singapore, Frankfurt, 600, Lufthansa, 3900]), 5600, 1191, 0)
+    (( [ 29/2/2000, 8:45, Adelaide, Singapore, 602, Singaporeairlines, 1900 ]
+       [ 29/2/2000, 22:00, Singapore, Frankfurt, 600, Lufthansa, 3900 ]), 5800, 1202, 0) 
+    (( [ 29/2/2000, 9:00, Adelaide, Sydney, 110, Qantas, 200 ]
+       [ 29/2/2000, 11:30, Sydney, Tokyo, 598, Jal , 2100 ]
+       [ 29/2/2000, 23:30, Tokyo, Frankfurt, 721, Lufthansa, 4500 ]), 6800, 1429, 0)
+    (( [ 29/2/2000, 9:00, Adelaide, Sydney, 110, Qantas, 200 ]
+       [ 29/2/2000, 11:30, Sydney, Tokyo, 598, Jal , 2100 ]
+       [ 29/2/2000, 23:00, Tokyo, Frankfurt, 718, Jal, 5001 ]), 7301 , 1426, 0)])
+
+( [29/2/2000, 08:40, Adelaide, Singapore, (Qantas, Cost, Time), 1]
+, [ (( [ 29/2/2000, 9:00, Adelaide, Sydney, 110, Qantas, 200 ]
+       [ 29/2/2000, 11:00, Sydney, Singapore, 481, Singaporeairlines, 1500 ]), 1700 , 591, 110)])
+
+( [ 29/2/2000, 10:00, Sydney, Frankfurt, (Jal, Time, Cost), 2]
+, [ (( [ 29/2/2000, 11:30, Sydney, Tokyo, 598, Jal , 2100 ]
+       [ 29/2/2000, 23:00, Tokyo, Frankfurt, 718, Jal, 5001 ]), 7101 , 1316, 1316)
+    (( [ 29/2/2000, 11:30, Sydney, Tokyo, 598, Jal , 2100 ]
+       [ 29/2/2000, 23:30, Tokyo, Frankfurt, 721, Lufthansa, 4500 ]), 6800, 1319, 598)])
+
+
+
+
+

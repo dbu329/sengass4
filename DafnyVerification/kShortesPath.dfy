@@ -1,8 +1,56 @@
+/*class Comparator
+{
+	method compare(f1: FlightPlan, f2: FlightPlan)
+	requires f1 != 
+	{
+
+	}
+}*/
+
+
+class PriorityQueue<T>
+{
+	var val: seq<T>;
+	//var comp: Comparator;
+
+	constructor Init()
+	modifies this;
+	ensures val == [];
+	{
+		val := [];
+	}
+
+	method offer(x:T) 
+	modifies this; 
+	ensures val == old(val) + [x]; 
+	{
+		val := val + [x]; 
+	}
+
+	//Just a regular queue for now, will have to 
+	//change this so it conforms to a PriorityQueue
+	method poll() returns (r: T)
+	requires val != [];
+	ensures |val| < |old(val)|
+	ensures  val == old(val)[1..] && r == old(val)[0]
+	modifies this;
+	{
+		r := val[0];
+		val := val[1..];
+	}
+
+	function method isEmpty() :bool 
+	reads this; 
+	{
+		val == []   
+	}
+}
+
 class Vertex
 { 
 	var name: int;
 	var edges_to: seq<Vertex>;
-	var count: int; //The number of shortest paths to this Vertex
+	var numShortestPath: int; //The number of shortest paths to this Vertex
 	var path_from_root : seq<Edge>; //Needed for K-shortest algorithm 
 
 	/*
@@ -23,7 +71,7 @@ class Edge
 	var from: Vertex;
 	var to: Vertex;
 	
-	/*
+	
 	constructor (f:Vertex, t:Vertex, c:int)
 	requires c >= 0;
 	modifies this;
@@ -32,7 +80,22 @@ class Edge
 		from := f;
 		to := t;
 	}
-	*/
+	
+}
+
+class FlightPlan
+{
+	var list: seq<Edge>;
+	var totalCost: int;
+	var totalTime: int;
+	var totalAirline: int;
+
+	constructor ()
+	modifies this;
+	ensures list == []
+	{
+		list := [];
+	}
 }
 
 class Graph
@@ -80,30 +143,37 @@ ensures |P| == k; //where P is a set of k Paths and a Path is a set of Edges
 
 decreases * ; // This is needed here to allow decreases * on the loop 
 {
-	var P := {} //Set of shortest paths
-	var B := [] //Heap data structure containing paths 
-	forall u:Vertex | u in g{ u.count := 0;	}
+	var P :seq<FlightPlan> //Set of shortest paths
+	P := [];
+	var B := new PriorityQueue<FlightPlan>.Init(); //Heap data structure containing paths 
+	forall u:Vertex | u in g{ u.numShortestPath := 0; }
 	from.path_from_root := new Edge.Init(from, from, 0); 
-	B := B + [from.path_from_root];
+	B.offer(from.path)
 
-	while B != [] && to.count < k
-	decreases * //ignore termination for now
+	while !B.isEmpty() && to.numShortestPath < k
+	decreases *;//(k - to.numShortestPath), B//ignore termination for now
+	//modifies clause needed here
 	{
 		//let path P_u = cheapest path in B where u is a vertex
 		//let C = total cost of P_u
 		//B = B - P_u
-		//u.count++
+		//u.numShortestPath++
+
+		var u := B.poll(); //Cheapest path
+		var c := u.totalCost;
+		u.numShortestPath := u.numShortestPath + 1;
+
 		if(u == to)
 		{
-			P := P + [P_u];
+			P := P + [u];
 		}
 		
-		if(u.count <= k)
+		if(u.numShortestPath <= k)
 		{
 			forall v:Vertex | v in u.adjacent 
 			{
 				P_v = P_u + [v];
-				B = B + P_v;
+				B.offer(P_v);
 			}
 		}
 	}

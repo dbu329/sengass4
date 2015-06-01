@@ -7,17 +7,15 @@ public class Query {
 	private Calendar departureTime; // date as well, might need to change
 	private String origin;
 	private String destination;
-	private String[] preferences;
+	private Preferences preferences;
 	private int numToDisplay;
-	private ArrayList<State> finalStates;
 	
 	public Query(Calendar time, String start, String end,
-				 String[] order, int amount) {
+				 ArrayList<String> order, int amount) {
 		departureTime = time; // might have to change to clone
 		origin = start;
 		destination = end;
-		preferences = new String[3];
-		preferences = order; // again might have to clone
+		preferences = new Preferences(order);
 		numToDisplay = amount;
 	}
 	
@@ -54,7 +52,7 @@ public class Query {
 		return destination;
 	}
 	
-	public String[] getPreferences() {
+	public Preferences getPreferences() {
 		return preferences;
 	}
 	
@@ -62,13 +60,6 @@ public class Query {
 		return numToDisplay;
 	}
 	
-	public ArrayList<State> getFinalStates() {
-		return finalStates;
-	}
-	
-	public void addFinalState(State state) {
-		finalStates.add(state);
-	}
 	
 	public void print() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -81,15 +72,34 @@ public class Query {
 		//System.out.print(getHour() + ":" + getMinute() + ",");
 		
 		System.out.print(getOrigin() + "," + getDestination()+",("	);
-		
-		for (int i = 0; i < this.getPreferences().length; i++) {
-			String s = preferences[i];
+			
+		for (int i = 0; i < this.getPreferences().length(); i++) {
+			String s = preferences.get(i);
 			System.out.print(s);
-			if (i != preferences.length-1) {
+			if (i != preferences.length()-1) {
 				System.out.print(",");
 			}
 		}
-		System.out.println("),"+this.getNumToDisplay()+"]");
+		
+		System.out.println(")," + this.getNumToDisplay()+"]");
 //		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
+	}
+	
+	// printing out format = context free grammar specified format
+//	private Calendar departureTime;
+//	private String origin;
+//	private String destination;
+//	private Preferences preferences;
+//	private int numToDisplay;
+	public String toString() {
+		return    "[" + this.departureTime.get(Calendar.DAY_OF_MONTH) 
+				+ "/" + this.departureTime.get(Calendar.MONTH) 
+				+ "/" + this.departureTime.get(Calendar.YEAR)
+				+ "," + this.departureTime.get(Calendar.HOUR_OF_DAY)
+				+ ":" + this.departureTime.get(Calendar.MINUTE)
+				+ "," + this.origin + "," + this.destination
+				+ "," + this.preferences
+				+ "," + this.numToDisplay
+				+ "]";
 	}
 }

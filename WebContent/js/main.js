@@ -4,6 +4,10 @@ $(document).ready(function () {
 		<span class="arrow">&#9660;</span>\
 		<div class="details"></div>\
 	');
+	
+	$('#test').prop('checked', true);
+	
+	
 	$('#queryBtn').click(function (event) {
 		event.preventDefault();
 		$.post('query', {

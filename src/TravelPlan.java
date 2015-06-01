@@ -1,10 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
 
 
@@ -27,8 +24,9 @@ public class TravelPlan {
 		queryList = new ArrayList<Query>();
 		readFlightData(args[0]);
 		readQueryData(args[1]);
-		
+		doAnswers(queryList);
 	}
+
 
 	/**
 	 * Reads the query input, checking whether it is of valid format. If the format is valid but
@@ -124,11 +122,7 @@ public class TravelPlan {
 				// (Cost, Time and "airline"?)
 				// 	Furthermore would that be an incorrect format error? or incorrect
 				//  preference error or something?
-				//TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO TODO
-				//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+				//TODO Do we need to check that preference type is valid?
 				//5. check number of plans to return is valid
 				if (!isValidNumber(dataArray[i+7])) 
 					isValid = false;
@@ -196,10 +190,10 @@ public class TravelPlan {
 			int hour = Integer.parseInt(tmpTokens[0]);
 			int min = Integer.parseInt(tmpTokens[1]);
 			//check validity of date and time values
-			if (!validDateTime(day, month ,year, hour, min)){
+			if (!validDateTime(day, month+1 ,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
 				// re-generate the input line
-				System.out.println("[" + day + "/"+ month + "/" + year + ", " + 
+				System.out.println("[" + day + "/"+ month+1 + "/" + year + ", " + 
 								   hour + ":" + min + ", " + lineTokens[i+2] + 
 								   ", " + lineTokens[i+3] + ", (" + lineTokens[i+4] +
 								   ", " + lineTokens[i+5] + ", " + lineTokens[i+6] + 
@@ -214,12 +208,15 @@ public class TravelPlan {
 			dateTime.set(Calendar.HOUR_OF_DAY, hour);
 			dateTime.set(Calendar.MINUTE, min);
 			
-			String[] prefOrder = new String[3];
-			prefOrder[0] = lineTokens[i+4];
-			prefOrder[1] = lineTokens[i+5];
-			prefOrder[2] = lineTokens[i+6];
+			ArrayList<String> prefOrder = new ArrayList<String>();
+			
+			prefOrder.add(lineTokens[i+4]);
+			prefOrder.add(lineTokens[i+5]);
+			prefOrder.add(lineTokens[i+6]);
 
 			int numToDisplay = Integer.parseInt(lineTokens[i+7]);
+
+			System.out.println(prefOrder);
 			
 			Query newQuery = new Query(dateTime, lineTokens[i+2], lineTokens[i+3],
 									   prefOrder, numToDisplay);
@@ -293,9 +290,9 @@ public class TravelPlan {
 			myFlight.setAirline(lineTokens[i+5]);
 			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
 			//check validity of date and time values
-			if (!validDateTime(day,month,year, hour, min)){
+			if (!validDateTime(day,month+1,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
-				printInvalidDateTime(myFlight,day, month, year, hour, min);
+				printInvalidDateTime(myFlight,day, month+1, year, hour, min);
 				continue;
 			} 
 			myFlightMap.addFlight(myFlight);
@@ -450,7 +447,6 @@ public class TravelPlan {
 			System.out.print(myFlight.getTravelTime() + ",");
 			System.out.print(myFlight.getAirline()+",");
 			System.out.println(myFlight.getCost()+"]");
-		
 	}
 	
 	private String fileToString(String filePath){
@@ -462,10 +458,34 @@ public class TravelPlan {
 			while(sc.hasNextLine()){
 				text = text + sc.nextLine();
 			}
-		}catch(FileNotFoundException e) {
+		} catch(FileNotFoundException e) {
 			System.out.println("File not Found");
 		}
 			
 		return text;
 	}
+	
+	// for every query, return a query answer list, which contains the query and the answer
+	private ArrayList<QueryAnswerPair> doAnswers(ArrayList<Query> queryList) {
+		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
+		
+		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
+		
+		for (Query q : queryList) {
+			queryAnswerList.add(kbfs.search(q));
+		}
+		
+		System.out.println("FINAL ANSWER:" + queryAnswerList);
+		
+		return queryAnswerList;
+	}
+	
+	// wrapper function for 'doAnswers' set to public visibility.
+	public ArrayList<QueryAnswerPair> getResults () {
+		ArrayList<QueryAnswerPair> results = doAnswers(this.queryList);
+		System.out.println("RETURNING RESULTS...");
+		return results;
+	}
+
+	
 }
