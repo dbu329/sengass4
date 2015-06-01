@@ -2,32 +2,32 @@
 <html>
 	<head>
 		<title>WeBookU</title>
+		<link rel="stylesheet" href="css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="css/style.css" />
 		<script src="js/lib/jquery-2.1.4.min.js"></script>
+		<script src="js/lib/jquery-ui.min.js"></script>
 		<script src="js/lib/underscore.min.js"></script>
 		<script src="js/main.js"></script>
 	</head>
 	<body>
 		<h1>WeBookU</h1>
 		<form>
-			<!--<input id="query" type="text" placeholder="Destination" />-->
-			
-			Departure: <input type="date" name="bday"> <br><br>
-  			From: <input type="text"/>
-  			To: <input type="text"/><br><br>
-  			
-  			Preferences:
-  			<select>
-  				<option>Time</option>
-  				<option>Cost</option>
-  				<option>A TEXTBOX FOR PREFERENCES??</option>
-  				<option>THIS DOESN'T ALLOW USER TO SELECT THE DAMN PREFERENCE ORDER</option>
-  			</select>
-  			
-  			Items per Search: <input type="number"/><br><br>
-  			
-			<input id="queryBtn" type="submit" value="Search" />
-
+			<p>
+				<input id="origin" type="text" placeholder="Origin" />
+				<input id="destination" type="text" placeholder="Destination" />
+				<input id="date" type="text" placeholder="Date" />
+			</p>
+			<p>
+				Order by:
+				<select id="preference">
+					<option value="time">Time</option>
+					<option value="cost">Cost</option>
+					<option value="points">Frequent Flyers</option>
+				</select>
+				Items per search:
+				<input id="ips" type="text" />
+				<input id="queryBtn" type="submit" value="Search" />
+			</p>
 		</form>
 		<div class="results"></div>
 	</body>

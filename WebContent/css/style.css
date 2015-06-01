@@ -37,7 +37,10 @@ input[type="text"] {
 	border-radius: 4px;
 	padding: 0.5em 0.4em;
 	margin-right: 0.25em;
-	width: 20em;
+	width: 15em;
+}
+input[type="text"]#date {
+	width: 6em;
 }
 
 input[type="text"]:focus {
@@ -75,7 +78,6 @@ input[type="submit"] {
 	border: 1px solid rgba(50, 100, 50, 0.5);
 	border-radius: 4px;
 	padding: 0.5em 0.8em;
-	width: 45em;
 	color: #FFF;
 }
 
@@ -83,7 +85,20 @@ input[type="submit"]:hover {
 	cursor: pointer;
 	background-color: rgba(80, 200, 80, 0.8);
 }
-
+select {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 0.5em 0.4em;
+	margin-right: 0.25em;
+	width: 9em;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+#ips {
+	width: 5em;
+}
 div.results {
 	display: block;
 	width: 70%;
@@ -125,4 +140,24 @@ span.arrow.down {
 	-ms-transform: rotate(0deg); /* IE 9 */
     -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
     transform: rotate(0deg);
+}
+.ui-menu-item.ui-state-focus {
+	border: 1px solid rgb(50, 50, 255);
+	background: rgb(200, 200, 255) !important;
+	color: rgb(0, 0, 127);
+}
+.ui-datepicker-header, .ui-state-highlight { /* Date header and current day */
+	border: 0 !important;
+	background: rgb(200, 200, 255) !important;
+	color: rgb(93, 93, 220);
+}
+.ui-state-hover { /* Date hover */
+	border: 1px solid rgb(50, 50, 255) !important;
+	background: rgb(200, 200, 255) !important;
+	color: rgb(93, 93, 220) !important;
+}
+.ui-state-active { /* Date selected */
+	border: 1px solid rgb(150, 150, 255) !important;
+	background: rgb(220, 220, 255) !important;
+	color: rgb(93, 93, 220) !important;
 }
