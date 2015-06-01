@@ -72,7 +72,7 @@ public class Query {
 		//System.out.print(getHour() + ":" + getMinute() + ",");
 		
 		System.out.print(getOrigin() + "," + getDestination()+",("	);
-		
+			
 		for (int i = 0; i < this.getPreferences().length(); i++) {
 			String s = preferences.get(i);
 			System.out.print(s);
@@ -80,7 +80,26 @@ public class Query {
 				System.out.print(",");
 			}
 		}
-		System.out.println("),"+this.getNumToDisplay()+"]");
+		
+		System.out.println(")," + this.getNumToDisplay()+"]");
 //		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
+	}
+	
+	// printing out format = context free grammar specified format
+//	private Calendar departureTime;
+//	private String origin;
+//	private String destination;
+//	private Preferences preferences;
+//	private int numToDisplay;
+	public String toString() {
+		return    "[" + this.departureTime.get(Calendar.DAY_OF_MONTH) 
+				+ "/" + this.departureTime.get(Calendar.MONTH) 
+				+ "/" + this.departureTime.get(Calendar.YEAR)
+				+ "," + this.departureTime.get(Calendar.HOUR_OF_DAY)
+				+ ":" + this.departureTime.get(Calendar.MINUTE)
+				+ "," + this.origin + "," + this.destination
+				+ "," + this.preferences
+				+ "," + this.numToDisplay
+				+ "]";
 	}
 }

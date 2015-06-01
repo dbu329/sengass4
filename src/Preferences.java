@@ -55,6 +55,11 @@ public class Preferences {
 		return prefList;
 	}
 	
+	public String toString() {
+		return "(" + this.getFirstPref()
+				+ "," + this.getSecondPref()
+				+ "," + this.getThirdPref() + ")";
+	}
 	
 
 }
