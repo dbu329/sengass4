@@ -26,8 +26,8 @@ public class QueryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Content-type", "application/json");
-		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData.txt"),
-						 getServletContext().getRealPath("/WEB-INF/queryData.txt")};
+		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData3.txt"),
+						 getServletContext().getRealPath("/WEB-INF/queryData3.txt")};
 		TravelPlan tp = new TravelPlan(data);
 		JSONArray results = new JSONArray();
 		for (Flight flight : tp.myFlightMap.edges) {

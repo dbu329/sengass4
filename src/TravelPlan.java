@@ -24,7 +24,7 @@ public class TravelPlan {
 		queryList = new ArrayList<Query>();
 		readFlightData(args[0]);
 		readQueryData(args[1]);
-		findAnswers(queryList);
+		//findAnswers(queryList);
 	}
 
 
@@ -466,7 +466,7 @@ public class TravelPlan {
 	}
 	
 	// for every query, return a query answer list, which contains the query and the answer
-	private ArrayList<QueryAnswerPair> findAnswers(ArrayList<Query> queryList) {
+	private ArrayList<QueryAnswerPair> doAnswers(ArrayList<Query> queryList) {
 		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
 		
 		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
