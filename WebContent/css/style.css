@@ -123,6 +123,9 @@ div.result:hover {
 	cursor: pointer;
 }
 
+div.details {
+	padding-top: 1em;
+}
 span.arrow {
 	float: right;
 	font-size: 11pt;

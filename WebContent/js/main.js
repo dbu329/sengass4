@@ -1,15 +1,24 @@
 $(document).ready(function () {
-	var resultTmpl = _.template('\
+	/*var resultTmpl = _.template('\
 		<b><%= origin %></b> to <b><%= destination %></b> in <%= duration %> minutes\
 		<span class="arrow">&#9660;</span>\
 		<div class="details"><%= airline %></div>\
+	');*/
+	var resultTmpl = _.template('\
+		<b>Option <%= n %></b> <%= duration %> minutes, $<%= price %>\
+		<span class="arrow">&#9660;</span>\
+		<div class="details">\
+			<% _.each(flights, function (flight) { %>\
+				<%= flight.date %> <%= flight.time %>\
+				<%= flight.origin %> to <%= flight.destination %> (<%= flight.duration %> mins)\
+				<br/>\
+			<% }) %>\
+		</div>\
 	');
 	$.get('cities', function (results) {
 		$('#origin').autocomplete({ source: results });
 		$('#destination').autocomplete({ source: results });
 	})
-	//$('#origin').autocomplete({ source: cities });
-	//$('#destination').autocomplete({ source: cities });
 	$('#date').datepicker({ dateFormat: 'dd/mm/yy' });
 	$('#queryBtn').click(function (event) {
 		event.preventDefault();
@@ -22,9 +31,11 @@ $(document).ready(function () {
 		}, function (results) {
 			console.log(results);
 			$('.results').empty();
+			var n = 1;
 			results.forEach(function (i) {
 				var result = $('<div>');
 				$(result).addClass('result');
+				i.n = n++;
 				$(result).html(resultTmpl(i));
 				$('.details', result).height(0);
 				$('.details', result).hide();
