@@ -111,7 +111,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) 
 			/* 
 			 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) );
-			 * 
+			 * invariant 
 			 * modifies  *something;
 			 * 
 			 * When (q.getNumToDisplay - numShortestPaths.get(finish) <= 0 or the list 'b' 
@@ -175,6 +175,11 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			
 			
 		}
+		/*
+		 * assert invariant && !(guard)
+		 * assert invariant && (b.isEmpty()  || numShortestPaths.get(finish) >= q.getNumToDisplay())
+		 */
+		
 		System.out.println("Paths Found:");
 		for (FlightPlan pl: pathsToFinish) {
 			System.out.println(pl+" Cost:"+pl.getTotalCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Hours Used" + pl.getAirlineTime() );

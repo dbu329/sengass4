@@ -152,6 +152,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 
 	while !B.isEmpty() && to.numShortestPath < k
 	decreases *;//(k - to.numShortestPath), B//ignore termination for now
+	//invariant here
 	//modifies clause needed here
 	{
 		//let path P_u = cheapest path in B where u is a vertex
