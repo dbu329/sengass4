@@ -9,8 +9,9 @@ $(document).ready(function () {
 		<span class="arrow">&#9660;</span>\
 		<div class="details">\
 			<% _.each(flights, function (flight) { %>\
+				Depart:\
 				<%= flight.date %> <%= flight.time %>\
-				<%= flight.origin %> to <%= flight.destination %> (<%= Math.floor(flight.duration/60) %> hours	<%= flight.duration%60 %> mins)\
+				<%= flight.origin %> to <%= flight.destination %> (<%= Math.floor(flight.duration/60) %> hours,	<%= flight.duration%60 %> mins)\
 				<br/>\
 			<% }) %>\
 		</div>\
