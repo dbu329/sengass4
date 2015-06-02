@@ -72,25 +72,26 @@ public class QueryServlet extends HttpServlet {
 			JSONObject obj = new JSONObject();
 			obj.put("price", path.getCost());
 			obj.put("duration", path.getTotalTime());
-			obj.put("flights", path.getFlights().toString());
+			JSONArray flights = new JSONArray();
+			for (Flight f : path.getFlights()) {
+				JSONObject flight = new JSONObject();
+				flight.put("airline", f.getAirline());
+				flight.put("price", f.getCost());
+				flight.put("origin", f.getOrigin());
+				flight.put("destination", f.getDestination());
+				SimpleDateFormat timeF = new SimpleDateFormat("HH:mm");
+				timeF.setTimeZone(f.getDate().getTimeZone());
+				SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+				dateF.setTimeZone(f.getDate().getTimeZone());
+				flight.put("date", dateF.format(f.getDate().getTime()));
+				flight.put("time", timeF.format(f.getDate().getTime()));
+				flight.put("duration", f.getDuration());
+				flights.add(flight);
+			}
+			obj.put("flights", flights);
 			jsonResults.add(obj);
 		}
 		
-		/*for (Flight flight : tp.myFlightMap.edges) {
-			JSONObject obj = new JSONObject();
-			obj.put("airline", flight.getAirline());
-			obj.put("price", flight.getCost());
-			obj.put("origin", flight.getOrigin());
-			obj.put("destination", flight.getDestination());
-			SimpleDateFormat time = new SimpleDateFormat("HH:mm");
-			time.setTimeZone(flight.getTime().getTimeZone());
-			SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-			date.setTimeZone(flight.getTime().getTimeZone());
-			obj.put("date", date.format(flight.getTime().getTime()));
-			obj.put("time", time.format(flight.getTime().getTime()));
-			obj.put("duration", flight.getTravelTime());
-			jsonResults.add(obj);
-		}*/
 		response.getWriter().write(jsonResults.toJSONString());
 	}
 
