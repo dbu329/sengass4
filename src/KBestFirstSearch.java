@@ -117,7 +117,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) 
 			/* 
 			 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) );
-			 * invariant *something
+			 * TODO invariant *something
 			 * modifies  u && b && pathsToFinish && numShortestPaths;
 			 * ensures numShortestPaths.get(finish) > 0		(is this true)
 			 * 
@@ -147,6 +147,8 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			// if the city of the current city == finish city, 
 			if (u.getCurrentCity().equals(finish)) 
 				/*
+				 * Potentially shows the invariant holds throughout the loop (although i dont know what 
+				 * the invariant is for now)
 				 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) ) 
 				 */
 			{
@@ -165,6 +167,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 				for (Flight f : myMap.getNeighbours(u.getLastFlight())) 
 				/*
 				 * modifies b
+				 * TODO invariant *something
 				 * ensures |b| = |b| + |u.getNeighbours|
 				 */
 				
@@ -183,7 +186,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			
 		}
 		/*
-		 * assert invariant && !(guard)
+		 * TODO assert invariant && !(guard)
 		 * assert invariant && (b.isEmpty()  || numShortestPaths.get(finish) >= q.getNumToDisplay())
 		 */
 		
