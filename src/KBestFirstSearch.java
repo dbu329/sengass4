@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -6,10 +7,10 @@ import java.util.PriorityQueue;
 
 public class KBestFirstSearch {
 	
-	private FlightMap myMap;
+	private FlightMap graph;
 	
-	public KBestFirstSearch(FlightMap fm) {
-		myMap = fm;
+	public KBestFirstSearch(FlightMap graph) {
+		this.graph = graph;
 	}
 
 /*
@@ -54,8 +55,8 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	//TODO: A prelimiary check to determine whether a query's start and finish is in the
 	// list of all possible locations. if not, return EMPTY STRING.
 	
-	public QueryAnswerPair search(Query q) {
-		Preferences queryPreferences = q.getPreferences();
+	public List<Path> search(Query q) {
+		List<Comparator<Path>> preferences = q.getPreferences();
 		
 		// nodes (we're searching through) = 'flight'
 		// path (is a list of flights) aka = 'flightplan'
@@ -63,30 +64,24 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// originating city.
 		String start = q.getOrigin();
 		String finish = q.getDestination();
-		System.out.println("want to find an flight path for: " + start + "-->" + finish);
-		String airlineToUse = queryPreferences.airLinePreference();
+		//System.out.println("want to find an flight path for: " + start + "-->" + finish);
+		//String airlineToUse = preferences.airLinePreference();
+		String airlineToUse = q.getAirlinePreference();
 		
 		//creates a valid comparator given the preferences of the current Query q
-		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
+		//QueueComparator myComparator = new QueueComparator(preferences.getPrefList());
 		
 		// Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
-		PriorityQueue<FlightPlan> b = new PriorityQueue<FlightPlan>(10,myComparator);
+		PriorityQueue<Path> b = new PriorityQueue<Path>(10, new MultiComparator<Path>(preferences));
 		
 		//create a new flight from null -> origin
-		Flight fake = new Flight();
-		fake.setDate(q.getDay(), q.getMonth(), q.getYear());
-		fake.setDestination(start);
-		fake.setOrigin(null);
-		fake.setTime(q.getHour(), q.getMinute());
-		fake.setAirline("None");
-		fake.setCost(0);
-		fake.setTravelTime(0);
+		Flight fake = new Flight(q.getDepartureTime(), null, start, 0, "None", 0);
 
 		//Stores the count of shortest paths to EACH city.
 		// Then set the count for all of these cities to ZERO
 		HashMap<String, Integer> numShortestPaths = new HashMap<String, Integer>();
-		for (String s : myMap.getAllLocations()) {
+		for (String s : graph.getCities()) {
 			numShortestPaths.put(s, 0);
 		}
 
@@ -96,14 +91,19 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
 		// HashSet<FlightPlan> P = new HashSet<FlightPlan>();
-		FlightPlan u = new FlightPlan();
-		u.addFlight(fake);
+		Path u;
+		for (Flight flight : graph.getNeighbours(fake)) {
+			u = new Path();
+			u.addFlight(flight);
+			b.offer(u);
+		}
+		//System.out.println(fake);
 //		System.out.println("dummy flight plan" + u);
-		b.offer(u);
+		//b.offer(u);
 		
 		// Need a set/list of the paths that we found from start to finish
 		// big 'P' in Wikipedia
-		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
+		List<Path> pathsToFinish = new ArrayList<Path>();
 
 //		System.out.println("Number of paths to find: " + q.getNumToDisplay());
 //		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
@@ -119,7 +119,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			 */
 		{
 //			System.out.print("\n-----New Loop: B Contains:\n");
-			for (FlightPlan fp:b) {
+			for (Path fp:b) {
 //				System.out.println("\t"+fp + " Cost="+fp.getTotalCost()+ " Time="+fp.getTotalTime() + "airline" + fp.getAirlineTime());
 			}
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
@@ -155,7 +155,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			{
 				// for every neighbour of 'u', get the neighbours of the current city...
 //				System.out.println(myMap.getNeighbours(u.getLastFlight()).size());
-				for (Flight f : myMap.getNeighbours(u.getLastFlight())) 
+				for (Flight f : graph.getNeighbours(u.getLastFlight())) 
 				/*
 				 * modifies b
 				 * ensures |b| = |b| + |u.getNeighbours|
@@ -163,36 +163,34 @@ decreases * ; // This is needed here to allow decreases * on the loop
 				
 				{
 //					System.out.println("adding neighbour");
-					FlightPlan newPlan = new FlightPlan(u.getListOfFlights());
-					newPlan.incrementAirlineTime(u.getAirlineTime());
-					newPlan.addFlight(f);
-					if (airlineToUse.equals(f.getAirline())) {
-						newPlan.incrementAirlineTime(f.getTravelTime());
-					}
-					b.offer(newPlan);
+					Path path = new Path(u.getFlights());
+					//newPlan.incrementAirlineTime(u.getAirlineTime(airlineToUse));
+					path.addFlight(f);
+					//if (airlineToUse.equals(f.getAirline())) {
+						//newPlan.incrementAirlineTime(f.getDuration());
+					//}
+					b.offer(path);
 				}
 			}
 			
 			
 		}
 		System.out.println("Paths Found:");
-		for (FlightPlan pl: pathsToFinish) {
-			System.out.println(pl+" Cost:"+pl.getTotalCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Hours Used" + pl.getAirlineTime() );
+		for (Path pl: pathsToFinish) {
+			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Hours Used" + pl.getAirlineTime(airlineToUse));
 		}
 
 		
-		ArrayList<Answer> answerList = new ArrayList<Answer>();
-		for (FlightPlan pl2 : pathsToFinish) {
+		/*List<Answer> answerList = new ArrayList<Answer>();
+		for (Path pl2 : pathsToFinish) {
 			Answer a = new Answer(pl2);
 			answerList.add(a);
-		}
+		}*/
 		
-		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, answerList);
+		//QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, answerList);
 
 //		System.out.println("#######################################");
-		return queryAnswerPair;
+		return pathsToFinish;
 	}
-	
 
-	
 }

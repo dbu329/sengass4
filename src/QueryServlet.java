@@ -51,21 +51,21 @@ public class QueryServlet extends HttpServlet {
 		order.add("Time");
 		order.add("Cost");
 		int amount = Integer.parseInt(params.get("ips")[0]);
-		Query query = new Query(time, origin, destination, order, amount);
+		//Query query = new Query(time, origin, destination, order, amount);
 		
 		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData3.txt"),
 						 getServletContext().getRealPath("/WEB-INF/queryData3.txt")};
 		
-		TravelPlan tp = new TravelPlan(data);
+		//TravelPlan tp = new TravelPlan(data);
 		ArrayList<Query> queryList = new ArrayList<Query>();
-		queryList.add(query);
-		List<QueryAnswerPair> results = tp.doAnswers(queryList);
+		//queryList.add(query);
+		/*List<QueryAnswerPair> results = tp.doAnswers(queryList);
 		
 		JSONArray jsonResults = new JSONArray();
 		for (QueryAnswerPair qap : results) {
 			//qap.answer.get(0).flightPlan.
 			System.out.println(qap.answer.get(0).flightPlan.getListOfFlights());
-		}
+		}*/
 		
 		
 		/*for (Flight flight : tp.myFlightMap.edges) {
@@ -83,7 +83,7 @@ public class QueryServlet extends HttpServlet {
 			obj.put("duration", flight.getTravelTime());
 			jsonResults.add(obj);
 		}*/
-		response.getWriter().write(jsonResults.toJSONString());
+		//response.getWriter().write(jsonResults.toJSONString());
 	}
 
 }

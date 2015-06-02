@@ -1,4 +1,3 @@
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -7,67 +6,37 @@ public class Flight {
 	private Calendar date;
 	private String origin;
 	private String destination;
-	private int travelTime; // minutes
+	private int duration; // minutes
 	private String airline;
 	private int cost;
 	
-	public Flight() {
-		date = Calendar.getInstance();
+	public Flight(Calendar date, String origin, String destination, int duration, String airline, int cost) {
+		//date = Calendar.getInstance();
+		this.date = date;
+		this.origin = origin;
+		this.destination = destination;
+		this.duration = duration;
+		this.airline = airline;
+		this.cost = cost;
 	}
 	
-	public void setDate(int day, int month, int year) {
+	/*public void setDate(int day, int month, int year) {
 		date.set(Calendar.DAY_OF_MONTH, day);
 		date.set(Calendar.MONTH, month);
 		date.set(Calendar.YEAR, year);
-	}
+	}*/
 	
-	public void setTime(int hour, int minute) {
+	/*public void setTime(int hour, int minute) {
 		date.set(Calendar.HOUR_OF_DAY, hour);
 		date.set(Calendar.MINUTE, minute);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setTimeZone(date.getTimeZone());
 //		System.out.println("setting time: " + sdf.format(date.getTime()));
-	}
+	}*/
 	
-	public void setOrigin(String loc) {
-		origin = loc;
-	}
-	
-	public void setDestination(String loc) {
-		destination = loc;
-	}
-	
-	public void setTravelTime(int time) {
-		travelTime = time;
-	}
-	
-	public void setAirline(String name) {
-		airline = name;
-	}
-	
-	public void setCost(int c) {
-		cost = c;
-	}
-	
-	public int getDay() {
-		return date.get(Calendar.DATE);
-	}
-	
-	public int getMonth() {
-		return date.get(Calendar.MONTH);
-	}
-	
-	public int getYear() {
-		return date.get(Calendar.YEAR);
-	}
-	
-	public int getHour() {
-		return date.get(Calendar.HOUR_OF_DAY);
-	}
-	
-	public int getMinute() {
-		return date.get(Calendar.MINUTE);
+	public Calendar getDate() {
+		return date;
 	}
 	
 	public String getOrigin() {
@@ -77,28 +46,20 @@ public class Flight {
 	public String getDestination() {
 		return destination;
 	}
-	
-	public int getTravelTime() {
-		return travelTime;
+
+	public int getDuration() {
+		return duration;
 	}
-	
+
 	public String getAirline() {
 		return airline;
 	}
-	
+
 	public int getCost() {
 		return cost;
 	}
 	
-	/**
-	 * Returns the whole date as Calendar.
-	 * @return
-	 */
-	public Calendar getTime () {
-		return date;
-	}
-	
-	public void print() {
+	/*public void print() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 		dateFormat.setTimeZone(date.getTimeZone());
 		System.out.print("[" + dateFormat.format(date.getTime()) + ",");
@@ -111,11 +72,11 @@ public class Flight {
 		
 		System.out.print(getOrigin() + "," + getDestination()+",");
 		System.out.print(getTravelTime() + ","+getAirline()+"," + getCost()+"]");
-	}
+	}*/
 	
+	@Override
 	public String toString() {
-		return this.origin + "->" + this.destination;
+		return String.format("%s -> %s", origin, destination);
 	}
-	
 
 }

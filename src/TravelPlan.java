@@ -2,29 +2,37 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class TravelPlan {
 	
 	FlightMap myFlightMap;
-	ArrayList<Query> queryList;
+	List<Query> queryList;
 	
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("Usage: FlightMap flightsFile queryFile");
 		} else {
 			System.out.println("Seng Asscheduler:");
-			TravelPlan newPlan = new TravelPlan(args);
+			TravelPlan newPlan = new TravelPlan(args[0], args[1]);
 		}
 	}
 	
-	public TravelPlan(String[] args) {
+	public TravelPlan(String flightDataPath, String queryDataPath) {
 		myFlightMap = new FlightMap();
 		queryList = new ArrayList<Query>();
-		readFlightData(args[0]);
-		readQueryData(args[1]);
-		doAnswers(queryList);
+		readFlightData(flightDataPath);
+		readQueryData(queryDataPath);
+		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
+		for (Query query : queryList) {
+			//System.out.println(query);
+			//System.out.println(kbfs.search(query));
+			kbfs.search(query);
+		}
+		//doAnswers(queryList);
 	}
 
 
@@ -208,19 +216,23 @@ public class TravelPlan {
 			dateTime.set(Calendar.HOUR_OF_DAY, hour);
 			dateTime.set(Calendar.MINUTE, min);
 			
-			ArrayList<String> prefOrder = new ArrayList<String>();
-			
-			prefOrder.add(lineTokens[i+4]);
-			prefOrder.add(lineTokens[i+5]);
-			prefOrder.add(lineTokens[i+6]);
+			List<Comparator<Path>> preferences = new ArrayList<Comparator<Path>>();
+			String airlinePreference = null;
+			for (int j = i+4; j <= i+6; j++) {
+				if (lineTokens[j].equals("Time")) {
+					preferences.add(new TravelTimePreference());
+				} else if (lineTokens[j].equals("Cost")) {
+					preferences.add(new CostPreference());
+				} else {
+					preferences.add(new AirlinePreference(lineTokens[j]));
+					airlinePreference = lineTokens[j];
+				}
+			}
 
 			int numToDisplay = Integer.parseInt(lineTokens[i+7]);
-
-			System.out.println(prefOrder);
-			
-			Query newQuery = new Query(dateTime, lineTokens[i+2], lineTokens[i+3],
-									   prefOrder, numToDisplay);
-			queryList.add(newQuery);
+			Query query = new Query(dateTime, lineTokens[i+2], lineTokens[i+3],
+									   preferences, numToDisplay, airlinePreference);
+			queryList.add(query);
 		}
 	}
 	
@@ -271,7 +283,6 @@ public class TravelPlan {
 	 */
 	private void parseValidFlights(String[] lineTokens) {
 		for (int i = 0; i < lineTokens.length; i += 7) {
-			Flight myFlight = new Flight();
 			//first gets date, below line splits the first token(the date) by /,
 			String[] tmpTokens = lineTokens[i].split("/");
 			int day = Integer.parseInt(tmpTokens[0]);
@@ -282,20 +293,26 @@ public class TravelPlan {
 			int hour = Integer.parseInt(tmpTokens[0]);
 			int min = Integer.parseInt(tmpTokens[1]);
 			
-			myFlight.setDate(day, month, year);
-			myFlight.setTime(hour, min); 
-			myFlight.setOrigin(lineTokens[i+2]);
-			myFlight.setDestination(lineTokens[i+3]);
-			myFlight.setTravelTime(Integer.parseInt(lineTokens[i+4]));
-			myFlight.setAirline(lineTokens[i+5]);
-			myFlight.setCost(Integer.parseInt(lineTokens[i+6]));
+			Calendar date = Calendar.getInstance();
+			date.set(Calendar.DAY_OF_MONTH, day);
+			date.set(Calendar.MONTH, month);
+			date.set(Calendar.YEAR, year);
+			date.set(Calendar.HOUR_OF_DAY, hour);
+			date.set(Calendar.MINUTE, min);
+			String origin = lineTokens[i+2];
+			String destination = lineTokens[i+3];
+			int duration = Integer.parseInt(lineTokens[i+4]);
+			String airline = lineTokens[i+5];
+			int cost = Integer.parseInt(lineTokens[i+6]);
+			Flight flight = new Flight(date, origin, destination, duration, airline, cost);
+
 			//check validity of date and time values
 			if (!validDateTime(day,month+1,year, hour, min)){
 				System.out.print("Invalid date/time in entry: ");
-				printInvalidDateTime(myFlight,day, month+1, year, hour, min);
+				printInvalidDateTime(flight,day, month+1, year, hour, min);
 				continue;
 			} 
-			myFlightMap.addFlight(myFlight);
+			myFlightMap.addFlight(flight);
 		}
 	}
 	
@@ -444,35 +461,36 @@ public class TravelPlan {
 			System.out.format("[%02d/%02d/%02d,", day, month, year);
 			System.out.format("%02d:%02d,", hour, min);
 			System.out.print(myFlight.getOrigin() + "," + myFlight.getDestination());
-			System.out.print(myFlight.getTravelTime() + ",");
+			System.out.print(myFlight.getDuration() + ",");
 			System.out.print(myFlight.getAirline()+",");
 			System.out.println(myFlight.getCost()+"]");
 	}
 	
-	private String fileToString(String filePath){
-		
+	private String fileToString(String filePath) {
+		Scanner sc = null;
 		String text = "";
-		try
-		{
-			Scanner sc = new Scanner(new FileReader(filePath));
+		try {
+			sc = new Scanner(new FileReader(filePath));
 			while(sc.hasNextLine()){
 				text = text + sc.nextLine();
 			}
-		} catch(FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println("File not Found");
+		} finally {
+			sc.close();
 		}
-			
+		
 		return text;
 	}
 	
 	// for every query, return a query answer list, which contains the query and the answer
-	private ArrayList<QueryAnswerPair> doAnswers(ArrayList<Query> queryList) {
-		ArrayList<QueryAnswerPair> queryAnswerList = new ArrayList<QueryAnswerPair>();
+	/*private ArrayList<QueryAnswerPair> doAnswers(ArrayList<Query> queryList) {
+		List<Path> results = new ArrayList<Path>();
 		
 		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
 		
 		for (Query q : queryList) {
-			queryAnswerList.add(kbfs.search(q));
+			results.add(kbfs.search(q));
 		}
 		
 		System.out.println("FINAL ANSWER:" + queryAnswerList);
@@ -485,7 +503,7 @@ public class TravelPlan {
 		ArrayList<QueryAnswerPair> results = doAnswers(this.queryList);
 		System.out.println("RETURNING RESULTS...");
 		return results;
-	}
+	}*/
 
 	
 }

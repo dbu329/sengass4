@@ -1,25 +1,26 @@
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.List;
 
 
 public class Query {
 	private Calendar departureTime; // date as well, might need to change
 	private String origin;
 	private String destination;
-	private Preferences preferences;
+	private List<Comparator<Path>> preferences;
 	private int numToDisplay;
+	private String airlinePreference;
 	
-	public Query(Calendar time, String start, String end,
-				 ArrayList<String> order, int amount) {
-		departureTime = time; // might have to change to clone
+	public Query(Calendar time, String start, String end, List<Comparator<Path>> order, int amount, String airlinePreference) {
+		departureTime = time;
 		origin = start;
 		destination = end;
-		preferences = new Preferences(order);
+		preferences = order;
 		numToDisplay = amount;
+		this.airlinePreference = airlinePreference;
 	}
-	
-	// should we split into get start year, month, date, time? yes I've Split
+
 	public Calendar getDepartureTime() {
 		return departureTime;
 	}
@@ -52,7 +53,7 @@ public class Query {
 		return destination;
 	}
 	
-	public Preferences getPreferences() {
+	public List<Comparator<Path>> getPreferences() {
 		return preferences;
 	}
 	
@@ -60,6 +61,9 @@ public class Query {
 		return numToDisplay;
 	}
 	
+	public String getAirlinePreference() {
+		return airlinePreference;
+	}
 	
 	public void print() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -73,10 +77,10 @@ public class Query {
 		
 		System.out.print(getOrigin() + "," + getDestination()+",("	);
 			
-		for (int i = 0; i < this.getPreferences().length(); i++) {
-			String s = preferences.get(i);
+		for (int i = 0; i < preferences.size(); i++) {
+			String s = preferences.get(i).getClass().toString();
 			System.out.print(s);
-			if (i != preferences.length()-1) {
+			if (i != preferences.size()-1) {
 				System.out.print(",");
 			}
 		}
