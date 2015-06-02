@@ -511,6 +511,7 @@ public class TravelPlan {
 	public ArrayList<QueryAnswerPair> getResults () {
 		ArrayList<QueryAnswerPair> results = doAnswers(this.queryList);
 		System.out.println("RETURNING RESULTS...");
+		
 		return results;
 	}*/
 
