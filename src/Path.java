@@ -121,4 +121,5 @@ public class Path {
 	public List<Flight> getFlights() {
 		return flights;
 	}
+
 }
