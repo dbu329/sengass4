@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,16 +28,14 @@ public class QueryServlet extends HttpServlet {
 		response.getWriter().write("healthy");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Content-type", "application/json");
 		
 		Map<String, String[]> params = request.getParameterMap();
-		for (String p : params.keySet()) {
-			System.out.println(p);
-			System.out.println(params.get(p)[0]);
-		}
+		
 		String origin = params.get("origin")[0];
 		String destination = params.get("destination")[0];
 		Date date = null;
@@ -47,26 +46,35 @@ public class QueryServlet extends HttpServlet {
 		}
 		Calendar time = Calendar.getInstance();
 		time.setTime(date);
-		ArrayList<String> order = new ArrayList<String>();
-		order.add("Time");
-		order.add("Cost");
+		String airlinePreference = "None";
+		List<Comparator<Path>> preferences = new ArrayList<Comparator<Path>>();
+		if (params.get("preference")[0].equals("time")) {
+			preferences.add(new TravelTimePreference());
+			preferences.add(new CostPreference());
+			preferences.add(new AirlinePreference(airlinePreference));
+		} else if (params.get("preference")[0].equals("cost")) {
+			preferences.add(new CostPreference());
+			preferences.add(new TravelTimePreference());
+			preferences.add(new AirlinePreference(airlinePreference));
+		} else {
+			airlinePreference = params.get("preference")[0];
+			preferences.add(new AirlinePreference(params.get("preference")[0]));
+			preferences.add(new CostPreference());
+			preferences.add(new TravelTimePreference());
+		}
 		int amount = Integer.parseInt(params.get("ips")[0]);
-		//Query query = new Query(time, origin, destination, order, amount);
+		Query query = new Query(time, origin, destination, preferences, amount, airlinePreference);
 		
-		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData3.txt"),
-						 getServletContext().getRealPath("/WEB-INF/queryData3.txt")};
-		
-		//TravelPlan tp = new TravelPlan(data);
-		ArrayList<Query> queryList = new ArrayList<Query>();
-		//queryList.add(query);
-		/*List<QueryAnswerPair> results = tp.doAnswers(queryList);
-		
+		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData3.txt"));
+
 		JSONArray jsonResults = new JSONArray();
-		for (QueryAnswerPair qap : results) {
-			//qap.answer.get(0).flightPlan.
-			System.out.println(qap.answer.get(0).flightPlan.getListOfFlights());
-		}*/
-		
+		for (Path path : tp.executeQuery(query)) {
+			JSONObject obj = new JSONObject();
+			obj.put("price", path.getCost());
+			obj.put("duration", path.getTotalTime());
+			obj.put("flights", path.getFlights().toString());
+			jsonResults.add(obj);
+		}
 		
 		/*for (Flight flight : tp.myFlightMap.edges) {
 			JSONObject obj = new JSONObject();
@@ -83,7 +91,7 @@ public class QueryServlet extends HttpServlet {
 			obj.put("duration", flight.getTravelTime());
 			jsonResults.add(obj);
 		}*/
-		//response.getWriter().write(jsonResults.toJSONString());
+		response.getWriter().write(jsonResults.toJSONString());
 	}
 
 }

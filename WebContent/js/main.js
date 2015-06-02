@@ -4,14 +4,12 @@ $(document).ready(function () {
 		<span class="arrow">&#9660;</span>\
 		<div class="details"><%= airline %></div>\
 	');
-	var cities = [
-	    'Sydney',
-	    'Canberra',
-	    'Adelaide',
-	    'Egypt'
-	];
-	$('#origin').autocomplete({ source: cities });
-	$('#destination').autocomplete({ source: cities });
+	$.get('cities', function (results) {
+		$('#origin').autocomplete({ source: results });
+		$('#destination').autocomplete({ source: results });
+	})
+	//$('#origin').autocomplete({ source: cities });
+	//$('#destination').autocomplete({ source: cities });
 	$('#date').datepicker({ dateFormat: 'dd/mm/yy' });
 	$('#queryBtn').click(function (event) {
 		event.preventDefault();

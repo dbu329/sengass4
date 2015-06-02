@@ -34,7 +34,16 @@ public class TravelPlan {
 		}
 		//doAnswers(queryList);
 	}
-
+	
+	public TravelPlan(String flightDataPath) {
+		myFlightMap = new FlightMap();
+		readFlightData(flightDataPath);
+	}
+	
+	public List<Path> executeQuery(Query query) {
+		KBestFirstSearch kbfs = new KBestFirstSearch(myFlightMap);
+		return kbfs.search(query);
+	}
 
 	/**
 	 * Reads the query input, checking whether it is of valid format. If the format is valid but
