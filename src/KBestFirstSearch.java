@@ -60,10 +60,10 @@ public class KBestFirstSearch {
 				}
 			}
 		}
-		System.out.println("Paths Found:");
-		for (Path pl: pathsToFinish) {
-			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Minutes Used" + pl.getAirlineTime(airlineToUse));
-		}
+//		System.out.println("Paths Found:");
+//		for (Path pl: pathsToFinish) {
+//			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Minutes Used" + pl.getAirlineTime(airlineToUse));
+//		}
 		
 		return pathsToFinish;
 	}
