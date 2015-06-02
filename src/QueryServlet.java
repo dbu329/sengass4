@@ -1,7 +1,11 @@
-import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,25 +31,44 @@ public class QueryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Content-type", "application/json");
+		
+		Map<String, String[]> params = request.getParameterMap();
+		for (String p : params.keySet()) {
+			System.out.println(p);
+			System.out.println(params.get(p)[0]);
+		}
+		String origin = params.get("origin")[0];
+		String destination = params.get("destination")[0];
+		Date date = null;
+		try {
+			date = new SimpleDateFormat("DD/MM/yyyy").parse(params.get("date")[0]);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar time = Calendar.getInstance();
+		time.setTime(date);
+		ArrayList<String> order = new ArrayList<String>();
+		order.add("Time");
+		order.add("Cost");
+		int amount = Integer.parseInt(params.get("ips")[0]);
+		Query query = new Query(time, origin, destination, order, amount);
+		
 		String[] data = {getServletContext().getRealPath("/WEB-INF/flightData3.txt"),
 						 getServletContext().getRealPath("/WEB-INF/queryData3.txt")};
 		
-		// interaction with backend.
-		// we create a TravelPlan object.
 		TravelPlan tp = new TravelPlan(data);
-
-		ArrayList<QueryAnswerPair> solutions = new ArrayList<QueryAnswerPair>();
-		// the creation of 'tp' above loads all the queries etc into the object
-		// so, calling the method below is VALID.
-		solutions = tp.getResults();
+		ArrayList<Query> queryList = new ArrayList<Query>();
+		queryList.add(query);
+		List<QueryAnswerPair> results = tp.doAnswers(queryList);
 		
 		JSONArray jsonResults = new JSONArray();
-		for (QueryAnswerPair qap : solutions) {
-			JSONObject obj0 = new JSONObject();
+		for (QueryAnswerPair qap : results) {
+			//qap.answer.get(0).flightPlan.
+			System.out.println(qap.answer.get(0).flightPlan.getListOfFlights());
 		}
 		
 		
-		for (Flight flight : tp.myFlightMap.edges) {
+		/*for (Flight flight : tp.myFlightMap.edges) {
 			JSONObject obj = new JSONObject();
 			obj.put("airline", flight.getAirline());
 			obj.put("price", flight.getCost());
@@ -59,7 +82,7 @@ public class QueryServlet extends HttpServlet {
 			obj.put("time", time.format(flight.getTime().getTime()));
 			obj.put("duration", flight.getTravelTime());
 			jsonResults.add(obj);
-		}
+		}*/
 		response.getWriter().write(jsonResults.toJSONString());
 	}
 
