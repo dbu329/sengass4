@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +7,7 @@ import java.util.Map;
 
 public class Path {
 	
-	private List<Flight> flights; 
+	private List<Flight> flights; //initialises empty list of Flights 
 	
 	private int cost; // total price of flights
 	private int duration; // duration of path in minutes
@@ -22,14 +23,19 @@ public class Path {
 	}
 	
 	/**
-	 * Constructs a new Path. The flights is given a copy
-	 * of the arrayList 'flights' being passed in.
+	 * Constructs a new Path. The new Path adds each of the new Flights
+	 * in to itself, which also calculates cost, duration and airlineTimes
+	 * automatically, since it makes use of the addFlight(Flight) function.
 	 * @param flights
 	 */
-	public Path(List<Flight> flights) {
+	public Path(List<Flight> newFlights) {
+		cost = 0;
 		duration = 0;
-		this.flights = new ArrayList<Flight>(flights); // clone the given flights
+		flights = new ArrayList<Flight>();
 		airlineTime = new HashMap<String, Integer>();
+		for (Flight fl: newFlights) {
+			addFlight(fl);
+		}
 	}
 	
 	/**
@@ -37,8 +43,12 @@ public class Path {
 	 * @param f 
 	 */
 	public void addFlight(Flight flight) {
-		flights.add(flight);
+		//calculate duration BEFORE adding the new flight, as calculation of duration makes use
+		// of knowing the getLastFlight() function
 		duration += flight.getDuration();
+		duration += getLayoverTime(this.getLastFlight(), flight);
+		//Now add the new flight on
+		flights.add(flight);
 		String airline = flight.getAirline();
 		if (airlineTime.get(airline) == null) {
 			airlineTime.put(airline, 0);
@@ -48,21 +58,20 @@ public class Path {
 		cost += flight.getCost();
 	}
 
+	/**
+	 * Gets the total cost of this Path
+	 * @return
+	 */
 	public int getCost() {
 		return cost;
 	}
 	
-	//TODO we need to figure out a way to get Travel Time which includes delay times
-	// 		which is not necessarily an hour, could be more.
+	/**
+	 * Gets the total time taken for this path
+	 * @return
+	 */
 	public int getTotalTime() {
-		int time = 0;
-		Flight prevFlight = null;
-		for(Flight f : flights){
-			time += f.getDuration();
-			time += getLayoverTime(prevFlight, f); //get layover time deals with null first time
-			prevFlight = f;
-		}
-		return time;
+		return duration;
 	}
 
 	/**
@@ -97,10 +106,15 @@ public class Path {
 	private int getLayoverTime(Flight a, Flight b) {
 		if (a == null || b == null)
 			return 0;
+		Calendar arriveDateA = a.getDate();
+		Calendar arriveDateB = b.getDate();
+		//sets the Calendar Milliseconds to zero so that there won't be any rounding errors
+		arriveDateA.set(Calendar.MILLISECOND, 0);
+		arriveDateB.set(Calendar.MILLISECOND, 0);
 		
-		Date dateA = a.getDate().getTime();
-		Date dateB = b.getDate().getTime();
-		
+		Date dateA = arriveDateA.getTime();
+		Date dateB = arriveDateB.getTime();
+
 		//get the difference between the end of flight a, and the start of flight b
 		long diff = dateB.getTime() - (dateA.getTime() + a.getDuration()*60*1000);
 		// difference in minutes.don't ask me how i got this. edit* ask me how i got this
@@ -109,6 +123,10 @@ public class Path {
 		return (int) diffMinutes;
 	}
 
+	/**
+	 * Returns the last Flight on this Path
+	 * @return
+	 */
 	public Flight getLastFlight() {
 		Flight last = null;
 		int lastIndex = flights.size() - 1;
@@ -118,6 +136,10 @@ public class Path {
 		return last;
 	}
 
+	/**
+	 * Gets a list of the flights of this path.
+	 * @return
+	 */
 	public List<Flight> getFlights() {
 		return flights;
 	}

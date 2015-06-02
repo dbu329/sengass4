@@ -52,16 +52,17 @@ public class KBestFirstSearch {
 			if (path.getCurrentCity().equals(finish)) {
 				pathsToFinish.add(path);
 			}
-			
-			for (Flight flight : graph.getNeighbours(path.getLastFlight())) {
-				Path adj = new Path(path.getFlights());
-				adj.addFlight(flight);
-				queue.offer(adj);
+			if (numShortestPaths.get(path.getCurrentCity()) <= query.getNumToDisplay()) {
+				for (Flight flight : graph.getNeighbours(path.getLastFlight())) {
+					Path adj = new Path(path.getFlights());
+					adj.addFlight(flight);
+					queue.offer(adj);
+				}
 			}
 		}
 		System.out.println("Paths Found:");
 		for (Path pl: pathsToFinish) {
-			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Hours Used" + pl.getAirlineTime(airlineToUse));
+			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Minutes Used" + pl.getAirlineTime(airlineToUse));
 		}
 		
 		return pathsToFinish;
