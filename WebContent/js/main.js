@@ -16,7 +16,11 @@ $(document).ready(function () {
 	$('#queryBtn').click(function (event) {
 		event.preventDefault();
 		$.post('query', {
-			query: $('#query').val()
+			origin: $('#origin').val(),
+			destination: $('#destination').val(),
+			date: $('#date').val(),
+			preference: $('#preference').val(),
+			ips: $('#ips').val()
 		}, function (results) {
 			console.log(results);
 			$('.results').empty();
