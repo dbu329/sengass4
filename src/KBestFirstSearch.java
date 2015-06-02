@@ -54,7 +54,13 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	//TODO: A prelimiary check to determine whether a query's start and finish is in the
 	// list of all possible locations. if not, return EMPTY STRING.
 	
-	public QueryAnswerPair search(Query q) {
+	public QueryAnswerPair search(Query q) 
+	/*
+	 * Verification:
+	 * pre: q.getNumToDisplay > 0
+	 * post: |queryAnswerPair| <= q.getNumToDisplay 
+	 */
+	{
 		Preferences queryPreferences = q.getPreferences();
 		
 		// nodes (we're searching through) = 'flight'
@@ -111,8 +117,9 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) 
 			/* 
 			 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) );
-			 * invariant 
-			 * modifies  *something;
+			 * invariant *something
+			 * modifies  u && b && pathsToFinish && numShortestPaths;
+			 * ensures numShortestPaths.get(finish) > 0		(is this true)
 			 * 
 			 * When (q.getNumToDisplay - numShortestPaths.get(finish) <= 0 or the list 'b' 
 			 * is empty then the negation of the guard will ensure that the loop terminates
