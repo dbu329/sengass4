@@ -68,10 +68,12 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		
 		//creates a valid comparator given the preferences of the current Query q
 		QueueComparator myComparator = new QueueComparator(queryPreferences.getPrefList());
+		
 		// Creates a new Priority Queue using the new comparator created above
 		// Essentially the 'toVisit' list
 		PriorityQueue<FlightPlan> b = new PriorityQueue<FlightPlan>(10,myComparator);
 		
+		//create a new flight from null -> origin
 		Flight fake = new Flight();
 		fake.setDate(q.getDay(), q.getMonth(), q.getYear());
 		fake.setDestination(start);
@@ -87,9 +89,9 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		for (String s : myMap.getAllLocations()) {
 			numShortestPaths.put(s, 0);
 		}
-		
+
 //		System.out.println("numShortestPaths (HashMap) : " + numShortestPaths);
-		
+
 //		System.out.println();
 		
 		// P is not just a flight plan, pretty much the 'curr' in our other searches
@@ -102,11 +104,20 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		// Need a set/list of the paths that we found from start to finish
 		// big 'P' in Wikipedia
 		List<FlightPlan> pathsToFinish = new ArrayList<FlightPlan>();
-		
+
 //		System.out.println("Number of paths to find: " + q.getNumToDisplay());
 //		System.out.println("numShortestPaths.get(" + finish + ") = " + numShortestPaths.get(finish));
 		
-		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) {
+		while (!b.isEmpty() &&  numShortestPaths.get(finish) < q.getNumToDisplay()) 
+			/* 
+			 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) );
+			 * 
+			 * modifies  *something;
+			 * 
+			 * When (q.getNumToDisplay - numShortestPaths.get(finish) <= 0 or the list 'b' 
+			 * is empty then the negation of the guard will ensure that the loop terminates
+			 */
+		{
 //			System.out.print("\n-----New Loop: B Contains:\n");
 			for (FlightPlan fp:b) {
 //				System.out.println("\t"+fp + " Cost="+fp.getTotalCost()+ " Time="+fp.getTotalTime() + "airline" + fp.getAirlineTime());
@@ -114,22 +125,43 @@ decreases * ; // This is needed here to allow decreases * on the loop
 			//gets a flightPlan(our path) from the priority queue (already sorted to preferences)
 			// also removes itself from the top of the priority queue
 			u = b.poll();
+			
+			/*
+			 * FlightPlan u = cheapest path in set b
+			 * The shortest path from src -> u increases by one
+			 */
+
 //			System.out.println("just popped off: " + u);
-			// the shortest path from src -> 'u' increasesby one
+			// the shortest path from src -> 'u' increases by one
 //			System.out.println("current city = " + u.getCurrentCity());
 //			System.out.println("num shortest paths to 'u' = " + numShortestPaths.get(u.getCurrentCity()));
 			numShortestPaths.put(u.getCurrentCity(), numShortestPaths.get(u.getCurrentCity())+1);
 			
 			// if the city of the current city == finish city, 
-			if (u.getCurrentCity().equals(finish)) {
+			if (u.getCurrentCity().equals(finish)) 
+				/*
+				 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) ) 
+				 */
+			{
 				pathsToFinish.add(u);
 			}
 			
 			// if the QUOTA hasn't been fulfilled...
-			if (numShortestPaths.get(u.getCurrentCity()) <= q.getNumToDisplay()) {
+			if (numShortestPaths.get(u.getCurrentCity()) <= q.getNumToDisplay()) 
+				/*
+				 * assert (q.getNumToDisplay - numShortestPaths.get(u.currentCity()) >= 0
+				 *
+				 */
+			{
 				// for every neighbour of 'u', get the neighbours of the current city...
 //				System.out.println(myMap.getNeighbours(u.getLastFlight()).size());
-				for (Flight f : myMap.getNeighbours(u.getLastFlight())) {
+				for (Flight f : myMap.getNeighbours(u.getLastFlight())) 
+				/*
+				 * modifies b
+				 * ensures |b| = |b| + |u.getNeighbours|
+				 */
+				
+				{
 //					System.out.println("adding neighbour");
 					FlightPlan newPlan = new FlightPlan(u.getListOfFlights());
 					newPlan.incrementAirlineTime(u.getAirlineTime());
@@ -156,7 +188,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		}
 		
 		QueryAnswerPair queryAnswerPair = new QueryAnswerPair(q, answerList);
-		
+
 //		System.out.println("#######################################");
 		return queryAnswerPair;
 	}
