@@ -41,6 +41,9 @@ $(document).ready(function () {
 		}, function (results) {
 			console.log(results);
 			$('.results').empty();
+			if (results.length == 0) {
+				$('.results').append('<p style="color: #222">No results found.</p>');
+			}
 			var n = 1;
 			results.forEach(function (i) {
 				var result = $('<div>');
