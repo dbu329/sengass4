@@ -44,7 +44,8 @@ public class KBestFirstSearch {
 		Calendar queryDate = query.getDepartureTime();
 		for (Flight flight : graph.getNeighbours(fake)) {
 			Calendar flightDate = flight.getDate();
-			if (flightDate.after(queryDate) || flightDate.equals(queryDate)) {
+//			if (flightDate.after(queryDate) || flightDate.equals(queryDate)) {
+			if (equalOrBefore(queryDate, flightDate)) {
 				Path path = new Path();
 				path.addFlight(flight);
 				queue.offer(path);
@@ -77,4 +78,14 @@ public class KBestFirstSearch {
 		return pathsToFinish;
 	}
 
+	private boolean equalOrBefore(Calendar a, Calendar b) {
+		if (a.get(Calendar.MONTH) <= b.get(Calendar.MONTH) &&
+				a.get(Calendar.HOUR_OF_DAY) <= b.get(Calendar.HOUR_OF_DAY)&&
+				a.get(Calendar.DAY_OF_MONTH) <= b.get(Calendar.DAY_OF_MONTH)&&
+				a.get(Calendar.MINUTE) <= b.get(Calendar.MINUTE)&&
+				a.get(Calendar.YEAR) <= b.get(Calendar.YEAR)) {
+			return true;
+		}
+		return false;
+	}
 }
