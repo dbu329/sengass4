@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +36,20 @@ public class KBestFirstSearch {
 		for (String s : graph.getCities()) {
 			numShortestPaths.put(s, 0);
 		}
-		
+		/*
+		Path path = new Path();
+		path.addFlight(fake);
+		queue.offer(path); 
+		*/
+		Calendar queryDate = query.getDepartureTime();
 		for (Flight flight : graph.getNeighbours(fake)) {
-			Path path = new Path();
-			path.addFlight(flight);
-			queue.offer(path);
-		}
+			Calendar flightDate = flight.getDate();
+			if (flightDate.after(queryDate)) { 
+				Path path = new Path();
+				path.addFlight(flight);
+				queue.offer(path);
+			}
+		} 
 		
 		List<Path> pathsToFinish = new ArrayList<Path>();
 		
