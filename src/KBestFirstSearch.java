@@ -55,7 +55,7 @@ public class KBestFirstSearch {
 		
 		List<Path> pathsToFinish = new ArrayList<Path>();
 		
-		while (!queue.isEmpty() &&  numShortestPaths.get(finish) < query.getNumToDisplay()) {
+		while (!queue.isEmpty() &&  numShortestPaths.get(finish) < 100000) {//query.getNumToDisplay()) {
 			// get the highest priority path from the queue
 			Path path = queue.poll();
 			numShortestPaths.put(path.getCurrentCity(), numShortestPaths.get(path.getCurrentCity())+1);
@@ -63,7 +63,7 @@ public class KBestFirstSearch {
 			if (path.getCurrentCity().equals(finish)) {
 				pathsToFinish.add(path);
 			}
-			if (numShortestPaths.get(path.getCurrentCity()) <= query.getNumToDisplay()) {
+			if (numShortestPaths.get(path.getCurrentCity()) <= 100000) {//query.getNumToDisplay()) {
 				for (Flight flight : graph.getNeighbours(path.getLastFlight())) {
 					Path adj = new Path(path.getFlights());
 					adj.addFlight(flight);
@@ -79,7 +79,9 @@ public class KBestFirstSearch {
 		}
 		
 		Collections.sort(pathsToFinish, new MultiComparator<Path>(preferences));
-		return pathsToFinish;
+		System.out.println(String.format("%d %d %d", query.getNumToDisplay(), pathsToFinish.size(), Math.min(query.getNumToDisplay(), pathsToFinish.size())));
+		return pathsToFinish.subList(0, Math.min(query.getNumToDisplay(), pathsToFinish.size()));
+		//return pathsToFinish;
 	}
 
 	private boolean equalOrBefore(Calendar a, Calendar b) {
