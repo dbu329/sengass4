@@ -44,7 +44,7 @@ public class KBestFirstSearch {
 		Calendar queryDate = query.getDepartureTime();
 		for (Flight flight : graph.getNeighbours(fake)) {
 			Calendar flightDate = flight.getDate();
-			if (flightDate.after(queryDate) && flightDate.equals(queryDate)) {
+			if (flightDate.after(queryDate) || flightDate.equals(queryDate)) {
 				Path path = new Path();
 				path.addFlight(flight);
 				queue.offer(path);
