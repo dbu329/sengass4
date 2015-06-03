@@ -91,6 +91,7 @@ public class QueryServlet extends HttpServlet {
 			JSONObject obj = new JSONObject();
 			obj.put("price", path.getCost());
 			obj.put("duration", path.getTotalTime());
+			obj.put("points", path.getAirlineTime(airlinePreference));
 			JSONArray flights = new JSONArray();
 			for (Flight f : path.getFlights()) {
 				JSONObject flight = new JSONObject();
