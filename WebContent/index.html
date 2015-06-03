@@ -21,15 +21,26 @@
 				<input id="time" type="text" placeholder="Time" />
 			</p>
 			<p>
-				Order by:
-				<select id="preference">
+				<select class ="preference" id="preference1">
+					<option value="None" selected="selected">Preference 1...</option>
+					<option value="time">Time</option>
+					<option value="cost">Cost</option>
+					<option value="points">Frequent Flyers</option>
+				</select>
+				<select class ="preference" id="preference2">
+					<option value="None" selected="selected">Preference 2...</option>
+					<option value="time">Time</option>
+					<option value="cost">Cost</option>
+					<option value="points">Frequent Flyers</option>
+				</select>
+				<select class ="preference" id="preference3">
+					<option value="None" selected="selected">Preference 3...</option>
 					<option value="time">Time</option>
 					<option value="cost">Cost</option>
 					<option value="points">Frequent Flyers</option>
 				</select>
 				<input id="airline" type="text" placeholder="Airline" />
-				Items per search:
-				<input id="ips" type="text"/>
+				<input id="ips" type="text" placeholder="Max results" />
 				<input id="queryBtn" type="submit" value="Search" />
 			</p>
 		</form>

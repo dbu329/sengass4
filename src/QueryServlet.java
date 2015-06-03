@@ -56,20 +56,30 @@ public class QueryServlet extends HttpServlet {
 		time.set(Calendar.HOUR_OF_DAY, hour);
 		time.set(Calendar.MINUTE, min);
 		String airlinePreference = "None";
+		if (params.get("airline")[0].length() > 0) {
+			airlinePreference = params.get("airline")[0];
+		}
 		List<Comparator<Path>> preferences = new ArrayList<Comparator<Path>>();
-		if (params.get("preference")[0].equals("time")) {
+		if (params.get("preference1")[0].equals("time")) {
 			preferences.add(new TravelTimePreference());
+		} else if (params.get("preference1")[0].equals("cost")) {
 			preferences.add(new CostPreference());
+		} else if (params.get("preference1")[0].equals("points")) {
 			preferences.add(new AirlinePreference(airlinePreference));
-		} else if (params.get("preference")[0].equals("cost")) {
-			preferences.add(new CostPreference());
+		}
+		if (params.get("preference2")[0].equals("time")) {
 			preferences.add(new TravelTimePreference());
+		} else if (params.get("preference2")[0].equals("cost")) {
+			preferences.add(new CostPreference());
+		} else if (params.get("preference2")[0].equals("points")) {
 			preferences.add(new AirlinePreference(airlinePreference));
-		} else {
-			airlinePreference = params.get("preference")[0];
-			preferences.add(new AirlinePreference(params.get("preference")[0]));
-			preferences.add(new CostPreference());
+		}
+		if (params.get("preference3")[0].equals("time")) {
 			preferences.add(new TravelTimePreference());
+		} else if (params.get("preference3")[0].equals("cost")) {
+			preferences.add(new CostPreference());
+		} else if (params.get("preference3")[0].equals("points")) {
+			preferences.add(new AirlinePreference(airlinePreference));
 		}
 		int amount = Integer.parseInt(params.get("ips")[0]);
 		Query query = new Query(time, origin, destination, preferences, amount, airlinePreference);

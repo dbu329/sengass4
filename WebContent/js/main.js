@@ -33,7 +33,10 @@ $(document).ready(function () {
 			destination: $('#destination').val(),
 			date: $('#date').val(),
 			time: $('#time').val(),
-			preference: $('#preference').val(),
+			preference1: $('#preference1').val(),
+			preference2: $('#preference2').val(),
+			preference3: $('#preference3').val(),
+			airline: $('#airline').val(),
 			ips: $('#ips').val()
 		}, function (results) {
 			console.log(results);
