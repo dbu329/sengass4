@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ public class KBestFirstSearch {
 			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Minutes Used" + pl.getAirlineTime(airlineToUse));
 		}
 		
+		Collections.sort(pathsToFinish, new MultiComparator<Path>(preferences));
 		return pathsToFinish;
 	}
 
