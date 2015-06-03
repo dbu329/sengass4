@@ -1,13 +1,3 @@
-/*class Comparator
-{
-	method compare(f1: FlightPlan, f2: FlightPlan)
-	requires f1 != 
-	{
-
-	}
-}*/
-
-
 class PriorityQueue<T>
 {
 	var val: seq<T>;
@@ -47,48 +37,50 @@ class PriorityQueue<T>
 }
 
 class Vertex
-{ 
-	var name: int;
-	var edges_to: seq<Vertex>;
-	var numShortestPath: int; //The number of shortest paths to this Vertex
-	var path_from_root : seq<Edge>; //Needed for K-shortest algorithm 
-
-	/*
-	constructor (n:int)
-	modifies this;
-	ensures forall v:Vertex :: v in  edges_to ==> v != null ; 
-		{ name := n; 
-		  edges_to := []; 
-		  colour := White ;  
-			  path_from_root := []; 
-		} 
-	*/ 
+{
+	var name: string;
+	var numShortestPath: nat;
 }
 
-class Edge
+class Path
 {
-	var cost: int;
-	var from: Vertex;
-	var to: Vertex;
-	
-	
-	constructor (f:Vertex, t:Vertex, c:int)
-	requires c >= 0;
+	var flights: seq<Flight>;
+
+	constructor(newFlights:seq<Flight>)
+	ensures flights == newFlights;
 	modifies this;
 	{
-		cost := c;
-		from := f;
-		to := t;
+		var i := 0;
+		flights := [];
+		while i < |newFlights|
+		invariant i <= |newFlights|;
+		{
+			flights := flights + [newFlights[i]];
+			i := i + 1;
+		}
 	}
 	
 }
 
+class Flight
+{
+	var origin: Vertex;
+	var destination: Vertex;
+	var cost: int;
+
+	constructor(o: Vertex, d: Vertex, c: int)
+	requires cost >= 0;
+	modifies this;
+	{
+		origin := o;
+		destination := d;
+		cost := c;
+	}
+}
+
 class FlightPlan
 {
-	var list: seq<Edge>;
-	var totalCost: int;
-	var totalTime: int;
-	var totalAirline: int;
+	var list: seq<Path>;
 
 	constructor ()
 	modifies this;
@@ -100,17 +92,16 @@ class FlightPlan
 
 class Graph
 { 
-var vertices : set<Vertex> ; 
+	var vertices : set<Vertex> ; 
+	var edges: map<Vertex,seq<Vertex>>; 
 
-var edges: map<Vertex,seq<Vertex>> ; 
+	method getNeighbours(f: Flight) returns (n:seq<Vertex>)
+	requires f.destination in vertices; 
+	{
+		n := edges[f.destination];
+	}
 
 } 
-
-// we use a function method here rather than predicate, since Dafny 
-// does not like predicate in one of the contexts of usage below. 
-function method closed(g:Graph):bool
-reads g; 
-{ null !in g.vertices && forall v:Vertex :: v in g.vertices ==> (forall i:nat :: i< |v.edges_to| ==> v.edges_to[i] in g.vertices) }  
 
 
 predicate well_formed(g:Graph) 
@@ -119,8 +110,8 @@ reads g;
 	g != null && 
 	null !in g.vertices && 
 	// here u in g.edges says that u is in the domain of the map g.edges
-	(forall u:Vertex :: ( u in g.edges  ==> u in  g.vertices )) && 
-	(forall u:Vertex :: ( u in g.vertices  ==> u in  g.edges )) && 
+	(forall u:Vertex :: ( (u in g.edges)  ==> u in g.vertices )) && 
+	(forall u:Vertex :: ( u in g.vertices  ==> u in g.edges )) && 
 	forall u:Vertex :: u in g.edges  ==> forall v:Vertex ::  v in g.edges[u] ==> (v != null && v in g.vertices)   
 }
 
@@ -128,37 +119,39 @@ reads g;
 
 predicate path(from:Vertex,to:Vertex, p:seq<Vertex>,g:Graph) 
 reads p,g; 
-{  well_formed(g) && from in g.vertices && to in g.vertices && 
-  |p| > 0 && 
-  (forall v:Vertex :: v in p ==> v in g.vertices)  && 
-from == p[0] && to == p[|p|-1] && forall n:nat :: (n<|p|-1 ==> p[n+1] in g.edges[p[n]]) } 
+{  
+	well_formed(g) && from in g.vertices && to in g.vertices && 
+	|p| > 0 && 
+	(forall v:Vertex :: v in p ==> v in g.vertices)  && 
+	from == p[0] && to == p[|p|-1] && forall n:nat :: (n<|p|-1 ==> p[n+1] in g.edges[p[n]]) 
+}
 
-
-lemma path_extend(from:Vertex,to:Vertex,next:Vertex,p:seq<Vertex>,g:set<Vertex>)
-requires closed(g) && from in g && to in g && next in g ; 
+lemma path_extend(from:Vertex,to:Vertex,next:Vertex,p:seq<Vertex>,g:Graph)
+requires well_formed(g) && from in g.vertices && to in g.vertices && next in g.vertices ; 
 requires path(from,to,p,g); 
-requires next in to.edges_to ; 
+requires next in g.edges[to] ; 
 ensures path(from,next,p+[next],g); 
 {
 // Dafny knows this already 
-} 
+}
 
 
 
 
-method search(from:Vertex, to:Vertex, g:Graph, k: int) returns (P: set<set<Edge>>) 
-requires from in g && to in g && closed(g); 
+method search(from:Vertex, to:Vertex, g:Graph, k: int) returns (P: set<Path>) 
+requires from in g.vertices && to in g.vertices && well_formed(g); 
 requires k > 0;
-modifies set v:Vertex | v in g; 
+modifies set v:Vertex | v in g.vertices; 
 ensures |P| <= k; //where P is a set of k Paths and a Path is a set of Edges
 
 decreases * ; // This is needed here to allow decreases * on the loop 
 {
-	var P :seq<FlightPlan>; //Set of shortest paths
-	P := [];
+	//var fake := new Flight.Init(from, from, 0);
+
+	//var P :seq<FlightPlan>; //Set of shortest paths
+	P := {};
 	var B := new PriorityQueue<FlightPlan>.Init(); //Heap data structure containing paths 
-	forall u:Vertex | u in g{ u.numShortestPath := 0; }
-	from.path_from_root := new Edge.Init(from, from, 0); 
+	forall u:Vertex | u in g.vertices { u.numShortestPath := 0; }
 	B.offer(from.path);
 
 	while !B.isEmpty() && to.numShortestPath < k
