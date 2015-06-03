@@ -32,6 +32,7 @@ $(document).ready(function () {
 			origin: $('#origin').val(),
 			destination: $('#destination').val(),
 			date: $('#date').val(),
+			time: $('#time').val(),
 			preference: $('#preference').val(),
 			ips: $('#ips').val()
 		}, function (results) {
