@@ -37,7 +37,7 @@ input[type="text"] {
 	border-radius: 4px;
 	padding: 0.5em 0.4em;
 	margin-right: 0.25em;
-	width: 15em;
+	width: 16em;
 }
 input[type="text"]#date {
 	width: 6em;
@@ -45,18 +45,20 @@ input[type="text"]#date {
 input[type="text"]#time {
 	width: 4em;
 }
-
+input[type="text"]#airline {
+	width: 8em;
+}
 input[type="text"]:focus {
 	border: 1px solid rgb(50, 50, 255);
 }
 
-select {
+select.preference {
 	background-color: rgba(255, 255, 255, 0.5);
 	border: 1px solid rgba(0, 0, 0, 0.5);
 	border-radius: 4px;
 	padding: 0.5em 0.4em;
 	margin-right: 0.25em;
-	width: 20em;
+	width: 9em;
 }
 
 input[type="submit"] {
@@ -83,13 +85,13 @@ select {
 	-moz-appearance: none;
 }
 #ips {
-	width: 5em;
+	width: 5.1em;
 }
 div.results {
 	display: block;
 	width: 70%;
 	height: 70%;
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgba(255, 255, 255, 0.4);
 	border-radius: 4px;
 	margin: 0 auto;
 	margin-top: 1em;
