@@ -87,7 +87,12 @@ public class QueryServlet extends HttpServlet {
 		} else if (params.get("preference3")[0].equals("points")) {
 			preferences.add(new AirlinePreference(airlinePreference));
 		}
-		int amount = Integer.parseInt(params.get("ips")[0]);
+		int amount = 10;
+		try {
+			amount = Integer.parseInt(params.get("ips")[0]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Query query = new Query(time, origin, destination, preferences, amount, airlinePreference);
 		
 		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData5.txt"));

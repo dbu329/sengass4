@@ -68,4 +68,28 @@ $(document).ready(function () {
 			});
 		}, 'json');
 	});
+	$('#preference1').change(function () {
+		if ($('#preference1').val() == $('#preference2').val()) {
+			$('#preference2').val('None');
+		}
+		if ($('#preference1').val() == $('#preference3').val()) {
+			$('#preference3').val('None');
+		}
+	});
+	$('#preference2').change(function () {
+		if ($('#preference2').val() == $('#preference1').val()) {
+			$('#preference1').val('None');
+		}
+		if ($('#preference2').val() == $('#preference3').val()) {
+			$('#preference3').val('None');
+		}
+	});
+	$('#preference3').change(function () {
+		if ($('#preference3').val() == $('#preference1').val()) {
+			$('#preference1').val('None');
+		}
+		if ($('#preference3').val() == $('#preference2').val()) {
+			$('#preference2').val('None');
+		}
+	});
 });

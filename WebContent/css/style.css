@@ -37,13 +37,13 @@ input[type="text"] {
 	border-radius: 4px;
 	padding: 0.5em 0.4em;
 	margin-right: 0.25em;
-	width: 16em;
+	width: 15em;
 }
 input[type="text"]#date {
 	width: 6em;
 }
 input[type="text"]#time {
-	width: 4em;
+	width: 5.8em;
 }
 input[type="text"]#airline {
 	width: 8em;
