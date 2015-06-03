@@ -19,7 +19,7 @@ public class AirlineServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.addHeader("Content-type", "application/json");
 		
-		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData3.txt"));
+		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData5.txt"));
 		
 		JSONArray airlines = new JSONArray();
 		for (String airline : tp.myFlightMap.getAirlines()) {

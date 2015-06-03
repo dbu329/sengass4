@@ -28,7 +28,7 @@ public class QueryServlet extends HttpServlet {
 		response.getWriter().write("healthy");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -39,8 +39,9 @@ public class QueryServlet extends HttpServlet {
 		String origin = params.get("origin")[0];
 		String destination = params.get("destination")[0];
 		Date date = null;
+		System.out.println(params.get("date")[0]);
 		try {
-			date = new SimpleDateFormat("DD/MM/yyyy").parse(params.get("date")[0]);
+			date = new SimpleDateFormat("DD/M/yyyy").parse(params.get("date")[0]);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -55,6 +56,11 @@ public class QueryServlet extends HttpServlet {
 		}
 		time.set(Calendar.HOUR_OF_DAY, hour);
 		time.set(Calendar.MINUTE, min);
+		try {
+			time.set(Calendar.MONTH, Integer.parseInt(params.get("date")[0].split("/")[1])-1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String airlinePreference = "None";
 		if (params.get("airline")[0].length() > 0) {
 			airlinePreference = params.get("airline")[0];
@@ -84,7 +90,7 @@ public class QueryServlet extends HttpServlet {
 		int amount = Integer.parseInt(params.get("ips")[0]);
 		Query query = new Query(time, origin, destination, preferences, amount, airlinePreference);
 		
-		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData3.txt"));
+		TravelPlan tp = new TravelPlan(getServletContext().getRealPath("/WEB-INF/flightData5.txt"));
 
 		JSONArray jsonResults = new JSONArray();
 		for (Path path : tp.executeQuery(query)) {

@@ -69,7 +69,9 @@ public class KBestFirstSearch {
 					queue.offer(adj);
 				}
 			}
+			
 		}
+		System.out.println("query:" + query);
 		System.out.println("Paths Found:");
 		for (Path pl: pathsToFinish) {
 			System.out.println(pl+" Cost:"+pl.getCost() +" Travel Time:" + pl.getTotalTime()+ " Airline Minutes Used" + pl.getAirlineTime(airlineToUse));
@@ -79,12 +81,44 @@ public class KBestFirstSearch {
 	}
 
 	private boolean equalOrBefore(Calendar a, Calendar b) {
-		if (a.get(Calendar.MONTH) <= b.get(Calendar.MONTH) &&
+		/*if (a.get(Calendar.MONTH) <= b.get(Calendar.MONTH) &&
 				a.get(Calendar.HOUR_OF_DAY) <= b.get(Calendar.HOUR_OF_DAY)&&
 				a.get(Calendar.DAY_OF_MONTH) <= b.get(Calendar.DAY_OF_MONTH)&&
 				a.get(Calendar.MINUTE) <= b.get(Calendar.MINUTE)&&
 				a.get(Calendar.YEAR) <= b.get(Calendar.YEAR)) {
 			return true;
+		}*/
+		System.out.println(String.format("%d %d", a.get(Calendar.DAY_OF_MONTH), b.get(Calendar.DAY_OF_MONTH)));
+		if (a.get(Calendar.YEAR) < b.get(Calendar.YEAR)) {
+			System.out.println("year is less");
+			return true;
+		} else if (a.get(Calendar.YEAR) == b.get(Calendar.YEAR)) {
+			System.out.println("year is equal");
+			System.out.println(a.get(Calendar.MONTH) + " " + b.get(Calendar.MONTH));
+			if (a.get(Calendar.MONTH) < b.get(Calendar.MONTH)) {
+				System.out.println("month is less");
+				return true;
+			} else if (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)) {
+				System.out.println("month is equal");
+				if (a.get(Calendar.DAY_OF_MONTH) < b.get(Calendar.DAY_OF_MONTH)) {
+					System.out.println("day of month is less");
+					return true;
+				} else if (a.get(Calendar.DAY_OF_MONTH) == b.get(Calendar.DAY_OF_MONTH)) {
+					System.out.println("day of month is equal");
+					System.out.println(String.format("%d %d", a.get(Calendar.DAY_OF_MONTH), b.get(Calendar.DAY_OF_MONTH)));
+					if (a.get(Calendar.HOUR_OF_DAY) < b.get(Calendar.HOUR_OF_DAY)) {
+						System.out.println("hour is less");
+						return true;
+					} else if (a.get(Calendar.HOUR_OF_DAY) == b.get(Calendar.HOUR_OF_DAY)) {
+						if (a.get(Calendar.MINUTE) <= b.get(Calendar.MINUTE)) {
+							System.out.println("minute is less");
+							return true;
+						} else {
+							System.out.println("minutes is greater than");
+						}
+					}
+				}
+			}
 		}
 		return false;
 	}
