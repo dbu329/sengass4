@@ -107,6 +107,7 @@ div.results {
 	border-radius: 4px;
 	margin: 0 auto;
 	margin-top: 1em;
+	overflow-y: auto;
 }
 
 div.result {
