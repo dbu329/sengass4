@@ -5,7 +5,7 @@ $(document).ready(function () {
 		<div class="details"><%= airline %></div>\
 	');*/
 	var resultTmpl = _.template('\
-		<b>Option <%= n %></b> <%= duration %> minutes, $<%= price %>\
+		<b>Option <%= n %></b> <%= Math.floor(duration/60) %> hours, <%= Math.floor(duration%60) %> minutes, $<%= price %>\
 		<span class="arrow">&#9660;</span>\
 		<div class="details">\
 			<% _.each(flights, function (flight) { %>\
@@ -20,6 +20,11 @@ $(document).ready(function () {
 		$('#origin').autocomplete({ source: results });
 		$('#destination').autocomplete({ source: results });
 	})
+	
+	$.get('airlines', function (airlines) {
+		$('#airline').autocomplete({ source: airlines });
+	})
+	
 	$('#date').datepicker({ dateFormat: 'dd/mm/yy' });
 	$('#queryBtn').click(function (event) {
 		event.preventDefault();

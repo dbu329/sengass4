@@ -16,7 +16,7 @@ public class TravelPlan {
 		if (args.length != 2) {
 			System.out.println("Usage: FlightMap flightsFile queryFile");
 		} else {
-			System.out.println("Seng Asscheduler:");
+			//System.out.println("Seng Asscheduler:");
 			TravelPlan newPlan = new TravelPlan(args[0], args[1]);
 		}
 	}

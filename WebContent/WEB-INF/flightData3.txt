@@ -2,8 +2,7 @@
 [ 29/2/2000,
     11:30, Sydney,Tokyo, 598, Jal , 2100 ]
 [ 29/2/2000, 08:45,Adelaide, Singapore, 602, Singaporeairlines, 1900  ]
-  [ 29/2/2000, 11:0, Sydney,
-    Singapore, 481, Singaporeairlines, 1500 ]
+  [ 29/2/2000, 11:0, Sydney,    Singapore, 481, Singaporeairlines, 1500 ]
 [ 29/02/2000, 22:00, Singapore, Frankfurt, 600,
   Lufthansa, 3900]
 [ 29/2/2000  , 23:30  , Tokyo  , Frankfurt  ,  721  ,   Lufthansa ,   4500  ][29/2/2000,23:00,Tokyo,Frankfurt,718,Jal,5001]

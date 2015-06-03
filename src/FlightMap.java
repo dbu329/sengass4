@@ -96,4 +96,12 @@ public class FlightMap {
 		return (int) diffMinutes;
 	}
 
+	public Set<String> getAirlines() {
+		Set<String> airlines = new HashSet<String>();
+		for (Flight flight : edges) {
+			airlines.add(flight.getAirline());
+		}
+		return airlines;
+	}
+
 }
