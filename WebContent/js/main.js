@@ -11,7 +11,7 @@ $(document).ready(function () {
 			<% _.each(flights, function (flight) { %>\
 				Depart:\
 				<%= flight.date %> <%= flight.time %>\
-				<%= flight.origin %> to (<%= Math.floor(flight.duration/60) %> hours,	<%= flight.duration%60 %> mins)\
+				<%= flight.origin %> to <%= flight.destination %> (<%= Math.floor(flight.duration/60) %> hours,	<%= flight.duration%60 %> mins)\
 				<br/>\
 			<% }) %>\
 		</div>\

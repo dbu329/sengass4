@@ -46,8 +46,13 @@ public class QueryServlet extends HttpServlet {
 		}
 		Calendar time = Calendar.getInstance();
 		time.setTime(date);
-		int hour = Integer.parseInt(params.get("time")[0].split(":")[0]);
-		int min = Integer.parseInt(params.get("time")[0].split(":")[1]);
+		int hour = 0, min = 0;
+		try {
+			hour = Integer.parseInt(params.get("time")[0].split(":")[0]);
+			min = Integer.parseInt(params.get("time")[0].split(":")[1]);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		time.set(Calendar.HOUR_OF_DAY, hour);
 		time.set(Calendar.MINUTE, min);
 		String airlinePreference = "None";
