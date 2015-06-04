@@ -200,49 +200,52 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	invariant 0 <= |P| <= k;
 	//invariant (forall p1:seq<Flight> :: p1 in P ==> forall f:Flight :: f in p1 ==> f.destination in g.vertices && f.origin in g.vertices);
 	invariant forall p:Flight :: p in g.edges ==> p != null && p.origin != null && p.destination != null;
-	decreases *;//(k - to.numShortestPath), B ignore termination for now
+	decreases (k - to.numShortestPath), |q.val|; //ignore termination for now
 	//modifies clause needed here
 	{
 		//let path P_u = cheapest path in B where u is a vertex
 		//let C = total cost of P_u
 		//B = B - P_u
 		//u.numShortestPath++
+		ghost var old_q_len := |q.val|;
+		ghost var old_to_nsp := k - to.numShortestPath;
+
 		assume |P| < k;
 		var u := q.poll(); //Cheapest path
 
-		if u != []
+		assume u != [];
+		assert |q.val| < old_q_len;
+
+		var last := |u|-1;
+		assert last >= 0;
+		assume u[last] != null;
+		var currCity: Vertex; 
+		currCity := u[last].destination;
+		assume currCity in g.vertices;
+
+		currCity.numShortestPath := currCity.numShortestPath + 1;
+		//u.numShortestPath := u.numShortestPath + 1;
+
+		if(currCity == to)
 		{
-			var last := |u|-1;
-			assert last >= 0;
-			assume u[last] != null;
-			var currCity: Vertex; 
-			currCity := u[last].destination;
-			assume currCity in g.vertices;
+			P := P + {u};
+			assert (k - to.numShortestPath) < old_to_nsp;
+		}
+		
+		if(currCity.numShortestPath <= k)
+		{
 
-			currCity.numShortestPath := currCity.numShortestPath + 1;
-			//u.numShortestPath := u.numShortestPath + 1;
-
-			if(currCity.name == to.name)
+			var i := 0;
+			neighbours := g.getNeighboursVertex(currCity);
+			while i < |neighbours|
+			decreases |neighbours| - i; 
 			{
-				P := P + {u};
-			}
-			
-			if(currCity.numShortestPath <= k)
-			{
-
-				var i := 0;
-				neighbours := g.getNeighboursVertex(currCity);
-				while i < |neighbours|
-				decreases |neighbours| - i; 
-				{
-					var adj := [];
-					adj := u + [neighbours[i]];
-					q.offer(adj);
-					i := i + 1;
-				}
+				var adj := [];
+				adj := u + [neighbours[i]];
+				q.offer(adj);
+				i := i + 1;
 			}
 		}
-
 	}
 
 	assert |P| <= k;
