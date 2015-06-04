@@ -1,2 +1,4 @@
 **/*.class
 /bin/
+DafnyVerification/kShortesPathVertices.dll
+*.pdb

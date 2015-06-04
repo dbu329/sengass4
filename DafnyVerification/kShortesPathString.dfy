@@ -44,7 +44,7 @@ class Path
 	ensures flights == newFlights;
 	modifies this;
 	{
-		int i := 0;
+		var i := 0;
 		flights := [];
 		while i < |newFlights|
 		invariant i <= |newFlights|;
@@ -71,10 +71,10 @@ class Flight
 		cost := c;
 	}
 }
-
+/*
 class FlightPlan
 {
-	var list: seq<Edge>;
+	var list: seq<Flight>;
 	var totalCost: int;
 	var totalTime: int;
 	var totalAirline: int;
@@ -85,18 +85,19 @@ class FlightPlan
 	{
 		list := [];
 	}
-}
+}*/
 
 class Graph
 { 
-	var vertices : set<string> ; 
-	var edges: set<Flight> ; 
+	var vertices : set<string>; 
+	var edges: set<Flight>; 
+	ghost var edgesMap: map<string, set<string>>;
 
 	method getNeighbours(f: Flight) returns (n:seq<Flight>)
 	ensures forall u:Flight :: u in n ==> u.origin == f.destination; 
 	{
 		n := [];
-		int i := 0;
+		var i := 0;
 		while i < |edges|
 		invariant i <= |edges|
 		{
@@ -130,12 +131,14 @@ reads g;
 
 
 
-predicate path(from:string,to:string, p:seq<Path>,g:Graph) 
+predicate path(from:Vertex,to:Vertex, p:seq<Vertex>,g:Graph) 
 reads p,g; 
-{  well_formed(g) && from in g.vertices && to in g.vertices && 
-  |p| > 0 && 
-  (forall q:Path :: q in p ==> q in g.)  && 
-from == p[0] && to == p[|p|-1] && forall n:nat :: (n<|p|-1 ==> p[n+1] in g.edges[p[n]]) } 
+{  
+	well_formed(g) && from in g.vertices && to in g.vertices && 
+	|p| > 0 && 
+	(forall v:Vertex :: v in p ==> v in g.vertices)  && 
+	from == p[0] && to == p[|p|-1] && forall n:nat :: (n<|p|-1 ==> p[n+1] in g.edgesMap[p[n]]) 
+}
 
 
 lemma path_extend(from:Vertex,to:Vertex,next:Vertex,p:seq<Vertex>,g:Graph)
