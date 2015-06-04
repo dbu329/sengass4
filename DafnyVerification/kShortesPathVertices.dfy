@@ -1,7 +1,7 @@
 
-class PriorityQueue<T>
+class PriorityQueue
 {
-	var val: seq<T>;
+	var val: seq<seq<Flight>>;
 	//var comp: Comparator;
 
 	constructor Init()
@@ -11,7 +11,7 @@ class PriorityQueue<T>
 		val := [];
 	}
 
-	method offer(x:T) 
+	method offer(x: seq<Flight>) 
 	modifies this; 
 	ensures val == old(val) + [x]; 
 	{
@@ -20,13 +20,16 @@ class PriorityQueue<T>
 
 	//Just a regular queue for now, will have to 
 	//change this so it conforms to a PriorityQueue
-	method poll() returns (r: T)
+	method poll() returns (r: seq<Flight>)
 	requires val != [];
-	ensures |val| < |old(val)|
-	ensures  val == old(val)[1..] && r == old(val)[0]
+	requires |val| >= 1;
 	modifies this;
+	//ensures forall v:Flight :: v in r ==> v != null;
+	ensures |val| < |old(val)|;
+	ensures  val == old(val)[1..] && r == old(val)[0];
 	{
 		r := val[0];
+		//assert r != null;
 		val := val[1..];
 	}
 
@@ -171,19 +174,16 @@ requires well_formed(g) && from in g.vertices && to in g.vertices;
 requires k > 0;
 modifies set v:Vertex | v in g.vertices; 
 ensures |P| <= k; //where P is a set of k Paths and a Path is a set of Edges
-
 decreases * ; // This is needed here to allow decreases * on the loop 
 {
-	//var fake := new Flight.Init(from, from, 0);
 
-	//var P :seq<FlightPlan>; //Set of shortest paths
 	P := {};
-	var q := new PriorityQueue<seq<Flight>>.Init(); //Heap data structure containing paths 
+	assert |P| <= k;
+	var q := new PriorityQueue.Init(); //Heap data structure containing paths 
 	forall u:Vertex | u in g.vertices { u.numShortestPath := 0; }
 	
 	var i := 0;
 	assert from in g.vertices;
-	assert forall p:Flight :: p in g.edges ==> p != null && p.origin != null && p.destination != null;
 	var neighbours := g.getNeighboursVertex(from);
 	while i < |neighbours|
 	{
@@ -193,40 +193,58 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		q.offer(path);
 		i := i + 1;
 	}
-	/*
-	//q.offer(from.getPaths);
+	
+	
 
-	while !B.isEmpty() && to.numShortestPath < k
-	decreases *;//(k - to.numShortestPath), B//ignore termination for now
+	while !q.isEmpty() && to.numShortestPath <= k
+	invariant 0 <= |P| <= k;
+	//invariant (forall p1:seq<Flight> :: p1 in P ==> forall f:Flight :: f in p1 ==> f.destination in g.vertices && f.origin in g.vertices);
+	invariant forall p:Flight :: p in g.edges ==> p != null && p.origin != null && p.destination != null;
+	decreases *;//(k - to.numShortestPath), B ignore termination for now
 	//modifies clause needed here
 	{
 		//let path P_u = cheapest path in B where u is a vertex
 		//let C = total cost of P_u
 		//B = B - P_u
 		//u.numShortestPath++
+		assume |P| < k;
+		var u := q.poll(); //Cheapest path
 
-		var u := B.poll(); //Cheapest path
-		var c := u.totalCost;
-		u.numShortestPath := u.numShortestPath + 1;
-
-		if(u == to)
+		if u != []
 		{
-			P := P + [u];
-		}
-		
-		if(u.numShortestPath <= k)
-		{
+			var last := |u|-1;
+			assert last >= 0;
+			assume u[last] != null;
+			var currCity: Vertex; 
+			currCity := u[last].destination;
+			assume currCity in g.vertices;
 
-			var i := 0;
-			while i < |u.adjacent|
-			decreases |u.adjacent| - i; 
+			currCity.numShortestPath := currCity.numShortestPath + 1;
+			//u.numShortestPath := u.numShortestPath + 1;
+
+			if(currCity.name == to.name)
 			{
-				var v := u.adjacent[i];
-				var adj := new Path.Init(u.getFlights());
-				i := i + 1;
+				P := P + {u};
+			}
+			
+			if(currCity.numShortestPath <= k)
+			{
+
+				var i := 0;
+				neighbours := g.getNeighboursVertex(currCity);
+				while i < |neighbours|
+				decreases |neighbours| - i; 
+				{
+					var adj := [];
+					adj := u + [neighbours[i]];
+					q.offer(adj);
+					i := i + 1;
+				}
 			}
 		}
 
 	}
-*/
+
+	assert |P| <= k;
+
 }
