@@ -19,6 +19,7 @@ public class TravelPlan {
 			//System.out.println("Seng Asscheduler:");
 			TravelPlan newPlan = new TravelPlan(args[0], args[1]);
 		}
+		
 	}
 	
 	public TravelPlan(String flightDataPath, String queryDataPath) {
@@ -30,9 +31,15 @@ public class TravelPlan {
 		for (Query query : queryList) {
 			//System.out.println(query);
 			//System.out.println(kbfs.search(query));
-			kbfs.search(query);
+			query.setAnswers(kbfs.search(query));
 		}
 		//doAnswers(queryList);
+	}
+	
+	public void printQueryAnswers() {
+		for (Query q: queryList) {
+			//Print out in correct format, all the queries and their answers
+		}
 	}
 	
 	public TravelPlan(String flightDataPath) {

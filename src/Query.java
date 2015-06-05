@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +10,7 @@ public class Query {
 	private String origin;
 	private String destination;
 	private List<Comparator<Path>> preferences;
+	private List<Path> answers;
 	private int numToDisplay;
 	private String airlinePreference;
 	
@@ -24,7 +26,11 @@ public class Query {
 	public Calendar getDepartureTime() {
 		return departureTime;
 	}
-
+	
+	public void setAnswers(List<Path> paths) {
+		answers = new ArrayList<Path>(paths);
+	}
+	
 	public int getDay() {
 		return departureTime.get(Calendar.DATE);
 	}
