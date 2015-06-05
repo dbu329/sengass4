@@ -18,6 +18,7 @@ public class TravelPlan {
 		} else {
 			//System.out.println("Seng Asscheduler:");
 			TravelPlan newPlan = new TravelPlan(args[0], args[1]);
+			newPlan.printQueryAnswers();
 		}
 		
 	}
@@ -39,6 +40,18 @@ public class TravelPlan {
 	public void printQueryAnswers() {
 		for (Query q: queryList) {
 			//Print out in correct format, all the queries and their answers
+			System.out.println("( " + q.toString());
+			
+			int size = 0;
+			for (Path pl : q.getAnswers()) {
+				size++;
+				if (size == 1)
+					System.out.print(", [ ");
+				else 
+					System.out.print("    ");
+				System.out.println("(( "+pl.toString() + "), "+pl.getCost() + ", "+ pl.getTotalTime() + ", "+ pl.getAirlineTime(q.getAirlinePreference()));
+			}
+			System.out.println("])");
 		}
 	}
 	

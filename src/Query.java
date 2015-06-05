@@ -31,6 +31,10 @@ public class Query {
 		answers = new ArrayList<Path>(paths);
 	}
 	
+	public List<Path> getAnswers() {
+		return answers;
+	}
+	
 	public int getDay() {
 		return departureTime.get(Calendar.DATE);
 	}
@@ -102,14 +106,25 @@ public class Query {
 //	private Preferences preferences;
 //	private int numToDisplay;
 	public String toString() {
-		return    "[" + this.departureTime.get(Calendar.DAY_OF_MONTH) 
-				+ "/" + this.departureTime.get(Calendar.MONTH) 
+		//Preference Order?
+		List<String> stringPreferences = new ArrayList<String>();
+		for (Comparator c:preferences) {
+			if (c instanceof AirlinePreference)
+				stringPreferences.add(airlinePreference);
+			else if (c instanceof CostPreference)
+				stringPreferences.add("Cost");
+			else
+				stringPreferences.add("Time");
+		}
+		//StringBuilder newa = new StringBuilder();
+		return    "[ " + this.departureTime.get(Calendar.DAY_OF_MONTH) 
+				+ "/" + this.departureTime.get(Calendar.MONTH)+1 
 				+ "/" + this.departureTime.get(Calendar.YEAR)
-				+ "," + this.departureTime.get(Calendar.HOUR_OF_DAY)
+				+ ", " + this.departureTime.get(Calendar.HOUR_OF_DAY)
 				+ ":" + this.departureTime.get(Calendar.MINUTE)
-				+ "," + this.origin + "," + this.destination
-				+ "," + this.preferences
-				+ "," + this.numToDisplay
+				+ ", " + this.origin + "," + this.destination
+				+ ", (" + stringPreferences.get(0) +", " + stringPreferences.get(1) + ", " + stringPreferences.get(2)
+				+ "), " + this.numToDisplay
 				+ "]";
 	}
 }

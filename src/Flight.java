@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -76,7 +77,18 @@ public class Flight {
 	
 	@Override
 	public String toString() {
-		return String.format("%s -> %s", origin, destination);
+		StringBuilder str = new StringBuilder();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+		dateFormat.setTimeZone(date.getTimeZone());
+		str.append("[" + dateFormat.format(date.getTime()) + ", ");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		timeFormat.setTimeZone(date.getTimeZone());
+		str.append(timeFormat.format(date.getTime()) + ", ");
+		str.append(getOrigin() + ", " + getDestination()+", ");
+		str.append(getDuration() + ", "+getAirline()+", " + getCost()+"]");
+		
+		//return String.format("%s -> %s", origin, destination);
+		return str.toString();
 	}
 
 }

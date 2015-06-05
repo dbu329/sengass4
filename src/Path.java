@@ -93,7 +93,16 @@ public class Path {
 
 	@Override
 	public String toString() {
-		return flights.toString();
+		StringBuilder myStr = new StringBuilder();
+		int size = 0;
+		for (Flight f : flights) {
+			size++;
+			myStr.append(f);
+			if (size != flights.size())
+				myStr.append("\n       ");
+		}
+		//return flights.toString();
+		return myStr.toString();
 	}
 	
 	/**
