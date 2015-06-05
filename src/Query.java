@@ -107,7 +107,7 @@ public class Query {
 //	private int numToDisplay;
 	public String toString() {
 		//Preference Order?
-		List<String> stringPreferences = new ArrayList<String>();
+		/*List<String> stringPreferences = new ArrayList<String>();
 		for (Comparator c:preferences) {
 			if (c instanceof AirlinePreference)
 				stringPreferences.add(airlinePreference);
@@ -126,5 +126,31 @@ public class Query {
 				+ ", (" + stringPreferences.get(0) +", " + stringPreferences.get(1) + ", " + stringPreferences.get(2)
 				+ "), " + this.numToDisplay
 				+ "]";
+		
+		*/
+		StringBuilder str = new StringBuilder();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat.setTimeZone(departureTime.getTimeZone());
+		str.append("["+dateFormat.format(departureTime.getTime()) +", ");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		timeFormat.setTimeZone(departureTime.getTimeZone());
+		str.append(timeFormat.format(departureTime.getTime()) +", ");
+		str.append(getOrigin() + ", " + getDestination()+", ("	);
+		for (int i = 0; i < preferences.size(); i++) {
+			String s = "";
+			if (preferences.get(i) instanceof AirlinePreference)
+				s = airlinePreference;
+			if (preferences.get(i) instanceof CostPreference)
+				s = "Cost";
+			if (preferences.get(i) instanceof TravelTimePreference)
+				s = "Time";
+			str.append(s);
+			if (i != preferences.size()-1) {
+				str.append(", ");
+			}
+		}
+		
+		str.append("), " + this.getNumToDisplay()+"]");
+		return str.toString();
 	}
 }
