@@ -45,14 +45,12 @@ public class KBestFirstSearch {
 		Calendar queryDate = query.getDepartureTime();
 		for (Flight flight : graph.getNeighbours(fake)) {
 			Calendar flightDate = flight.getDate();
-//			if (flightDate.after(queryDate) || flightDate.equals(queryDate)) {
 			if (equalOrBefore(queryDate, flightDate)) {
 				Path path = new Path();
 				path.addFlight(flight);
 				queue.offer(path);
 			}
 		} 
-		
 		List<Path> pathsToFinish = new ArrayList<Path>();
 		
 		while (!queue.isEmpty() &&  numShortestPaths.get(finish) < 100000) {//query.getNumToDisplay()) {

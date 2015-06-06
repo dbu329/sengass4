@@ -46,7 +46,7 @@ public class Path {
 		//calculate duration BEFORE adding the new flight, as calculation of duration makes use
 		// of knowing the getLastFlight() function
 		duration += flight.getDuration();
-		duration += getLayoverTime(this.getLastFlight(), flight);
+		//duration += getLayoverTime(this.getLastFlight(), flight);
 		//Now add the new flight on
 		flights.add(flight);
 		String airline = flight.getAirline();

@@ -49,9 +49,14 @@ public class TravelPlan {
 					System.out.print(", [ ");
 				else 
 					System.out.print("    ");
-				System.out.println("(( "+pl.toString() + "), "+pl.getCost() + ", "+ pl.getTotalTime() + ", "+ pl.getAirlineTime(q.getAirlinePreference()));
+				System.out.print("(( "+pl.toString() + "), "+pl.getCost() + ", "+ pl.getTotalTime() + ", "+ pl.getAirlineTime(q.getAirlinePreference()) + ")");
+				if (size < q.getAnswers().size()) 
+					System.out.println();
+				else 
+					System.out.println("])");
+				
 			}
-			System.out.println("])");
+			System.out.println("");
 		}
 	}
 	
