@@ -77,14 +77,16 @@ public class TravelPlan {
 	 * @param file query input file
 	 */
 	private void readQueryData(String file) {
-		Scanner sc = null;
+		/*Scanner sc = null;
 		try	{
 			sc = new Scanner(new FileReader(file)); 
      	    while (sc.hasNextLine()) {
-     	    	String line = sc.nextLine();
+     	    	String line = sc.nextLine();*/
+				String line = fileToString(file);
+				boolean correctFormat = true;
      	    	line = line.replaceAll("\\s", "");
      	    	// check queries have valid format
-     	    	if (!verifyQueryFormat(line)) {
+     	/*    	if (!verifyQueryFormat(line)) {
      	    		System.out.println("incorrectly formatted query data");
      	    		System.exit(0);
      	    	}
@@ -95,8 +97,27 @@ public class TravelPlan {
      	    	line = line.replaceAll("\\)", "");
      	    	String delims = "[,]+";
      	    	String lineTokens[] = line.split(delims);
-     	    	parseValidQuery(lineTokens);
-     	    }
+     	    	parseValidQuery(lineTokens);*/
+     	    	
+     	    	if (verifyQueryFormat(line) == false) {
+     	    		System.out.println("incorrectly formatted query data");
+     	    		correctFormat = false;
+     	    		//break;
+     	    	}else{
+         	    	//Edit line, in order to be able to split into string tokens.
+         	    	line = line.replaceAll("\\[", "");
+         	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
+         	    	String delims = "[,]+";             //split string line, by comma
+         	    	String lineTokens[] = line.split(delims);
+         	    	//move through one OR more flights in the current line, and add
+         	    	//them flights. Already proved above the format was correct.
+         	    	parseValidQuery(lineTokens);
+     	    	}
+         	    
+         	    if (!correctFormat) {
+         	    	System.exit(0);
+         	    }
+     	/*    }
      	    
 //     	    for (Query q : queryList) {
 //     	    	q.print();
@@ -105,7 +126,7 @@ public class TravelPlan {
 			System.out.println("File not Found");
 		} finally {
 		    if (sc != null) sc.close();
-		}
+		}*/
 	}
 
 	private boolean verifyQueryFormat(String data) {
@@ -282,7 +303,6 @@ public class TravelPlan {
  
 			String line = fileToString(file);
 		    boolean correctFormat = true;
-
  	    	line = line.replaceAll("\\s", "");
  	    	
  	    	//check that the all flights(one or more) in the current line has
