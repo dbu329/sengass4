@@ -205,7 +205,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		var path := [neighbours[i]];
 		assert forall f:Flight :: f in path ==> (f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 		q.offer(path);
-		assume forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
+		assert forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 		i := i + 1;
 	}
 	
@@ -214,7 +214,7 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	while !q.isEmpty() && to.numShortestPath <= k
 	invariant 0 <= |P| <= k;
 	//invariant (forall p1:seq<Flight> :: p1 in P ==> forall f:Flight :: f in p1 ==> f.destination in g.vertices && f.origin in g.vertices);
-	//invariant forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
+	invariant forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 	invariant forall p:Flight :: p in g.edges ==> p != null && p.origin != null && p.destination != null;
 	//decreases (k - to.numShortestPath), |q.val|; //ignore termination for now
 	decreases *;
