@@ -107,6 +107,7 @@ public class TravelPlan {
          	    	//Edit line, in order to be able to split into string tokens.
          	    	line = line.replaceAll("\\[", "");
          	    	line = line.replaceAll("\\]", ","); //replace end bracket by comma
+         	    	line = line.replaceAll("[()]", ""); //extra line to delete ALL Brackets
          	    	String delims = "[,]+";             //split string line, by comma
          	    	String lineTokens[] = line.split(delims);
          	    	//move through one OR more flights in the current line, and add
@@ -274,16 +275,19 @@ public class TravelPlan {
 			List<Comparator<Path>> preferences = new ArrayList<Comparator<Path>>();
 			String airlinePreference = null;
 			for (int j = i+4; j <= i+6; j++) {
+//				System.out.println(lineTokens[j]);
 				if (lineTokens[j].equals("Time")) {
+//					System.out.println("time");
 					preferences.add(new TravelTimePreference());
 				} else if (lineTokens[j].equals("Cost")) {
+//					System.out.println("cost");
 					preferences.add(new CostPreference());
 				} else {
 					preferences.add(new AirlinePreference(lineTokens[j]));
 					airlinePreference = lineTokens[j];
 				}
 			}
-
+//System.out.println("---");
 			int numToDisplay = Integer.parseInt(lineTokens[i+7]);
 			Query query = new Query(dateTime, lineTokens[i+2], lineTokens[i+3],
 									   preferences, numToDisplay, airlinePreference);

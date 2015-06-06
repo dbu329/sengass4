@@ -138,12 +138,16 @@ public class Query {
 		str.append(getOrigin() + ", " + getDestination()+", ("	);
 		for (int i = 0; i < preferences.size(); i++) {
 			String s = "";
-			if (preferences.get(i) instanceof AirlinePreference)
-				s = airlinePreference;
-			if (preferences.get(i) instanceof CostPreference)
+//			if (preferences.get(i) instanceof AirlinePreference) {
+//				s = airlinePreference;
+//			System.out.println(preferences.get(i));
+			if (preferences.get(i) instanceof CostPreference) {
 				s = "Cost";
-			if (preferences.get(i) instanceof TravelTimePreference)
+			}  else if (preferences.get(i) instanceof TravelTimePreference) {
 				s = "Time";
+			} else {
+				s = airlinePreference;
+			}
 			str.append(s);
 			if (i != preferences.size()-1) {
 				str.append(", ");
