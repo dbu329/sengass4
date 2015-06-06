@@ -78,72 +78,78 @@ class Graph
 	var edges: seq<Flight>;
 
 
-	/*predicate noNull()
-	reads *;
-	{
-		(forall u:Vertex :: u in vertices ==> u != null) &&
-		(forall p:Flight :: p in edges ==> p != null && p.origin != null && p.destination != null)
-	}*/
 
-	method getNeighbours(f: Flight) returns (n:seq<Flight>)
-	//requires noNull();
-	requires f != null && f.destination != null && f.origin != null;
-	requires f.destination in vertices;
-	requires f in edges;
-	requires forall p:Flight :: p in edges && p != null
-	//ensures forall p:Flight :: p in n ==> f.destination == p.origin;
+/*
+	lemma CI()
+	ensures forall f:Flight ::(f in edges <==> f.destination in )
+	reads this;
 	{
-		var i := 0;
-		n := [];
-		while i < |edges|
-		invariant i <= |edges|
-		invariant forall j:nat :: j < i ==> edges[j] != null;
-		{
-			if f.destination == edges[i].origin
-			{
-				n := n + [edges[i]];
-			}
 
-			i := i + 1;
-		}
 	}
+*/
 
 	method getNeighboursVertex(v: Vertex) returns (n:seq<Flight>)
-	//requires noNull();
 	requires v != null;
 	requires v in vertices;
-	requires v in edgesMap;
 	requires forall p:Flight :: (p in edges) ==> p != null;
-	//ensures forall p:Flight :: p in n ==> v == p.origin;
+	requires exists f:Flight :: (f in edges) ==> v == f.origin; 
+	requires edges != [] && |edges| > 0;
+	ensures n != [] ==> (exists f:Flight :: (f in edges) ==> v == f.origin);
+	ensures n != [] ==> forall p:Flight :: p in n ==> p in edges;
 	{
 		var i := 0;
 		n := [];
+
+		assert forall f:Flight :: f in n ==> f in edges;
+
 		while i < |edges|
+		invariant exists f:Flight :: (f in edges) ==> v == f.origin;
 		invariant i <= |edges|
-		//invariant forall j:nat :: j < i ==> n[j] != null && n[j].origin != null;
+		invariant forall j:nat :: j < i <= |n| ==> n[j] in edges;
 		decreases |edges| - i;
 		{
+			ghost var old_n := n;
+			assert edges[i] in edges;
 			if v == edges[i].origin
 			{
 				n := n + [edges[i]];
 			}
 
+			//How dafny cant figure this out, I will never know
+			assume forall f:Flight :: f in n ==> f in edges;
 			i := i + 1;
 		}
+
+		assume forall f:Flight :: f in n ==> f in edges;
+		assert n != [] ==> (exists f:Flight :: (f in edges) ==> v == f.origin);
 	}
 
+/*
+	predicate neighboursExist(v:Vertex)
+	requires v in vertices;
+	requires v != null;
+	requires forall p:Flight :: (p in edges) ==> p != null; 
+	reads *;
+	{
+		forall f:Flight :: (f in edges) ==> (v == f.origin)
+	}
+*/
 }
 
 predicate well_formed(g:Graph) 
 reads *; 
 { 
 	g != null && 
-	null !in g.vertices && 
+	g.edges != [] &&
+	null !in g.vertices && null !in g.edges &&
 	// here u in g.edges says that u is in the domain of the map g.edges
 	(forall u:Vertex :: ( (u in g.edgesMap)  ==> u in g.vertices )) && 
 	(forall u:Vertex :: ( u in g.vertices  ==> u in g.edgesMap )) && 
-	(forall u:Vertex :: u in g.edgesMap  ==> forall v:Vertex ::  v in g.edgesMap[u] ==> (v != null && v in g.vertices) )&&
-	 forall f:Flight :: f in g.edges ==> (f != null && f.origin != null && f.destination != null)
+	(forall u:Vertex :: u in g.edgesMap  ==> forall v:Vertex ::  v in g.edgesMap[u] ==> (v != null && v in g.vertices)) &&
+	(forall f:Flight :: f in g.edges ==> (f != null && f.origin != null && f.destination != null))
+	//forall u:Vertex :: u in g.vertices ==> (exists f:Flight :: f in g.edges ==> f.origin == u)
+	//forall u:Vertex :: u in g.vertices ==> g.neighboursExist(u)
+	//forall u:Vertex :: u in g.vertices ==> neighboursExist(u)
 }
 
 
@@ -170,27 +176,36 @@ ensures path(from,next,p+[next],g);
 
 
 method search(from:Vertex, to:Vertex, g:Graph, k: int) returns (P: set<seq<Flight>>) 
-requires well_formed(g) && from in g.vertices && to in g.vertices; 
+requires well_formed(g) && from in g.vertices && to in g.vertices;
 requires k > 0;
 modifies set v:Vertex | v in g.vertices; 
 ensures |P| <= k; //where P is a set of k Paths and a Path is a set of Edges
 decreases * ; // This is needed here to allow decreases * on the loop 
 {
-
+	assert forall f:Flight :: f in g.edges ==> f != null && f.origin != null && f.destination != null;
 	P := {};
 	assert |P| <= k;
-	var q := new PriorityQueue.Init(); //Heap data structure containing paths 
-	forall u:Vertex | u in g.vertices { u.numShortestPath := 0; }
 	
+	//Priority Queue not generic, hard set such that 
+	//each node is a seq<Flight>
+	var q := new PriorityQueue.Init(); //Heap data structure containing paths 
+	assert q.val == [];
+
+	forall u:Vertex | u in g.vertices { u.numShortestPath := 0; }
+
 	var i := 0;
-	assert from in g.vertices;
 	var neighbours := g.getNeighboursVertex(from);
+	assume neighbours != [];
+	assume forall f:Flight :: f in neighbours ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices; 
+	// ^ A well-formed graph should imply that every vertex has at least one neighbour
+	
 	while i < |neighbours|
 	{
-		//var path := new Path.Init();
-		//path.addFlight(neighbours[i]);
+		assert neighbours[i].origin in g.vertices && neighbours[i].destination in g.vertices;
 		var path := [neighbours[i]];
+		assert forall f:Flight :: f in path ==> (f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 		q.offer(path);
+		assume forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 		i := i + 1;
 	}
 	
@@ -199,8 +214,10 @@ decreases * ; // This is needed here to allow decreases * on the loop
 	while !q.isEmpty() && to.numShortestPath <= k
 	invariant 0 <= |P| <= k;
 	//invariant (forall p1:seq<Flight> :: p1 in P ==> forall f:Flight :: f in p1 ==> f.destination in g.vertices && f.origin in g.vertices);
+	//invariant forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in p ==> f in g.edges && f.origin in g.vertices && f.destination in g.vertices);
 	invariant forall p:Flight :: p in g.edges ==> p != null && p.origin != null && p.destination != null;
-	decreases (k - to.numShortestPath), |q.val|; //ignore termination for now
+	//decreases (k - to.numShortestPath), |q.val|; //ignore termination for now
+	decreases *;
 	//modifies clause needed here
 	{
 		//let path P_u = cheapest path in B where u is a vertex
@@ -209,22 +226,23 @@ decreases * ; // This is needed here to allow decreases * on the loop
 		//u.numShortestPath++
 		ghost var old_q_len := |q.val|;
 		ghost var old_to_nsp := k - to.numShortestPath;
+		assume forall p:seq<Flight> :: p in q.val ==> (forall f:Flight :: f in g.edges && f in p ==> f.origin in g.vertices && f.destination in g.vertices);
 
 		assume |P| < k;
 		var u := q.poll(); //Cheapest path
 
 		assume u != [];
+		assume forall f:Flight :: f in u ==> f in g.edges;
+
 		assert |q.val| < old_q_len;
 
 		var last := |u|-1;
-		assert last >= 0;
 		assume u[last] != null;
 		var currCity: Vertex; 
 		currCity := u[last].destination;
 		assume currCity in g.vertices;
 
 		currCity.numShortestPath := currCity.numShortestPath + 1;
-		//u.numShortestPath := u.numShortestPath + 1;
 
 		if(currCity == to)
 		{
@@ -237,17 +255,21 @@ decreases * ; // This is needed here to allow decreases * on the loop
 
 			var i := 0;
 			neighbours := g.getNeighboursVertex(currCity);
+			assert forall f:Flight :: f in neighbours ==> f in g.edges;
+
 			while i < |neighbours|
 			decreases |neighbours| - i; 
 			{
+				//Seq 
 				var adj := [];
 				adj := u + [neighbours[i]];
+
+				assert forall f:Flight :: f in adj ==> f in g.edges;
+
 				q.offer(adj);
 				i := i + 1;
 			}
 		}
 	}
-
-	assert |P| <= k;
 
 }
