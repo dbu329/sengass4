@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java TravelPlan ../flightData3.txt ../queryData3.txt
