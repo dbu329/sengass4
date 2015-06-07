@@ -16,8 +16,6 @@ public class KBestFirstSearch {
 
 	/*
 	precondition: 	query is valid
-					graph contains the origin city
-					graph contains the destination city
 	postCondition:	if a path or multiple paths exist then a list of size k or less is returned
 	 */
 	public List<Path> search(Query query) {
