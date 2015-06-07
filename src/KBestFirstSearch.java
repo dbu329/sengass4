@@ -14,6 +14,12 @@ public class KBestFirstSearch {
 		this.graph = graph;
 	}
 
+	/*
+	precondition: 	query is valid
+					graph contains the origin city
+					graph contains the destination city
+	postCondition:	if a path or multiple paths exist then a list of size k or less is returned
+	 */
 	public List<Path> search(Query query) {
 		// if the origin or destination isn't valid, return null 
 		if (!graph.getCities().contains(query.getOrigin()) || !graph.getCities().contains(query.getDestination())) {
@@ -54,15 +60,34 @@ public class KBestFirstSearch {
 		List<Path> pathsToFinish = new ArrayList<Path>();
 		
 		while (!queue.isEmpty() &&  numShortestPaths.get(finish) < 100000) {//query.getNumToDisplay()) {
+			/*
+			 * decreases (q.getNumToDisplay - numShortestPaths.get(finish) );
+			 * Invariant: forall path: Path :: queue.contains(path) ==> (forall flight: Flight :: path.contains(flight) ==> graph.contains(flight)
+			 * modifies  queue && path && pathsToFinish && numShortestPaths;
+			 * ensures numShortestPaths.get(finish) > 0
+			 *
+			 * When (q.getNumToDisplay - numShortestPaths.get(finish) <= 0 or the queue
+			 * is empty then the negation of the guard will ensure that the loop terminates
+			 */
 			// get the highest priority path from the queue
 			Path path = queue.poll();
+			/*
+			path = cheapest path in the queue
+			shortest path from origin -> path.currentCity() increases by one
+			 */
 			numShortestPaths.put(path.getCurrentCity(), numShortestPaths.get(path.getCurrentCity())+1);
 			 
 			if (path.getCurrentCity().equals(finish)) {
 				pathsToFinish.add(path);
 			}
 			if (numShortestPaths.get(path.getCurrentCity()) <= 100000) {//query.getNumToDisplay()) {
-				for (Flight flight : graph.getNeighbours(path.getLastFlight())) {
+				for (Flight flight : graph.getNeighbours(path.getLastFlight()))
+					/*
+					modifies queue
+					decreases graph.getNeighbours()
+					ensures |queue| = |queue |  + | graph.getNeighbours |
+					 */
+				{
 					Path adj = new Path(path.getFlights());
 					adj.addFlight(flight);
 					queue.offer(adj);
@@ -70,6 +95,9 @@ public class KBestFirstSearch {
 			}
 			
 		}
+		/*
+		assert queue.isEmpty() || numShortestPaths.get(finish) < 100000
+		 */
 //		System.out.println("query:" + query);
 //		System.out.println("Paths Found:");
 //		for (Path pl: pathsToFinish) {
